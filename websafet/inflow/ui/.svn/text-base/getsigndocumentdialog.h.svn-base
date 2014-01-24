@@ -1,0 +1,32 @@
+#ifndef GETSIGNDOCUMENTDIALOG_H
+#define GETSIGNDOCUMENTDIALOG_H
+
+#include <QDialog>
+#include <QListWidget>
+
+namespace Ui {
+    class GetSignDocumentDIalog;
+}
+
+class GetSignDocumentDIalog : public QDialog {
+    Q_OBJECT
+public:
+    GetSignDocumentDIalog(QWidget *parent = 0);
+    ~GetSignDocumentDIalog();
+    static QStringList uncompresstar(const QString& filename);
+
+public slots:
+    void selectFiles();
+    void delFiles();
+    void includeFiles();
+    bool enableIncludeFiles();
+    bool searchInListNameFile(const QString& n);
+    void showFileInfo();
+protected:
+    void changeEvent(QEvent *e);
+
+private:
+    Ui::GetSignDocumentDIalog *ui;
+};
+
+#endif // GETSIGNDOCUMENTDIALOG_H

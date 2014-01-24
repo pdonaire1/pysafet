@@ -1,0 +1,329 @@
+K 25
+svn:wc:ra_dav:version-url
+V 60
+/safet/svn/!svn/ver/1554/safet/websafet/inflow/documentation
+END
+safet-documentacion-certificado-digital.html
+K 25
+svn:wc:ra_dav:version-url
+V 105
+/safet/svn/!svn/ver/1498/safet/websafet/inflow/documentation/safet-documentacion-certificado-digital.html
+END
+safet-modulo-realizar-consultas.html
+K 25
+svn:wc:ra_dav:version-url
+V 97
+/safet/svn/!svn/ver/1498/safet/websafet/inflow/documentation/safet-modulo-realizar-consultas.html
+END
+safet-modulo-firmar-verificar-documento.html
+K 25
+svn:wc:ra_dav:version-url
+V 105
+/safet/svn/!svn/ver/1498/safet/websafet/inflow/documentation/safet-modulo-firmar-verificar-documento.html
+END
+safet-operacion-generar-grafico-para-clave.html
+K 25
+svn:wc:ra_dav:version-url
+V 108
+/safet/svn/!svn/ver/1498/safet/websafet/inflow/documentation/safet-operacion-generar-grafico-para-clave.html
+END
+safet-documentacion-verificar-firma-electronica.html
+K 25
+svn:wc:ra_dav:version-url
+V 113
+/safet/svn/!svn/ver/1498/safet/websafet/inflow/documentation/safet-documentacion-verificar-firma-electronica.html
+END
+safet-operacion-listar-datos.html
+K 25
+svn:wc:ra_dav:version-url
+V 94
+/safet/svn/!svn/ver/1498/safet/websafet/inflow/documentation/safet-operacion-listar-datos.html
+END
+safet-documentacion-verificacion-estampillado-de-tiempo.html
+K 25
+svn:wc:ra_dav:version-url
+V 121
+/safet/svn/!svn/ver/1498/safet/websafet/inflow/documentation/safet-documentacion-verificacion-estampillado-de-tiempo.html
+END
+about.txt
+K 25
+svn:wc:ra_dav:version-url
+V 70
+/safet/svn/!svn/ver/1498/safet/websafet/inflow/documentation/about.txt
+END
+safet-operacion-listar-datos-con-autofiltro.html
+K 25
+svn:wc:ra_dav:version-url
+V 109
+/safet/svn/!svn/ver/1498/safet/websafet/inflow/documentation/safet-operacion-listar-datos-con-autofiltro.html
+END
+safet-documentacion.html
+K 25
+svn:wc:ra_dav:version-url
+V 85
+/safet/svn/!svn/ver/1498/safet/websafet/inflow/documentation/safet-documentacion.html
+END
+safet-acceso-salida.html
+K 25
+svn:wc:ra_dav:version-url
+V 85
+/safet/svn/!svn/ver/1498/safet/websafet/inflow/documentation/safet-acceso-salida.html
+END
+inflowDoc.qhc
+K 25
+svn:wc:ra_dav:version-url
+V 74
+/safet/svn/!svn/ver/1498/safet/websafet/inflow/documentation/inflowDoc.qhc
+END
+safet-operacion-verificar-firmar-electronica.html
+K 25
+svn:wc:ra_dav:version-url
+V 110
+/safet/svn/!svn/ver/1498/safet/websafet/inflow/documentation/safet-operacion-verificar-firmar-electronica.html
+END
+leame.txt
+K 25
+svn:wc:ra_dav:version-url
+V 70
+/safet/svn/!svn/ver/1498/safet/websafet/inflow/documentation/leame.txt
+END
+filedialog.html
+K 25
+svn:wc:ra_dav:version-url
+V 76
+/safet/svn/!svn/ver/1498/safet/websafet/inflow/documentation/filedialog.html
+END
+interfazGrafica.html
+K 25
+svn:wc:ra_dav:version-url
+V 81
+/safet/svn/!svn/ver/1498/safet/websafet/inflow/documentation/interfazGrafica.html
+END
+openfile.html
+K 25
+svn:wc:ra_dav:version-url
+V 74
+/safet/svn/!svn/ver/1498/safet/websafet/inflow/documentation/openfile.html
+END
+browse.html
+K 25
+svn:wc:ra_dav:version-url
+V 72
+/safet/svn/!svn/ver/1498/safet/websafet/inflow/documentation/browse.html
+END
+safet-modulo-agregar-modificar-informacion.html
+K 25
+svn:wc:ra_dav:version-url
+V 108
+/safet/svn/!svn/ver/1498/safet/websafet/inflow/documentation/safet-modulo-agregar-modificar-informacion.html
+END
+safet-barra-de-pestana-modulo.html
+K 25
+svn:wc:ra_dav:version-url
+V 95
+/safet/svn/!svn/ver/1498/safet/websafet/inflow/documentation/safet-barra-de-pestana-modulo.html
+END
+safet-instalacion.html
+K 25
+svn:wc:ra_dav:version-url
+V 83
+/safet/svn/!svn/ver/1498/safet/websafet/inflow/documentation/safet-instalacion.html
+END
+safet-operacion-borrar.html
+K 25
+svn:wc:ra_dav:version-url
+V 88
+/safet/svn/!svn/ver/1498/safet/websafet/inflow/documentation/safet-operacion-borrar.html
+END
+wildcardmatching.html
+K 25
+svn:wc:ra_dav:version-url
+V 82
+/safet/svn/!svn/ver/1498/safet/websafet/inflow/documentation/wildcardmatching.html
+END
+inflowDoc.qhp
+K 25
+svn:wc:ra_dav:version-url
+V 74
+/safet/svn/!svn/ver/1498/safet/websafet/inflow/documentation/inflowDoc.qhp
+END
+safet-operacion-siguiente.html
+K 25
+svn:wc:ra_dav:version-url
+V 91
+/safet/svn/!svn/ver/1498/safet/websafet/inflow/documentation/safet-operacion-siguiente.html
+END
+safet-barra-de-herramienta.html
+K 25
+svn:wc:ra_dav:version-url
+V 92
+/safet/svn/!svn/ver/1498/safet/websafet/inflow/documentation/safet-barra-de-herramienta.html
+END
+inflowDoc.qhcp
+K 25
+svn:wc:ra_dav:version-url
+V 75
+/safet/svn/!svn/ver/1498/safet/websafet/inflow/documentation/inflowDoc.qhcp
+END
+firmaDocumento.html
+K 25
+svn:wc:ra_dav:version-url
+V 80
+/safet/svn/!svn/ver/1498/safet/websafet/inflow/documentation/firmaDocumento.html
+END
+safet-interfaz-grafica.html
+K 25
+svn:wc:ra_dav:version-url
+V 88
+/safet/svn/!svn/ver/1498/safet/websafet/inflow/documentation/safet-interfaz-grafica.html
+END
+yawl.html
+K 25
+svn:wc:ra_dav:version-url
+V 70
+/safet/svn/!svn/ver/1498/safet/websafet/inflow/documentation/yawl.html
+END
+safet-operacion-generar-grafico-coloreado.html
+K 25
+svn:wc:ra_dav:version-url
+V 107
+/safet/svn/!svn/ver/1498/safet/websafet/inflow/documentation/safet-operacion-generar-grafico-coloreado.html
+END
+safet-glosario-de-termino.html
+K 25
+svn:wc:ra_dav:version-url
+V 91
+/safet/svn/!svn/ver/1498/safet/websafet/inflow/documentation/safet-glosario-de-termino.html
+END
+findfile.html
+K 25
+svn:wc:ra_dav:version-url
+V 74
+/safet/svn/!svn/ver/1498/safet/websafet/inflow/documentation/findfile.html
+END
+acciones.html
+K 25
+svn:wc:ra_dav:version-url
+V 74
+/safet/svn/!svn/ver/1498/safet/websafet/inflow/documentation/acciones.html
+END
+safet-operacion-generar-grafico-con-filtrorecursivo.html
+K 25
+svn:wc:ra_dav:version-url
+V 117
+/safet/svn/!svn/ver/1498/safet/websafet/inflow/documentation/safet-operacion-generar-grafico-con-filtrorecursivo.html
+END
+safet-documentacion-estampillado-de-tiempo.html
+K 25
+svn:wc:ra_dav:version-url
+V 108
+/safet/svn/!svn/ver/1498/safet/websafet/inflow/documentation/safet-documentacion-estampillado-de-tiempo.html
+END
+safet-operacion-agregar-wiki.html
+K 25
+svn:wc:ra_dav:version-url
+V 94
+/safet/svn/!svn/ver/1498/safet/websafet/inflow/documentation/safet-operacion-agregar-wiki.html
+END
+inflowDoc.qch
+K 25
+svn:wc:ra_dav:version-url
+V 74
+/safet/svn/!svn/ver/1498/safet/websafet/inflow/documentation/inflowDoc.qch
+END
+intro.html
+K 25
+svn:wc:ra_dav:version-url
+V 71
+/safet/svn/!svn/ver/1498/safet/websafet/inflow/documentation/intro.html
+END
+safet-introduccion.html
+K 25
+svn:wc:ra_dav:version-url
+V 84
+/safet/svn/!svn/ver/1498/safet/websafet/inflow/documentation/safet-introduccion.html
+END
+safet.html
+K 25
+svn:wc:ra_dav:version-url
+V 71
+/safet/svn/!svn/ver/1498/safet/websafet/inflow/documentation/safet.html
+END
+safet-archivo-de-configuracion.html
+K 25
+svn:wc:ra_dav:version-url
+V 96
+/safet/svn/!svn/ver/1498/safet/websafet/inflow/documentation/safet-archivo-de-configuracion.html
+END
+safet-operacion-firmar-electronicamente-archivo.html
+K 25
+svn:wc:ra_dav:version-url
+V 113
+/safet/svn/!svn/ver/1498/safet/websafet/inflow/documentation/safet-operacion-firmar-electronicamente-archivo.html
+END
+safet-operacion-agregar-ticket.html
+K 25
+svn:wc:ra_dav:version-url
+V 96
+/safet/svn/!svn/ver/1498/safet/websafet/inflow/documentation/safet-operacion-agregar-ticket.html
+END
+agregarInformacionTrac.html
+K 25
+svn:wc:ra_dav:version-url
+V 88
+/safet/svn/!svn/ver/1498/safet/websafet/inflow/documentation/agregarInformacionTrac.html
+END
+index.html
+K 25
+svn:wc:ra_dav:version-url
+V 71
+/safet/svn/!svn/ver/1498/safet/websafet/inflow/documentation/index.html
+END
+safet-modulo-salir.html
+K 25
+svn:wc:ra_dav:version-url
+V 84
+/safet/svn/!svn/ver/1553/safet/websafet/inflow/documentation/safet-modulo-salir.html
+END
+safet-menu-inteligente.html
+K 25
+svn:wc:ra_dav:version-url
+V 88
+/safet/svn/!svn/ver/1498/safet/websafet/inflow/documentation/safet-menu-inteligente.html
+END
+safet-documentacion-firma-electronica.html
+K 25
+svn:wc:ra_dav:version-url
+V 103
+/safet/svn/!svn/ver/1498/safet/websafet/inflow/documentation/safet-documentacion-firma-electronica.html
+END
+safet-operacion-modificar.html
+K 25
+svn:wc:ra_dav:version-url
+V 91
+/safet/svn/!svn/ver/1498/safet/websafet/inflow/documentation/safet-operacion-modificar.html
+END
+safet-documentacion-flujo-de-trabajo.html
+K 25
+svn:wc:ra_dav:version-url
+V 102
+/safet/svn/!svn/ver/1498/safet/websafet/inflow/documentation/safet-documentacion-flujo-de-trabajo.html
+END
+safet-cuadro-de-edicion.html
+K 25
+svn:wc:ra_dav:version-url
+V 89
+/safet/svn/!svn/ver/1498/safet/websafet/inflow/documentation/safet-cuadro-de-edicion.html
+END
+consultas.html
+K 25
+svn:wc:ra_dav:version-url
+V 75
+/safet/svn/!svn/ver/1498/safet/websafet/inflow/documentation/consultas.html
+END
+safet-operacion-generar-grafico-con-autofiltro.html
+K 25
+svn:wc:ra_dav:version-url
+V 112
+/safet/svn/!svn/ver/1498/safet/websafet/inflow/documentation/safet-operacion-generar-grafico-con-autofiltro.html
+END

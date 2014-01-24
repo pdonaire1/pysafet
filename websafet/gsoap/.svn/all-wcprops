@@ -1,0 +1,173 @@
+K 25
+svn:wc:ra_dav:version-url
+V 45
+/safet/svn/!svn/ver/1555/safet/websafet/gsoap
+END
+safet.nsmap
+K 25
+svn:wc:ra_dav:version-url
+V 57
+/safet/svn/!svn/ver/1498/safet/websafet/gsoap/safet.nsmap
+END
+stdsoap2.cpp
+K 25
+svn:wc:ra_dav:version-url
+V 58
+/safet/svn/!svn/ver/1555/safet/websafet/gsoap/stdsoap2.cpp
+END
+safetclient.cpp
+K 25
+svn:wc:ra_dav:version-url
+V 61
+/safet/svn/!svn/ver/1498/safet/websafet/gsoap/safetclient.cpp
+END
+soapClient.cpp
+K 25
+svn:wc:ra_dav:version-url
+V 60
+/safet/svn/!svn/ver/1498/safet/websafet/gsoap/soapClient.cpp
+END
+leame.server.repositorio.txt
+K 25
+svn:wc:ra_dav:version-url
+V 74
+/safet/svn/!svn/ver/1498/safet/websafet/gsoap/leame.server.repositorio.txt
+END
+safet.verifyDocumentSignatureWithId.req.xml
+K 25
+svn:wc:ra_dav:version-url
+V 89
+/safet/svn/!svn/ver/1498/safet/websafet/gsoap/safet.verifyDocumentSignatureWithId.req.xml
+END
+stdsoap2.h
+K 25
+svn:wc:ra_dav:version-url
+V 56
+/safet/svn/!svn/ver/1498/safet/websafet/gsoap/stdsoap2.h
+END
+safet.verifyDocumentSignatureWithId.res.xml
+K 25
+svn:wc:ra_dav:version-url
+V 89
+/safet/svn/!svn/ver/1498/safet/websafet/gsoap/safet.verifyDocumentSignatureWithId.res.xml
+END
+soapC.cpp
+K 25
+svn:wc:ra_dav:version-url
+V 55
+/safet/svn/!svn/ver/1498/safet/websafet/gsoap/soapC.cpp
+END
+soapStub.h
+K 25
+svn:wc:ra_dav:version-url
+V 56
+/safet/svn/!svn/ver/1498/safet/websafet/gsoap/soapStub.h
+END
+safet.h
+K 25
+svn:wc:ra_dav:version-url
+V 53
+/safet/svn/!svn/ver/1498/safet/websafet/gsoap/safet.h
+END
+safet.verifyDocumentSignatureWithNames.req.xml
+K 25
+svn:wc:ra_dav:version-url
+V 92
+/safet/svn/!svn/ver/1498/safet/websafet/gsoap/safet.verifyDocumentSignatureWithNames.req.xml
+END
+safet.guardarXml.req.xml
+K 25
+svn:wc:ra_dav:version-url
+V 70
+/safet/svn/!svn/ver/1498/safet/websafet/gsoap/safet.guardarXml.req.xml
+END
+safet.verifyDocumentSignatureWithNames.res.xml
+K 25
+svn:wc:ra_dav:version-url
+V 92
+/safet/svn/!svn/ver/1498/safet/websafet/gsoap/safet.verifyDocumentSignatureWithNames.res.xml
+END
+safet.verifyDocumentSignatures.req.xml
+K 25
+svn:wc:ra_dav:version-url
+V 84
+/safet/svn/!svn/ver/1498/safet/websafet/gsoap/safet.verifyDocumentSignatures.req.xml
+END
+safet.guardarXml.res.xml
+K 25
+svn:wc:ra_dav:version-url
+V 70
+/safet/svn/!svn/ver/1498/safet/websafet/gsoap/safet.guardarXml.res.xml
+END
+safet.verifyDocumentSignatures.res.xml
+K 25
+svn:wc:ra_dav:version-url
+V 84
+/safet/svn/!svn/ver/1498/safet/websafet/gsoap/safet.verifyDocumentSignatures.res.xml
+END
+soapH.h
+K 25
+svn:wc:ra_dav:version-url
+V 53
+/safet/svn/!svn/ver/1498/safet/websafet/gsoap/soapH.h
+END
+leame.txt
+K 25
+svn:wc:ra_dav:version-url
+V 55
+/safet/svn/!svn/ver/1498/safet/websafet/gsoap/leame.txt
+END
+soapServerLib.cpp
+K 25
+svn:wc:ra_dav:version-url
+V 63
+/safet/svn/!svn/ver/1498/safet/websafet/gsoap/soapServerLib.cpp
+END
+soapsafetObject.h
+K 25
+svn:wc:ra_dav:version-url
+V 63
+/safet/svn/!svn/ver/1498/safet/websafet/gsoap/soapsafetObject.h
+END
+soapClientLib.cpp
+K 25
+svn:wc:ra_dav:version-url
+V 63
+/safet/svn/!svn/ver/1498/safet/websafet/gsoap/soapClientLib.cpp
+END
+safet.wsdl
+K 25
+svn:wc:ra_dav:version-url
+V 56
+/safet/svn/!svn/ver/1498/safet/websafet/gsoap/safet.wsdl
+END
+safetserver.cpp
+K 25
+svn:wc:ra_dav:version-url
+V 61
+/safet/svn/!svn/ver/1498/safet/websafet/gsoap/safetserver.cpp
+END
+soapServer.cpp
+K 25
+svn:wc:ra_dav:version-url
+V 60
+/safet/svn/!svn/ver/1498/safet/websafet/gsoap/soapServer.cpp
+END
+compilacion.txt
+K 25
+svn:wc:ra_dav:version-url
+V 61
+/safet/svn/!svn/ver/1498/safet/websafet/gsoap/compilacion.txt
+END
+ns.xsd
+K 25
+svn:wc:ra_dav:version-url
+V 52
+/safet/svn/!svn/ver/1498/safet/websafet/gsoap/ns.xsd
+END
+soapsafetProxy.h
+K 25
+svn:wc:ra_dav:version-url
+V 62
+/safet/svn/!svn/ver/1498/safet/websafet/gsoap/soapsafetProxy.h
+END
