@@ -2005,7 +2005,6 @@ QStringList SafetWorkflow::listNextStates(const QString& id, SafetWorkflow::Next
 }
 
 
-
 QString SafetWorkflow::generateCodeGraph(char* filetype, const QString& info, bool norender) {
      SYD << tr(".................SafetWorkflow::generateCodeGraph......(entrando)");
      QMap<QString,QString> newresults;
@@ -2029,8 +2028,8 @@ QString SafetWorkflow::generateCodeGraph(char* filetype, const QString& info, bo
              QString nodename = mycond->id();
              QString nextnodes;
 
-             for( int j = 0 ; j < mycond->outport()->getConnBackList().count(); j++) {
-                  QString source = mycond->outport()->getConnBackList().at(j)->source();
+             for( int j = 0 ; j < mycond->outport()->getConnectionlist().count(); j++) {
+                  QString source = mycond->outport()->getConnectionlist().at(j)->source();
                   nextnodes += source + ";";
              }
              if (nextnodes.isEmpty()) {
@@ -2047,15 +2046,23 @@ QString SafetWorkflow::generateCodeGraph(char* filetype, const QString& info, bo
          }
      }
 
+     QList<QPair<QString,QString> >  hides;
+
      for(int i = 0; i < getTasklist().count();i++) {
          SafetTask *mytask = getTasklist().at(i);
          if (mytask != NULL ) {
              SYD << tr(".....SafetWorkflow::generateCodeGraph....GENERATECODEGRAPH....mytask->id():|%1|").arg(mytask->id());
              QString nodename = mytask->id();
              QString nextnodes;
+         if (!mytask->hideuntil().isEmpty() ) {
+              QPair<QString,QString> mypair;
+              mypair.first = mytask->id();
+              mypair.second =  mytask->hideuntil();
+              hides.append(mypair);
+              }
 
-             for( int j = 0 ; j < mytask->outport()->getConnBackList().count(); j++) {
-                  QString source = mytask->outport()->getConnBackList().at(j)->source();
+             for( int j = 0 ; j < mytask->outport()->getConnectionlist().count(); j++) {
+                  QString source = mytask->outport()->getConnectionlist().at(j)->source();
                   nextnodes += source + ";";
              }
              if (nextnodes.isEmpty()) {
@@ -2080,8 +2087,8 @@ QString SafetWorkflow::generateCodeGraph(char* filetype, const QString& info, bo
              QString nodename = mycond->id();
              QString nextnodes;
 
-             for( int j = 0 ; j < mycond->outport()->getConnBackList().count(); j++) {
-                  QString source = mycond->outport()->getConnBackList().at(j)->source();
+             for( int j = 0 ; j < mycond->outport()->getConnectionlist().count(); j++) {
+                  QString source = mycond->outport()->getConnectionlist().at(j)->source();
                   nextnodes += source + ";";
              }
              if (nextnodes.isEmpty()) {
@@ -2099,20 +2106,21 @@ QString SafetWorkflow::generateCodeGraph(char* filetype, const QString& info, bo
          }
      }
 
-     SYD << tr("...SafetWorkflow::generateCodeGraph....GENERATECODEGRAPH (3)......(ENDTIME)");
+     for(int i=0; i < hides.count(); i++) {
+         QPair<QString,QString> hidenode = hides.at(i);
+         SYD << tr(".....SafetWorkflow::generateCodeGraph...HIDENODE..hide:|%1|").arg(hidenode.first);
+         checkDisconnectedNodes(newresults,hidenode.first, hidenode.second,info,neworderresults);
+      }
 
-
-
-     SYD << tr("...SafetWorkflow::generateCodeGraph....GENERATECODEGRAPH (3)......(INITEXTRATIME)");
      proccessExtraInfo(newresults,info,neworderresults);
-     QString newresult;
-     for( int i = 0 ; i < neworderresults.values().count(); i++) {
-                QString mynode = neworderresults[i];
-               newresult += newresults[mynode ] +  "\n";
-     }
-     SYD << tr("...SafetWorkflow::generateCodeGraph....GENERATECODEGRAPH (3)......(ENDEXTRATIME)");
 
-     SYD << tr("......NEW..RESULT:\n%1\n")
+     QString newresult;
+
+     foreach(QString nodename, newresults.keys() ) {
+               newresult += newresults[nodename ] +  "\n";
+     }
+
+     SYD << tr("......NEW..CONNECTED.....RESULT:\n%1\n")
             .arg(newresult);
 
      return newresult;
@@ -2120,6 +2128,151 @@ QString SafetWorkflow::generateCodeGraph(char* filetype, const QString& info, bo
 
 
 
+
+void  SafetWorkflow::checkDisconnectedNodes(QMap<QString,QString>&  nodes,const QString& nodestart, const QString& nodeend,const QString& info,QMap<int,QString>& orders) {
+
+    bool remainnodes;
+    if (!nodes.contains(nodestart) ) {
+
+        SYW << tr("El nodo \"%1\" no existe en el grafo, no es posible realizar una nueva conexión").arg(nodestart);
+        return;
+   }
+
+    if (!nodes.contains(nodeend) ) {
+
+        SYW << tr("El nodo \"%1\" no existe en el grafo, no es posible realizar una nueva conexión").arg(nodeend);
+        return;
+   }
+
+     QString mynode = nodes[nodestart];
+     QStringList myfields = mynode.split(",",QString::SkipEmptyParts);
+     Q_ASSERT(myfields.count() > 2 );
+     nodes.remove(nodestart);
+
+     mynode = "";
+     SafetTask* mytaskstart = searchTask(nodestart);
+     if (mytaskstart == NULL ) {
+         SYW << tr("No fue posible conseguir la tarea \"%1\"").arg(nodestart);
+         return;
+     }
+     SafetVariable *myvarstart = mytaskstart->getVariables().at(0);
+     SYD << tr("myvarstart == NULL");
+     Q_ASSERT(myvarstart == NULL);
+
+
+
+     for(int i=0; i < myfields.count(); i++) {
+        if ( i==2 )  {
+                mynode = mynode + QString("Siguiente:%1,").arg(nodeend);
+        }
+        else {
+
+                mynode = mynode + myfields.at(i) + ",";
+        }
+
+
+     }
+        mynode.chop(1);
+
+        SYD << tr("\n..... SafetWorkflow::checkDisconnectedNodes....mynode:\n%1")
+                .arg(mynode);
+
+        nodes[ nodestart ] = mynode;
+
+    QRegExp rx; // Para saber si es un nodo marcado
+    rx.setPattern("info\\.task\\.(color|size):\\s*([\\-a-zA-Z0-9_\\.]+)\\s*,?");
+
+    QMap<QString,QString>  summnodes;
+        while( true ) {
+
+                remainnodes = false;
+                QStringList connectnodes;
+                foreach(QString nodename, nodes.keys()) {
+                            QString mynode = nodes[nodename];
+                            QStringList myfields = mynode.split(",",QString::SkipEmptyParts);
+                            Q_ASSERT(myfields.count() > 2 );
+                            QStringList nextnodes = myfields.at(2).mid(QString("Siguiente:").length()+1).split(";",QString::SkipEmptyParts);
+                            nextnodes.removeAll("final");
+                            Q_ASSERT(nextnodes.count() > 0 );
+                             connectnodes.append(nextnodes);
+                }
+
+                SYD << tr("\n\nite................");
+                foreach(QString nodename, connectnodes) {
+                    SYD << tr("..........SafetWorkflow::checkDisconnectedNodes...nodename:|%1|").arg(nodename);
+
+                }
+
+                foreach(QString nodename, nodes.keys() ) {
+
+                            if (!connectnodes.contains(nodename) && nodename != "final"  && nodename != "inicial" ) {
+                                SafetTask* mytaskremoved = searchTask(nodename);
+                                if (mytaskremoved != NULL ) {
+
+                                    SafetVariable* myvar = mytaskremoved->getVariables().at(0);
+                                    SYD << tr("myvar != NULL");
+                                    Q_ASSERT(myvar != NULL);
+                                    QString myrolvalue = myvar->rolfield();
+                                    QString mytsvalue = myvar->timestampfield();
+
+                       if ( rx.indexIn( nodes[nodename] ) > 0 ) {
+                        SYD << tr("........SUMMARIZE...nodetocheck:\n%1")
+                        .arg(nodes[nodename]);
+                        bool ok;
+                        double porc = rx.cap(2).toDouble(&ok);
+                        if (porc >  0 ) {
+                //		 SYD << tr("........SUMMARIZE...NODETOCHECK...GETROLVALUE...myrolvalue:\n%1")
+                //				.arg(myrolvalue);
+                                           //myvarstart->setRolfield(myrolvalue);
+                           myvarstart->setTimestampfield(mytsvalue);
+
+                        }
+                    }
+
+
+
+                                }
+                                else {
+                                    SYW << tr("No se pudo eliminar la tarea \"%1\" en el proceso de ocultar (hide)")
+                                           .arg(nodename);
+
+                                }
+
+                summnodes[nodename] =  nodes[nodename] + "\n";
+                                nodes.remove(nodename);
+                                remainnodes = true;
+                            }
+                  }
+
+                     if (!remainnodes ) {
+                            break;
+                }
+
+         }
+              proccessExtraInfo(summnodes,info,orders);
+
+           QString mysumm;
+            foreach(QString nodename, summnodes.keys() ) {
+                mysumm = mysumm +  summnodes[nodename] + "\n";
+            }
+
+                   SYD << tr("..........SafetWorkflow::checkDisconnectedNodes..,,,.**SUMMNODES...MYSUMM...mysumm:\n%1\n").arg(mysumm);
+          QString formularesult = calculateGraphFormula(mysumm,Partial);
+          QString textualresult = formularesult;
+          textualresult.chop(1);
+          //mytaskstart->setTextualinfo(textualresult);
+          QString selectresult = QString("(select 'user %1') as rol").arg(formularesult);
+          myvarstart->setRolfield(selectresult);
+
+                   SYD << tr("..........SafetWorkflow::checkDisconnectedNodes..,,,.**SUMMNODES...MYSUMM...textualresult:|%1|").arg(textualresult);
+                   SYD << tr("..........SafetWorkflow::checkDisconnectedNodes..,,,.**SUMMNODES...MYSUMM...selectresult:|%1|").arg(selectresult);
+
+
+
+
+
+
+ }
 
 
 
@@ -2132,6 +2285,8 @@ void SafetWorkflow::proccessExtraInfo( QMap<QString,QString>& codes,const QStrin
 
     QMap <QString,SafetTask*> timespans;
 
+
+
     for(int i=0; i < orders.count();i++) {
 
         if ( !orders.contains(i)) {
@@ -2140,6 +2295,10 @@ void SafetWorkflow::proccessExtraInfo( QMap<QString,QString>& codes,const QStrin
         QString mytask = orders[i];
         //        qDebug("**...mytask...:|%s|",
         //               qPrintable(mytask));
+
+    if (!codes.keys().contains(mytask) ) {
+        continue;
+    }
 
         bool ok;
         QString derror;
@@ -2174,9 +2333,12 @@ void SafetWorkflow::proccessExtraInfo( QMap<QString,QString>& codes,const QStrin
 
                     SYD << tr("....*geteando...tsvalue (format):|%1|").arg(tsvalue);
                     codes[mytask] = QString("%1%2...%3...")
-                                    .arg(codes[mytask])
-                                    .arg(rolvalue)
+                                    .arg(codes[mytask].trimmed())
+                                    .arg(rolvalue.trimmed())
                                     .arg(tsvalue);
+            SYD  << tr("...........proccessExtraInfo.......TOUCHCODE:\n%1")
+            .arg(codes[mytask]);
+
 
                 }
 
@@ -2194,118 +2356,67 @@ void SafetWorkflow::proccessExtraInfo( QMap<QString,QString>& codes,const QStrin
 
 
 
-
                     if (!rolfield.startsWith("cn::")) {
                         localparser.addFieldToList(rolfield);
                     }
                     else {
-                        SYD << tr("...........proccessExtrainfo....EVALUATINGCN.....(1)...");
-                        QRegExp rxCN("cn::([a-zA-Z0-9\\s\\-\\._áéíóúñÑ]+)");
-                        QString cn;
+                        int nrosign = 0;
 
-                        if (rolfield.indexOf(rxCN) == -1) {
-                            SYE << tr("El rolfield \"%1\" no tiene el formato cn::<Nombre Comun>")
-                                   .arg(rolfield);
-                            continue;
+                        infosigners =
+                                getSignersDocument(myvar,info,derror);
+                        if (infosigners.count() > 0 ) {
+                              SafetWorkflow::InfoSigner signature =  infosigners.at(nrosign);
+                              rolvalue = signature.commonName;
+
+                        }
+                        else {
+                            rolvalue = tr("firma::N/A");
                         }
 
-                        cn = rxCN.cap(1);
 
-                        infosigners =  getSignersDocument(myvar,info,derror);
-
-
-                        SYD << tr("...........proccessExtrainfo....EVALUATINGCN.....(1)...cn:|%1|")
-                               .arg(cn);
-                        rolvalue = tr("firma::N/A");
-
-                        SYD << tr("...........proccessExtrainfo....EVALUATINGCN.....(1)...cn:|%1|")
-                               .arg(infosigners.count());
-                        foreach(SafetWorkflow::InfoSigner signature,infosigners) {
-                           QString currentcn = signature.commonName;
-                           SYD << tr("..........SafetWorkflow::proccessExtraInfo...EXTRAINFO..rolfield.currentcn:|%1|")
-                                  .arg(currentcn);
-                           if (cn == currentcn) {
-                               rolvalue = cn;
-                                break;
-                           }
-                        }
-
-                        SYD << tr("..........SafetWorkflow::proccessExtraInfo...EXTRAINFO...rolvalue:|%1|")
-                               .arg(rolvalue);
                     }
-
-                    SYD << tr("..........SafetWorkflow::proccessExtraInfo...EXTRAINFO...TSFIELD....tsfield:|%1|")
-                           .arg(tsfield);
                     if (!tsfield.startsWith("cn::")) {
                         localparser.addFieldToList(tsfield);
                     }
                     else {
-                        QRegExp rxCN("cn::([a-zA-Z0-9\\s\\-\\._áéíóúñÑ]+)");
-                        QString cn;
+                        int nrosign = 0;
+                        if (infosigners.count() > 0 ) {
+                            QString spanvalue = "<br/>N/A*";
+                            SafetWorkflow::InfoSigner signature =  infosigners.at(nrosign);
+                            tsvalue = signature.date + " "+signature.hour;
+                            tsvalue.chop(1);
+                            QStack<QString> nexts = searchtask->next();
+                            tsvalue = adjustTimeZone(tsvalue);
 
-                        if (tsfield.indexOf(rxCN) == -1) {
-                            SYE << tr("El timestampfield \"%1\" NO tiene el formato cn::<Nombre comun>")
-                                   .arg(tsfield);
-                            continue;
-                        }
+                            while ( !nexts.isEmpty()) {
+                                QString nexttask = nexts.pop();
+                                searchtask->setTsValue(tsvalue);
+                                timespans[nexttask] = searchtask;
+                            }
+                            int days;
+                            if ( timespans.contains(searchtask->id())) {
 
-                        if (infosigners.count() == 0 ) {
-                            infosigners =  getSignersDocument(myvar,info,derror);
-                        }
-
-                        cn = rxCN.cap(1);
-                        tsvalue = tr("firma::N/A");
-                        SYD << tr("..........SafetWorkflow::proccessExtraInfo...EXTRAINFO..tsvalue.cn:|%1|")
-                               .arg(cn);
-                        foreach(SafetWorkflow::InfoSigner signature, infosigners) {
-                            QString currentcn = signature.commonName;
-                            SYD << tr("..........SafetWorkflow::proccessExtraInfo...EXTRAINFO..tsfield.currentcn:|%1|")
-                                   .arg(currentcn);
-                            if ( cn == currentcn) {
-                                QString spanvalue = "<br/>N/A*";
-                                tsvalue = signature.date + " "+signature.hour;
-                                SYD << tr("..........SafetWorkflow::proccessExtraInfo...EXTRAINFO...tsvalue:|%1|")
-                                       .arg(tsvalue);
-                                tsvalue = tsvalue.trimmed();
-                                SYD << tr("..........SafetWorkflow::proccessExtraInfo...EXTRAINFO...tsvalue.chop(1):|%1|")
-                                       .arg(tsvalue);
-
-                                QStack<QString> nexts = searchtask->next();
-                                tsvalue = adjustTimeZone(tsvalue,"ddd MMM d HH:mm:ss yyyy");
-                                SYD << tr("..........SafetWorkflow::proccessExtraInfo...EXTRAINFO...adjustTimeZone:|%1|")
-                                       .arg(tsvalue);
-
-                                while ( !nexts.isEmpty()) {
-                                    QString nexttask = nexts.pop();
-                                    searchtask->setTsValue(tsvalue);
-                                    timespans[nexttask] = searchtask;
-                                }
-                                int days;
-                                if ( timespans.contains(searchtask->id())) {
-
-                                        spanvalue = QLatin1String("<br/>")+humanizeDate(days,timespans[searchtask->id()]->tsvalue(),
-                                                                  "dd/MM/yyyy hh:mmap",
-                                                                 QDateTime::fromString(tsvalue,
-                                                                 "dd/MM/yyyy hh:mmap"),
-                                                                             SafetWorkflow::WaitTime,showhuman).trimmed();
+                                    spanvalue = tr("<br/>")+humanizeDate(days,timespans[searchtask->id()]->tsvalue(),
+                                                              "dd/MM/yyyy hh:mmap",
+                                                             QDateTime::fromString(tsvalue,
+                                                             "dd/MM/yyyy hh:mmap"),
+                                                                         SafetWorkflow::WaitTime,showhuman).trimmed();
 
 
 
-                                }
+                            }
 
-                                if ( showhuman) {
-                                    tsvalue += "<br/>"+humanizeDate(days,tsvalue,"dd/MM/yyyy hh:mmap",
-                                                         QDateTime::currentDateTime(),
-                                                         SafetWorkflow::SinceWhenTime,showhuman)
-                                            + spanvalue;
-                                }
-                                break;
+                            if ( showhuman) {
+                                tsvalue += "<br/>"+humanizeDate(days,tsvalue,"dd/MM/yyyy hh:mmap",
+                                                     QDateTime::currentDateTime(),
+                                                     SafetWorkflow::SinceWhenTime,showhuman)
+                                        + spanvalue;
                             }
 
                         }
-
-
-
+                        else {
+                            tsvalue = tr("firma::N/A");
+                        }
                     }
                     if (rolvalue.isEmpty() || tsvalue.isEmpty()) {
                         newsql = "SELECT ";
@@ -2403,15 +2514,18 @@ void SafetWorkflow::proccessExtraInfo( QMap<QString,QString>& codes,const QStrin
 
 
                     if (rolvalue != tr("firma::N/A")  ) {
+            SYD << tr("TOUCH1");
                         codes[mytask] = QString("%1%2...%3...")
-                                        .arg(codes[mytask])
-                                        .arg(rolvalue)
+                                        .arg(codes[mytask].trimmed())
+                                        .arg(rolvalue.trimmed())
                                         .arg(tsvalue);
                     }
                     else {
                         if (showonly) {
                             QRegExp rx;
                             rx.setPattern(",\\s*(\\d+)...\\d+...\\s*");
+
+                SYD << tr("TOUCH2");
                             int pos = codes[mytask].indexOf(rx);
                             int value = 0;
                             bool ok;
@@ -2432,6 +2546,8 @@ void SafetWorkflow::proccessExtraInfo( QMap<QString,QString>& codes,const QStrin
                     if (showonly) {
                         QRegExp rx;
                         rx.setPattern(",\\s*(\\d+)...\\d+...\\s*");
+
+            SYD << tr("TOUCH4");
                         int pos = codes[mytask].indexOf(rx);
                         int value = 0;
                         bool ok;
@@ -2446,8 +2562,11 @@ void SafetWorkflow::proccessExtraInfo( QMap<QString,QString>& codes,const QStrin
                 }
                 _searchkey.key = info;
                 if ( !rolvalue.isEmpty() && !tsvalue.isEmpty() ) {
+
+            SYD << tr("TOUCH3...rolvalue:|%1|")
+            .arg(rolvalue);
                     _searchkey.extrainfo[mytask]= rolvalue.trimmed()+";"
-                            +tsvalue.trimmed().replace("2013","13");
+                                                  +tsvalue.trimmed();
                 }
 
                 break;
@@ -2578,7 +2697,7 @@ QString SafetWorkflow::getJSONMiles(const QList<SafetWorkflow::Miles>& miles,
 
 
 
-QString SafetWorkflow::generateGraph(char* filetype, QString& json, const QString& info) {
+QString SafetWorkflow:: generateGraph(char* filetype, QString& json, const QString& info) {
 
     if ( !checkSourcesTask())  {
 
@@ -2595,7 +2714,17 @@ QString SafetWorkflow::generateGraph(char* filetype, QString& json, const QStrin
     QList<SafetWorkflow::Miles> ordermiles;
     QStringList mylist = codeGraph.split("\n",QString::SkipEmptyParts);
     QSet<QString>  tasks;
+
+
+
+
     if (!codeGraph.isEmpty()) {
+        QStringList codenodes;
+        foreach(QString currnode, mylist) {
+            QString nodename = currnode.split(",").at(0).mid(QString("Nodo:").length()+1);
+            SYD << tr("........CODENODE:|%1|").arg(nodename);
+            codenodes.append(nodename);
+        }
 
         SafetWorkflow::ExtraInfoSearchKey& sk = searchKey();
         SYD << tr("...sk.key():|%1|").arg(sk.key);
@@ -2612,6 +2741,9 @@ QString SafetWorkflow::generateGraph(char* filetype, QString& json, const QStrin
 
             QString mydata = sk.extrainfo[ mykey];
 
+            if (codenodes.contains(mykey)) {
+                continue;
+            }
 
             QStringList mylist = mydata.split(QRegExp(";|<br/>"));
             if (mylist.count() < 3 ) {
@@ -2885,7 +3017,7 @@ QString SafetWorkflow::generateGraph(char* filetype, QString& json, const QStrin
 }
 
 
-QString SafetWorkflow::calculateGraphFormula(const QString& code) {
+QString SafetWorkflow::calculateGraphFormula(const QString& code, SafetWorkflow::ResultType rtype) {
     QString result;
     QStringList mynodes = code.split("\n",QString::SkipEmptyParts);
 
@@ -2935,6 +3067,8 @@ QString SafetWorkflow::calculateGraphFormula(const QString& code) {
         Q_ASSERT(!namenode.isEmpty());
 
 
+    SYD << tr("....SafetWorkflow::calculateGraphFormula...**s:|%1|").arg(s);
+
         QStringList myinfos =  s.split("...", QString::SkipEmptyParts);
 
 
@@ -2973,7 +3107,12 @@ QString SafetWorkflow::calculateGraphFormula(const QString& code) {
 
     if ( eformula == Safet::SUMALL) {
   //      _porc = QString("%1%").arg(totalporc);
-        result += finalnode.arg(QString("%1%").arg(totalporc)).arg(tr("Suma total:"));
+    if (rtype == Partial ) {
+        return QString("%1%").arg(totalporc);
+    }
+    else {
+             result += finalnode.arg(QString("%1%").arg(totalporc)).arg(tr("Suma total:"));
+    }
     }
     else if ( eformula == Safet::AVGALL ) {
         if ( totalcount == 0) {
@@ -2982,7 +3121,12 @@ QString SafetWorkflow::calculateGraphFormula(const QString& code) {
         }
         //_porc = QString("%1%").arg(double(totalporc)/double(totalcount));
 
-        result += finalnode.arg(QString("%1%").arg(double(totalporc)/double(totalcount))).arg(tr("Promedio:"));
+    if (rtype == Partial ) {
+        return QString("%1").arg(double(totalporc)/double(totalcount));
+    }
+    else {
+            result += finalnode.arg(QString("%1%").arg(double(totalporc)/double(totalcount))).arg(tr("Promedio:"));
+    }
 
     }
     else {
@@ -3007,6 +3151,8 @@ QString SafetWorkflow::calculateGraphFormula(const QString& code) {
 
     return result;
 }
+
+
 
 
 QString SafetWorkflow::paintGraph(const QString& code) {

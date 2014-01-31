@@ -116,7 +116,8 @@ public:
 		QString nodename() const { return _nodename;}		
 		void setNodename(const QString& s)  { _nodename = s;}
 	};
-        enum ItemSearched { SearchTask, SearchOption };
+        enum ResultType { Complete, Partial };
+    enum ItemSearched { SearchTask, SearchOption };
     enum OutputFormat { XML, JSON, SVG,JSONARRAY };
         enum TypeStats { Text, Graph };
         enum NextStates { OnlyNext, NextAndPrev, Previous, Neighbour, AllNotCompleted,  All };
@@ -205,7 +206,7 @@ public:
           \return Nuevo codigo
           */
 
-        QString calculateGraphFormula(const QString &code);
+           QString calculateGraphFormula(const QString &code,ResultType rtype =  SafetWorkflow::Complete);
 
         /**
           \brief Pinta un nodo para las estadisticas
@@ -883,6 +884,17 @@ private:
 
    SafetToken* ptoken;
    SafetWorkflow(const SafetWorkflow&);
+
+   /**
+       * @brief checkDisconnectedNodes elimina los nodos desconectados del inicio de una especificación de grafo
+       * @param nodes Mapa de nodos (Por referencia, se modifica en el método)
+       * @param nodestart nodo de inicio
+       * @param nuevo nodo final
+       * @return  Variable por referencia
+       */
+
+         void checkDisconnectedNodes(QMap<QString, QString>& nodes, const QString& nodestart, const QString& nodeend,const QString& info,
+                               QMap<int,QString>& orders);
 
 
 };

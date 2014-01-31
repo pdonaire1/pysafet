@@ -52,6 +52,7 @@ class SafetTask : public SafetNode  {
 
     Q_PROPERTY(QString role READ type WRITE setRole)
     Q_PROPERTY(QString note READ type WRITE setNote)
+    Q_PROPERTY(QString hideuntil READ type WRITE setHideuntil)
 
 	
     QList<SafetVariable*> variablelist;
@@ -61,6 +62,8 @@ class SafetTask : public SafetNode  {
         QString _tsvalue;
         QString _role;
          QString _note;
+	QString _hideuntil;
+
 public:
 	SafetTask();
         ~SafetTask();
@@ -102,6 +105,9 @@ public:
 
     QString note() const {return _note; };
     void setNote(const QString& i) { _note = i; }
+
+    QString hideuntil() const {return _hideuntil; };
+    void setHideuntil(const QString& i) { _hideuntil = i; }
 
 
         QString tsvalue() { return _tsvalue;}
