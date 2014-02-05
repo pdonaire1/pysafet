@@ -18,6 +18,7 @@
 #include "SafetYAWL.h"
 #include <QTextCodec>
 #include <QColor>
+#include <QDir>
 #include <QStringList>
 extern "C" {
     #include <locale.h>
@@ -596,8 +597,13 @@ QString graphvizPlugin::renderGraph(const QString&  code, const QString& info,
 
     QString infile, outfile;
 //    infile = "/tmp/"+list.at(0).section("/",-1);
-    infile = "/home/victorrbravo/tmp/"+list.at(0).section("/",-1);
-    outfile = "/home/victorrbravo/tmp/"+list.at(1).section("/",-1)+"."+_typegraph;
+    infile = QDir::tempPath() + "/"+list.at(0).section("/",-1);
+
+	QString outdir = QDir::tempPath();	
+    if ( context.keys().contains("GeneralOptions/generaloptions.dir.media"))  {
+		outdir = context[ "GeneralOptions/generaloptions.dir.media"];
+     }
+    outfile = outdir + "/"+list.at(1).section("/",-1)+"."+_typegraph;
 //    infile = "/var/www/media/"+list.at(0).section("/",-1);
 //    outfile = "/var/www/media/"+list.at(1).section("/",-1)+"."+_typegraph;
 
