@@ -47,7 +47,7 @@ INCLUDEPATH += /usr/local/include/digidocpp/ \
 QT += core \
     sql \
     network \
-    webkit \
+#    webkit \
 #    gui \
     svg \
     script \
