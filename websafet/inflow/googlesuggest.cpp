@@ -137,7 +137,7 @@ void GSuggestCompletion::showCompletion(const QStringList &choices, const QStrin
 
     if (choices.isEmpty() || choices.count() != hits.count())
         return;
-
+/*
     const QPalette &pal = editor->palette();
     QColor color = pal.color(QPalette::Disabled, QPalette::WindowText);
 
@@ -163,6 +163,7 @@ void GSuggestCompletion::showCompletion(const QStringList &choices, const QStrin
     popup->move(editor->mapToGlobal(QPoint(0, editor->height())));
     popup->setFocus();
     popup->show();
+*/
 }
 
 void GSuggestCompletion::doneCompletion()

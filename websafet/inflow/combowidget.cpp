@@ -719,7 +719,7 @@ void ComboWidget::selColor() {
 //        return;
 //    }
 
-QColor mycolor;
+//QColor mycolor;
 #if (QT_VERSION > QT_VERSION_CHECK(4, 4, 3)) 
 //     QColorDialog mydialog;
 //    if ( mydialog.exec() == QDialog::Accepted ) {
@@ -728,9 +728,9 @@ QColor mycolor;
 #else
         //mycolor = QColorDialog::getColor();
 #endif
-        QString curcolor =  QString("#%1%2%3").arg(mycolor.red(),2,16)
-                 .arg(mycolor.green(),2,16).arg(mycolor.blue(),2,16);
-        curcolor.replace(" ","0");
+        //QString curcolor =  QString("#%1%2%3").arg(mycolor.red(),2,16)
+          //       .arg(mycolor.green(),2,16).arg(mycolor.blue(),2,16);
+       // curcolor.replace(" ","0");
 //        varbox->addItem(curcolor);
 //        varbox->setCurrentIndex(varbox->count()-1);
     
