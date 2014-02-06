@@ -13,7 +13,7 @@ QT += core \
 HEADERS += graphvizplugin.h
 SOURCES += graphvizplugin.cpp
 LIBS += -L../../lib \
-        -ldigidoc \
+#        -ldigidoc \
         -lsafet \
 	-lgraph \
 	-lgvc
