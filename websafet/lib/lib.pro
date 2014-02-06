@@ -244,6 +244,6 @@ contains( DEFINES, SAFET_DBXML ) {
 
 
 
-target.path = /usr/lib/libsafet
+target.path = /usr/lib
 target.files = libsafet.so*
 INSTALLS += target

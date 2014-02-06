@@ -1,9 +1,9 @@
 TEMPLATE = subdirs
-SUBDIRS += src \    
+SUBDIRS = src \    
     lib \
 #    widgets \
-    plugins \
-    inflow 
+    plugins/plugviz 
+#    inflow 
 #    utils \
 #    tools
 # DEFINES = QT_DEBUG
@@ -21,10 +21,10 @@ CONFIG += qt \
 message( "Configuración y compilación de SAFET" )
 
 # Libreria Libdigidoc
-!exists( /usr/include/libdigidoc/DigiDocLib.h ) {
-       error(" ... Ocurrió un error en la búsqueda de encabezados de Libdigidoc. Por favor instale la librería Libdigidoc")
-}
-message( "... Verificación de encabezados de Libdigidoc: OK" )
+#!exists( /usr/include/libdigidoc/DigiDocLib.h ) {
+#       error(" ... Ocurrió un error en la búsqueda de encabezados de Libdigidoc. Por favor instale la librería Libdigidoc")
+#}
+#message( "... Verificación de encabezados de Libdigidoc: OK" )
 
 #!exists( /usr/lib/libdigidoc.so ) {
 #       error(" ... Ocurrió un error en la búsqueda de la librería Libdigidoc. Por favor instale la librería Libdigidoc")
@@ -44,15 +44,15 @@ message( "... Verificación de librería Libdigidoc: OK" )
 
 
 # Libreria Libxml2
-!exists( /usr/include/libxml2/libxml/xmlreader.h ) {
-       error(" ... Ocurrió un error en la búsqueda de encabezados de Libxml2. Por favor instale la librería Libxml2")
-}
-message( "... Verificación de encabezados de Libxml2: OK" )
+#!exists( /usr/include/libxml2/libxml/xmlreader.h ) {
+#       error(" ... Ocurrió un error en la búsqueda de encabezados de Libxml2. Por favor instale la librería Libxml2")
+#}
+#message( "... Verificación de encabezados de Libxml2: OK" )
 
-!exists( /usr/lib/libxml2.so ) {
-       error(" ... Ocurrió un error en la búsqueda de la librería Libxml2. Por favor instale la librería Libxml")
-}
-message( "... Verificación de librería Libxml2: OK" )
+#!exists( /usr/lib/libxml2.so ) {
+#       error(" ... Ocurrió un error en la búsqueda de la librería Libxml2. Por favor instale la librería Libxml")
+#}
+#message( "... Verificación de librería Libxml2: OK" )
 
 # Libreria Libxslt1
 #!exists( /usr/include/libexslt/exslt.h ) {
@@ -66,25 +66,25 @@ message( "... Verificación de librería Libxml2: OK" )
 #message( "... Verificación de librería Libxslt1.1: OK" )
 
 # Libreria Libgstreamer0.10
-!exists( /usr/include/gstreamer-0.10/gst/gst.h ) {
-       error(" ... Ocurrió un error en la búsqueda de encabezados de Libgstreamer0.10. Por favor instale la librería Libgstreamer0.10")
-}
+#!exists( /usr/include/gstreamer-0.10/gst/gst.h ) {
+#       error(" ... Ocurrió un error en la búsqueda de encabezados de Libgstreamer0.10. Por favor instale la librería Libgstreamer0.10")
+#}
 message( "... Verificación de encabezados de Libgstreamer0.10: OK" )
 
-!exists( /usr/lib/libgstreamer-0.10.so ) {
-       error(" ... Ocurrió un error en la búsqueda de la librería Libgstreamer0.10. Por favor instale la librería Libgstreamer0.10")
-}
-message( "... Verificación de librería Libgstreamer0.10: OK" )
+#!exists( /usr/lib/libgstreamer-0.10.so ) {
+#       error(" ... Ocurrió un error en la búsqueda de la librería Libgstreamer0.10. Por favor instale la librería Libgstreamer0.10")
+#}
+#message( "... Verificación de librería Libgstreamer0.10: OK" )
 
 # Libreria Libglib2.0-dev
-!exists( /usr/lib/glib-2.0/include/glibconfig.h ) {
-       error(" ... Ocurrió un error en la búsqueda de encabezados de Libglib2.0-dev. Por favor instale la librería Libglib2.0-dev")
-}
-message( "... Verificación de encabezados de Libglib2.0: OK" )
+#!exists( /usr/lib/glib-2.0/include/glibconfig.h ) {
+#       error(" ... Ocurrió un error en la búsqueda de encabezados de Libglib2.0-dev. Por favor instale la librería Libglib2.0-dev")
+#}
+#message( "... Verificación de encabezados de Libglib2.0: OK" )
 
-!exists( /usr/lib/libglib-2.0.so* ) {
-       error(" ... Ocurrió un error en la búsqueda de la librería Libglib2.0. Por favor instale la librería Libglib2.0")
-}
+#!exists( /usr/lib/libglib-2.0.so* ) {
+#       error(" ... Ocurrió un error en la búsqueda de la librería Libglib2.0. Por favor instale la librería Libglib2.0")
+#}
 message( "... Verificación de librería Libglib2.0: OK" )
 
 
