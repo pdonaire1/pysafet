@@ -19,14 +19,16 @@ x11proto-xext-dev
 libqt4-dev
 libssl-dev
 make
-qmake
 python-qt4-sql
 python-sip-dev
 python-qt4-dev
 libqt4-sql-sqlite
 ```
+Para instalar las dependencias desde la línea de commandos o terminal (puede hacerlo con synaptics, si está en ubuntu) puede ejecutar:
 
-$ sudo aptitude install libgraphviz-dev libtar-dev g++ libglib2.0-dev x11proto-xext-dev libqt4-dev libssl-dev make qmake python-qt4-sql python-sip-dev python-qt4-dev libqt4-sql-sqlite
+```
+$ sudo aptitude install libgraphviz-dev libtar-dev g++ libglib2.0-dev x11proto-xext-dev libqt4-dev libssl-dev make python-qt4-sql python-sip-dev python-qt4-dev libqt4-sql-sqlite  
+```
 
 Para clonar el repositorio de Libsafet debemos instalar el control de versiones git:
 ```
