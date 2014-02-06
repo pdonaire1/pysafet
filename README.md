@@ -10,7 +10,7 @@ Instalación de la librería Libsafet
 
 
 El código fuente de la librería Libsafet se encuentra alojada en una plataforma de desarrollo colaborativo de software (forja) llamada Github, esta plataforma utiliza como sistema de control de versión el software Git. Para la compilación se requiere que se instale los siguientes dependencias:
-
+'''
 libgraphviz-dev
 libtar-dev
 g++
@@ -24,12 +24,13 @@ python-qt4-sql
 python-sip-dev
 python-qt4-dev
 libqt4-sql-sqlite
-
+'''
 $ sudo aptitude install libgraphviz-dev libtar-dev g++ libglib2.0-dev x11proto-xext-dev libqt4-dev libssl-dev make qmake python-qt4-sql python-sip-dev python-qt4-dev libqt4-sql-sqlite
 
 Para clonar el repositorio de Libsafet debemos instalar el control de versiones git:
-
+'''
 $ sudo aptitude install git
+'''
 
 Luego ubicado en el directorio de trabajo (donde se va a descargar los fuentes) ejecuta el comando 
 
