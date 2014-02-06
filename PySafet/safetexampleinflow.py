@@ -13,7 +13,7 @@ Fecha_que_propone: 1296247598
 """
 #operacion:agregar_empleado Cedula: V20778810 Nombres: Víctor Rélar  Apellidos: Vélez Jímenez Cargo_asignado: Investigador"
 myform = QString(mystr)
-myinflow = Safet.MainWindow("/home/vbravo")
+myinflow = Safet.MainWindow("..")
 result = myinflow.login("admin","zpinquar")
 if result:
 #	isinserted = myinflow.toInputForm(mystr)

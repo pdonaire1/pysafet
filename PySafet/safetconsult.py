@@ -3,13 +3,13 @@
 from PyQt4.QtCore import *
 import Safet
 import os
-myconsult = u"operacion:Listar_datos Cargar_archivo_flujo:/home/vbravo/.safet/flowfiles/reportesActividades.xml Variable:VariableSumaTodas"
+myconsult = u"operacion:Listar_datos Cargar_archivo_flujo:../.safet/flowfiles/reportesActividades.xml Variable:VariableSumaTodas"
 #myconsult = u"operacion:agregar_ticket resumen: pruebaPy descripcion: dfdf componente: Aplicacion hito: VersionAlfa version: 0.1.0.0 tipo: Funcionalidad_extra prioridad: Importante" 
-#myconsult = u"operacion:Listar_datos Cargar_archivo_flujo:/home/vbravo/.safet/flowfiles/flujogeneral.xml Variable:VariableNuevo"
+#myconsult = u"operacion:Listar_datos Cargar_archivo_flujo:../.safet/flowfiles/flujogeneral.xml Variable:VariableNuevo"
 myform = QString(myconsult)
 print "Paso 1"
-myinflow = Safet.MainWindow(u"/home/vbravo")
-myinflow.setMediaPath("/home/vbravo/tmp")
+myinflow = Safet.MainWindow(u"..")
+myinflow.setMediaPath("../tmp")
 myinflow.setHostURL("http://localhost")
 myinflow.registerLogin("vbravo")
 result = myinflow.login("vbravo","d91408cd")

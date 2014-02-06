@@ -11,7 +11,7 @@
 class MainWindow : QObject
 {
 %TypeHeaderCode
-#include "/home/vbravo/websafet/inflow/mainwindow.h"
+#include "../websafet/inflow/mainwindow.h"
 %End
 
 public:
@@ -85,7 +85,7 @@ public:
 class SafetXmlObject : QObject 
 {
 %TypeHeaderCode
-#include "/home/vbravo/websafet/src/SafetXmlObject.h"
+#include "../websafet/src/SafetXmlObject.h"
 %End
 
 public:
@@ -97,7 +97,7 @@ public:
 class SafetDocument : SafetXmlObject
 {
 %TypeHeaderCode
-#include "/home/vbravo/websafet/src/SafetDocument.h"
+#include "../websafet/src/SafetDocument.h"
 %End
 
 public:
@@ -192,7 +192,7 @@ public:
 class SafetVariable : SafetXmlObject
 {
 %TypeHeaderCode
-#include "/home/vbravo/websafet/src/SafetVariable.h"
+#include "../websafet/src/SafetVariable.h"
 %End
 
 public:
@@ -226,7 +226,7 @@ public:
 class SafetYAWL : SafetXmlObject
 {
 %TypeHeaderCode
-#include "/home/vbravo/websafet/src/SafetYAWL.h"
+#include "../websafet/src/SafetYAWL.h"
 %End
 
 public:
@@ -254,7 +254,7 @@ private:
 struct ParsedSqlToData {
 
 %TypeHeaderCode
-#include "/home/vbravo/websafet/src/SafetYAWL.h"
+#include "../websafet/src/SafetYAWL.h"
 %End
 
 	bool null;
@@ -271,7 +271,7 @@ struct ParsedSqlToData {
 class SafetWorkflow : SafetXmlObject
 {
 %TypeHeaderCode
-#include "/home/vbravo/websafet/src/SafetWorkflow.h"
+#include "../websafet/src/SafetWorkflow.h"
 %End
 
 public:

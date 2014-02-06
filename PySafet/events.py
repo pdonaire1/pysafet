@@ -19,7 +19,7 @@ def checkevents():
     myuser = "vbravo"
     mypass = "d91408cd"
 	
-    myinflow = Safet.MainWindow("/home/vbravo") 
+    myinflow = Safet.MainWindow("..") 
     myinflow.registerLogin(myuser)
     result = myinflow.login(myuser,mypass)
     if result == False:

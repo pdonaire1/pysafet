@@ -6,6 +6,6 @@ myyawl.loadAllConfFiles(3)
 d = Safet.ParsedSqlToData()
 myddoc = Safet.SafetDocument()
 d.fields.append("Cargar_Archivo")
-d.values.append("/home/vbravo/PySafet/ingresados.ddoc")
+d.values.append("../PySafet/ingresados.ddoc")
 result = myyawl.verifyDocumentsFromData(d,myddoc)
 

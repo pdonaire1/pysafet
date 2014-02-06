@@ -11,7 +11,7 @@ else:
 	sys.exit()
 
 myform = QString(myconsult)
-myinflow = Safet.MainWindow(u"/home/vbravo")
+myinflow = Safet.MainWindow(u"..")
 myinflow.setMediaPath("/var/www/media")
 myinflow.setHostMediaPath("http://seguridad.cenditel.gob.ve/safet/intranet/media/archivos")
 result = myinflow.login("vbravo","zpinquar")

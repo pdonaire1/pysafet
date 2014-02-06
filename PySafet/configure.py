@@ -46,13 +46,13 @@ makefile.INCDIR_QT.append("/usr/include/qt4/QtNetwork")
 makefile.INCDIR_QT.append("/usr/include/qt4/QtSql")
 makefile.INCDIR_QT.append("/usr/include/qt4/QtWebKit")
 makefile.INCDIR_QT.append("/usr/include/qt4/QtSvg")
-makefile.INCDIR_QT.append("/home/vbravo/websafet/inflow")
-makefile.INCDIR_QT.append("/home/vbravo/websafet/src")
+makefile.INCDIR_QT.append("../websafet/inflow")
+makefile.INCDIR_QT.append("../websafet/src")
 #makefile.INCDIR_QT.append("/usr/include/qt4/QtCore")#QPair y QStack
 #makefile.INCDIR_QT.append("/usr/include/qt4/Qt")#QPair y QStack
-#makefile.LFLAGS.append("-L/home/vbravo/trac/seguridad/safet/libsafet/trunk/lib")
-#makefile.LFLAGS.append("-L/home/vbravo/libsafet/src")
-makefile.LFLAGS.append("-L/home/vbravo/websafet/lib")
+#makefile.LFLAGS.append("-L../trac/seguridad/safet/libsafet/trunk/lib")
+#makefile.LFLAGS.append("-L../libsafet/src")
+makefile.LFLAGS.append("-L../websafet/lib")
 makefile.extra_libs = ["safet","QtNetwork","QtSvg","QtSql","tar"]
 
 # Generate the Makefile itself.
