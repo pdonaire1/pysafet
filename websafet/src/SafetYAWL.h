@@ -56,6 +56,7 @@ const QString templateSVGString1 =
         "\n</svg>";
 
 const QString DateFormat = "dd/MM/yyyy hh:mmap";
+const QString BdocDateFormat = "ddd MMM d hh:mm:ss yyyy";
 const QString DateOnlyFormat = "dd/MM/yyyy";
 const QString SqlAllValues = "IS NOT NULL";
 const QString AnyOneObject = QObject::tr("_Cualquiera_");

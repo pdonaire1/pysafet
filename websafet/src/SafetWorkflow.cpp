@@ -2364,9 +2364,27 @@ void SafetWorkflow::proccessExtraInfo( QMap<QString,QString>& codes,const QStrin
 
                         infosigners =
                                 getSignersDocument(myvar,info,derror);
+                        QString rolmatch = rolfield.mid(QString("cn::").length());
                         if (infosigners.count() > 0 ) {
-                              SafetWorkflow::InfoSigner signature =  infosigners.at(nrosign);
+                            for(int j=0; j < infosigners.count(); j++ ) {
+                              SafetWorkflow::InfoSigner signature =  infosigners.at(j);
                               rolvalue = signature.commonName;
+
+                              SYD << tr("......SafetWorkflow::proccessExtraInfo....ROLMATCH...j:|%3|...rolmatch:|%1|...|%2|")
+                                     .arg(rolmatch)
+                                     .arg(rolvalue)
+                                     .arg(j);
+                              if (rolmatch == rolvalue) {
+                                  break;
+                              }
+                          }
+
+                            if (rolmatch != rolvalue) {
+                                rolvalue = "";
+                            }
+
+
+
 
                         }
                         else {
@@ -2382,11 +2400,36 @@ void SafetWorkflow::proccessExtraInfo( QMap<QString,QString>& codes,const QStrin
                         int nrosign = 0;
                         if (infosigners.count() > 0 ) {
                             QString spanvalue = "<br/>N/A*";
-                            SafetWorkflow::InfoSigner signature =  infosigners.at(nrosign);
-                            tsvalue = signature.date + " "+signature.hour;
-                            tsvalue.chop(1);
-                            QStack<QString> nexts = searchtask->next();
-                            tsvalue = adjustTimeZone(tsvalue);
+                            QStack<QString> nexts;
+                           QString rolmatch = rolfield.mid(QString("cn::").length());
+                             for(int j=0; j < infosigners.count(); j++ ) {
+                                SafetWorkflow::InfoSigner signature =  infosigners.at(j);
+                                tsvalue = signature.date + " "+signature.hour;
+                                tsvalue.chop(1);
+                                SYD << tr(".....SafetWorkflow::proccessExtraInfo:...TSVALUE...(1) tsvalue:|%1|")
+                                           .arg(tsvalue);
+                                nexts = searchtask->next();
+                                tsvalue = adjustTimeZone(tsvalue,Safet::BdocDateFormat,Safet::DateFormat);
+                                SYD << tr(".....SafetWorkflow::proccessExtraInfo:..j:|%2|.TSVALUE...(2) tsvalue:|%1|")
+                                           .arg(tsvalue)
+                                       .arg(j);
+
+                                rolvalue = signature.commonName;
+
+                                SYD << tr("......SafetWorkflow::proccessExtraInfo....TSROLMATCH...rolmatch:|%1|...|%2|")
+                                       .arg(rolmatch)
+                                       .arg(rolvalue);
+                                if (rolmatch == rolvalue) {
+                                    break;
+                                }
+
+                             }
+
+                            if (rolmatch != rolvalue) {
+                                rolvalue = "";
+                                tsvalue = "";
+
+                            }
 
                             while ( !nexts.isEmpty()) {
                                 QString nexttask = nexts.pop();
@@ -2407,11 +2450,17 @@ void SafetWorkflow::proccessExtraInfo( QMap<QString,QString>& codes,const QStrin
                             }
 
                             if ( showhuman) {
-                                tsvalue += "<br/>"+humanizeDate(days,tsvalue,"dd/MM/yyyy hh:mmap",
+                                if (!tsvalue.isEmpty()) {
+                                    tsvalue += "<br/>"+humanizeDate(days,tsvalue,"dd/MM/yyyy hh:mmap",
                                                      QDateTime::currentDateTime(),
-                                                     SafetWorkflow::SinceWhenTime,showhuman)
-                                        + spanvalue;
+                                                         SafetWorkflow::SinceWhenTime,showhuman)
+                                            + spanvalue;
+                                }
                             }
+                            SYD << tr(".....SafetWorkflow::proccessExtraInfo:...TSVALUE...(3) tsvalue:|%1|")
+                                       .arg(tsvalue);
+
+
 
                         }
                         else {
