@@ -8,17 +8,19 @@ class MainHandler(tornado.web.RequestHandler):
     def get(self):
         self.write("""
 <form name="input" action="/loadsignature" method="post">
-First name: <input type="text" name="firstname"><br>
-Last name: <input type="text" name="lastname">
+id: <input type="text" name="id"><br>
+status: <input type="text" name="status">
+resumen: <input type="text" name="summary">
 <input type="submit" value="Enviar"/>
 </form> 
 """)
 
 class SignatureHandler(tornado.web.RequestHandler):
     def post(self):
-	 firstname = self.get_argument("firstname", None)
-	 lastname =  self.get_argument("lastname", None)
-	 mymessage = firstname + lastname
+	 idfield = self.get_argument("id", None)
+	 statusfield =  self.get_argument("status", None)
+	 summaryfield =  self.get_argument("summary", None)
+	 mymessage = idfield + statusfield + summaryfield 
          mypage = u"""
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml">
