@@ -46,6 +46,7 @@ Dentro del directorio de trabajo se crea el directorio pysafet donde se tiene el
 Pasos para la compilación de la librería:
 ```
 $ cd pysafet/websafet
+$ make clean
 $ qmake-qt4
 $ make
 $ cd ../PySafet/
