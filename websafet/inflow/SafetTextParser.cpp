@@ -1840,6 +1840,10 @@ QString SafetTextParser::processCommand(const QDomElement& e, const QDomNode& ni
             if (mypair.first.trimmed().isEmpty()) {
                 continue;
             }
+            if (mypair.first.trimmed().startsWith("case when",Qt::CaseInsensitive)) { //FIX CHECK readonly fields
+                SYD << tr("...startsWith CASE WHEN:|%1|").arg(mypair.first);
+                continue;
+            }
             curr = curr + mypair.first;
             curr = curr + "=";
             addquotes =  !(SafetYAWL::canTypeConvert(mypair.second, QVariant::Bool) || SafetYAWL::canTypeConvert(mypair.second, QVariant::Int));
