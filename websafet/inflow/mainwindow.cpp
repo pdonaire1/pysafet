@@ -2424,7 +2424,14 @@ void MainWindow::executeJSCodeAfterLoad(/* bool ok */ ) {
     QString code;
     code = data;
     // Colocando los datos JSON
-    _currentjson = data;
+    QString typeresult = SafetYAWL::getConf()["Result/output.type"];
+
+    if (typeresult == "OnlyData") {
+           _currentjson = _currentdata;
+    }
+    else {
+        _currentjson = data;
+    }
 //    _currentjson = jsondata;
 
 
