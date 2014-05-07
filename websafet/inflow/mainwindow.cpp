@@ -2348,109 +2348,106 @@ void MainWindow::toLoadWeb() {
 
 
 
-void MainWindow::executeJSCodeAfterLoad(/* bool ok */ ) {
+//void MainWindow::executeJSCodeAfterLoad(/* bool ok */ ) {
 
 
-    // ** Reemplazar caracteres especiales, hacen falta pruebas aqui
-     currentDocuments.replace("\n","");
-     // ** Reemplazar caracteres especiales, hacen falta pruebas aqui
-     QString data;
-    data =  QString( "safetvariable = '%1';\n").arg(_listprincipalvariable);
-    data += QString("safetkey = '%1';\n").arg(_listprincipalkey);
-    QStringList mylist = _listprincipaltitle.split(SafetYAWL::LISTSEPARATORCHARACTER,QString::SkipEmptyParts);
-    data += QString("safettitle = '%1';\n").arg(mylist.at(0));
-    if ( mylist.count() > 1 ) {
-            data += QString("safetreport = '%1';\n").arg(mylist.at(1));
-    }
-    else {
-        data += QString("safetreport = '%1';\n").arg("Reporte");
-    }
+//    // ** Reemplazar caracteres especiales, hacen falta pruebas aqui
+//     currentDocuments.replace("\n","");
+//     // ** Reemplazar caracteres especiales, hacen falta pruebas aqui
+//     QString data;
+//    data =  QString( "safetvariable = '%1';\n").arg(_listprincipalvariable);
+//    data += QString("safetkey = '%1';\n").arg(_listprincipalkey);
+//    QStringList mylist = _listprincipaltitle.split(SafetYAWL::LISTSEPARATORCHARACTER,QString::SkipEmptyParts);
+//    data += QString("safettitle = '%1';\n").arg(mylist.at(0));
+//    if ( mylist.count() > 1 ) {
+//            data += QString("safetreport = '%1';\n").arg(mylist.at(1));
+//    }
+//    else {
+//        data += QString("safetreport = '%1';\n").arg("Reporte");
+//    }
 
-    data += QString("safetlistcount = %1;\n").arg(_listprincipalcount);
-    SYD << tr("....MainWindow::listDocuments..._listprincipaltitle:|%1|")
-           .arg(_listprincipaltitle);
+//    data += QString("safetlistcount = %1;\n").arg(_listprincipalcount);
+//    SYD << tr("....MainWindow::listDocuments..._listprincipaltitle:|%1|")
+//           .arg(_listprincipaltitle);
 
-    QString jsondata;
-
-
-    _currentdata = "[" + currentDocuments + " ]";
+//    QString jsondata;
 
 
-    QString jquerycolumns = QString("\n safetjson = {\n \"columns\" : [");
+//    _currentdata = "[" + currentDocuments + " ]";
 
 
-    jscriptcolumns = "safetcolumns  = [";
-    int i = 0;
-    foreach(QSqlField f, currentFields ) {
-
-        QString fname = f.name();
-        QString scriptlen = SafetYAWL::getScriptLen(f);
-         jscriptcolumns
-                 += QString("{ key: \"%1\",label:\"%1\",width:%2,"
-                            "resizeable:true,sortable:true},\n")
-                    .arg(fname)
-                    .arg(scriptlen);
-
-         jquerycolumns += QString(" {\"sTitle\": \"%1\"},\n")
-                 .arg(fname);
-
-         i++;
-    }
-      jquerycolumns += " ],\n";
-
-      jquerycolumns += "\n \"tasks\": [ " + currentADocuments + "]\n";
-
-      jquerycolumns += "\n};\n\n";
+//    QString jquerycolumns = QString("\n safetjson = {\n \"columns\" : [");
 
 
+//    jscriptcolumns = "safetcolumns  = [";
+//    int i = 0;
+//    foreach(QSqlField f, currentFields ) {
 
-    if (   i > 0 ) {
-        jscriptcolumns.chop(2);
-    }
-    jscriptcolumns += "];\n";
+//        QString fname = f.name();
+//        QString scriptlen = SafetYAWL::getScriptLen(f);
+//         jscriptcolumns
+//                 += QString("{ key: \"%1\",label:\"%1\",width:%2,"
+//                            "resizeable:true,sortable:true},\n")
+//                    .arg(fname)
+//                    .arg(scriptlen);
 
+//         jquerycolumns += QString(" {\"sTitle\": \"%1\"},\n")
+//                 .arg(fname);
 
-    jsondata += jscriptcolumns;
+//         i++;
+//    }
+//      jquerycolumns += " ],\n";
 
-    jsondata += jquerycolumns;
+//      jquerycolumns += "\n \"tasks\": [ " + currentADocuments + "]\n";
 
-    jsondata += "safetlist = [";
-    jsondata += currentDocuments;
-    jsondata += "];\n";
-
-    data += jsondata;
-
-
-    QString code;
-    code = data;
-    // Colocando los datos JSON
-    QString typeresult = SafetYAWL::getConf()["Result/output.type"];
-
-    if (typeresult == "OnlyData") {
-           _currentjson = _currentdata;
-    }
-    else {
-        _currentjson = data;
-    }
-//    _currentjson = jsondata;
-
-
-    // Colocando los datos JSON
-//    code += " ";
-//    code += jscriptcolumns;
-//    code += " ";
+//      jquerycolumns += "\n};\n\n";
 
 
 
-    code = "safetproccessData();";
+//    if (   i > 0 ) {
+//        jscriptcolumns.chop(2);
+//    }
+//    jscriptcolumns += "];\n";
+
+
+//    jsondata += jscriptcolumns;
+
+//    jsondata += jquerycolumns;
+
+//    jsondata += "safetlist = [";
+//    jsondata += currentDocuments;
+//    jsondata += "];\n";
+
+//    data += jsondata;
+
+
+//    QString code;
+//    code = data;
+//    // Colocando los datos JSON
+//    QString typeresult = SafetYAWL::getConf()["Result/output.type"];
+
+//    if (typeresult == "OnlyData") {
+//           _currentjson = _currentdata;
+//    }
+//    else {
+//        _currentjson = data;
+//    }
+////    _currentjson = jsondata;
+
+
+//    // Colocando los datos JSON
+////    code += " ";
+////    code += jscriptcolumns;
+////    code += " ";
 
 
 
-}
+//    code = "safetproccessData();";
 
-/*
- * FIXME: ARREGLAR UN SOLO FORMATO PARA JSON
- *
+
+
+//}
+
 void MainWindow::executeJSCodeAfterLoad( ) {
 
 
@@ -2484,7 +2481,7 @@ void MainWindow::executeJSCodeAfterLoad( ) {
     int i = 0;
     foreach(QSqlField f, currentFields ) {
 
-        QString scriptlen = getScriptLen(f);
+        QString scriptlen = SafetYAWL::getScriptLen(f);
          jscriptcolumns
                  += QString("{ \"key\": \"%1\",\"label\":\"%1\",\"width\":\"%2\","
                             "\"resizeable\":\"true\",\"sortable\":\"true\"},\n")
@@ -2517,7 +2514,7 @@ void MainWindow::executeJSCodeAfterLoad( ) {
 
 }
 
-*/
+
 
 void MainWindow::generateJScriptreports(const QString& documents,
                                         const QList<QSqlField>& fields) {
