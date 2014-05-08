@@ -902,6 +902,7 @@ public:
        * @return
        */
       QString genTicket(const QString& user);
+
 public Q_SLOTS: // Slots para el manejo de los servicios de Escritorio (QDesktopServices)
 
         void browse( const QUrl &url );
@@ -1108,6 +1109,8 @@ private:
      */
 
     bool replaceDocumentid(QString &t, const QString& idkey);
+    void executeWithoutJSON();
+    void executeWithJSON();
 private slots:
     void executeJSCodeAfterLoad( /*bool ok */ );
 
