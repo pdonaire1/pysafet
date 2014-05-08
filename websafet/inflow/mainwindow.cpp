@@ -4348,6 +4348,7 @@ bool  MainWindow::toInputConsole(const QString& action,bool withpermises) {
                 foreach(QString e, infos) {
                     _currentjson +=  QString("[\"%1\"],\n").arg(e);
                 }
+		_currentjson.chop(2);
                 _currentjson += "\n]\n}\n";
 
 
