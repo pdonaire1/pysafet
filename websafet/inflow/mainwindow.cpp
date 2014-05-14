@@ -1374,6 +1374,7 @@ QString MainWindow::generateModifyHTML(const QString& operation, const QString& 
             || operation.startsWith(QLatin1String("Cambiar_nota"),Qt::CaseInsensitive)
             || operation.startsWith(QLatin1String("Cambiar_info"),Qt::CaseInsensitive)
             || operation.startsWith(QLatin1String("Generar_solicitud"),Qt::CaseInsensitive)
+            || operation.startsWith(QLatin1String("Oficina_"),Qt::CaseInsensitive)
             || operation.startsWith(QLatin1String("Asignar_"),Qt::CaseInsensitive)
             || operation.startsWith(QLatin1String("Confirmar_"),Qt::CaseInsensitive)
             || operation.startsWith(QLatin1String("Registrar_aprobación_"),Qt::CaseInsensitive)
@@ -1391,6 +1392,13 @@ QString MainWindow::generateModifyHTML(const QString& operation, const QString& 
             SYD << tr("..........(Periodo_vacacional)...generateModifyHTML: |%1|")
                .arg(result);
         }
+        else if (fieldname == "Correspondencia")  {
+
+            result = mymodel->getUpdateString(operation,fieldname,key,mylist);
+            SYD << tr("..........(Correspondencia)...generateModifyHTML: |%1|")
+               .arg(result);
+        }
+
         else {
             result = QString("%1")
                 .arg(formFieldsForKey(operation,fieldname, key,mymodel,secondkey,form));
@@ -3131,19 +3139,19 @@ QString  MainWindow::toInputForm(const QString& action,bool withpermises) {
      SYD << tr(".........MainWindow::toInputForm................*RETURNING..postaction:|%1|")
             .arg(mypostaction);
 
+
      if ( !mypostaction.isEmpty() ) {
 
-         SYD  << tr(".................MainWindow::toInputForm........*KEY_RETURNING...results.at(0):|%1|")
+         SYD  << tr(".................MainWindow::toInputForm....POSTACTION_APPEND (BEFORE)..."
+                    "KEY_RETURNING...results.at(0)->:|%1|")
                  .arg(results.at(0));
 
          ParsedSqlToData  data = SafetTextParser::parseSql(results.at(0),true);
 
-
-         SYD  << tr(".................MainWindow::toInputForm........*KEY_RETURNING....data.key:|%1|")
+         SYD  << tr(".................MainWindow::toInputForm....POSTACTION_APPEND (AFTER)....*KEY_RETURNING....data.key:|%1|")
                  .arg(data.key);
-         SYD  << tr(".................MainWindow::toInputForm........*KEYVALUE_RETURNING....data.keyvalue:|%1|")
+         SYD  << tr(".................MainWindow::toInputForm........----->KEYVALUE_RETURNING....data.keyvalue:|%1|")
                  .arg(data.keyvalue);
-
 
 
          QString curremail;
@@ -3160,7 +3168,6 @@ QString  MainWindow::toInputForm(const QString& action,bool withpermises) {
 
          mypostaction.replace("_EMAIL",curremail);
          mypostaction = mypostaction.arg(data.keyvalue);
-
 
          _plugs.push_back(mypostaction);
             SYD << tr(".........MainWindow::toInputForm................*RETURNING...mypostaction.append:|%1|")

@@ -1914,7 +1914,7 @@ QStringList SafetTextParser::processXml(bool doquery,bool dopermises) {
         }
         QString myaction = n.attributes().namedItem("dataaction").nodeValue();
         if (!myaction.isEmpty()) {
-            SYD << tr("...........SafetTextParser::processXml.....POSTACTION: |%1|")
+            SYD << tr("...........SafetTextParser::processXml.....DATAACTION: |%1|")
                    .arg(myaction);
             _currentdataaction = myaction;
         }
@@ -2022,6 +2022,9 @@ ParsedSqlToData SafetTextParser::parseSql(const QString& s, bool parsetomap ) {
 
      QRegExp rx;
      QString newsql = s;
+     /**
+       FIXME ¿Porque se reemplazada aqui"
+       **/
      newsql.replace("'","");
      QString updatePattern = "UPDATE\\s+([a-zA-Z0-9_\\.\\(\\)][a-zA-Z0-9_,'\\.\\(\\)\\-]*)\\s+"
                              "SET\\s+"
@@ -2031,7 +2034,7 @@ ParsedSqlToData SafetTextParser::parseSql(const QString& s, bool parsetomap ) {
      QString insertPattern = "INSERT INTO\\s+([a-zA-Z0-9_][a-zA-Z0-9_\\.\\-]*)\\s+"
                              "\\(([a-zA-Z0-9_\\.\\(\\)\\[\\]][@a-zA-Z0-9_,'\\=\\.\\(\\)"
                              "\\-\\[\\]]*)\\)\\s+"
-                             "VALUES\\s+\\(([a-zA-Z0-9_'\\./\\[\\]#\\|][@a-zA-Z0-9_,'\\=\\.\\-/\\[\\]\\s#\\|\\*:#\\{\\}\\?]*)"
+                             "VALUES\\s+\\(([a-zA-Z0-9_'\\./\\[\\]#\\|][@a-zA-Z0-9_,'\\=\\.\\-/\\[\\]\\s#\\|\\*:#\\{\\}\\?\\(\\)]*)"
                              "\\)\\s*";
 
      QString table = rx.cap(1);
@@ -2044,14 +2047,14 @@ ParsedSqlToData SafetTextParser::parseSql(const QString& s, bool parsetomap ) {
      int pos = rx.indexIn(newsql);
      if ( pos == -1 ) {
          SYD
-                              << tr("La Sentencia \"%1\" no es una sentencia SQL de INSERCION (INSERT)")
+                              << tr("*La Sentencia \"%1\" no es una sentencia SQL de INSERCION (INSERT)")
                                  .arg(newsql);                  
          rx.setPattern(updatePattern);
          pos = rx.indexIn(newsql);
 
          if ( pos == -1 ) {
              SYW
-                                  << tr("La Sentencia generada \"%1\" no es una sentencia SQL válida de ACTUALIZACION (UPDATE)")
+                                  << tr("*La Sentencia generada \"%1\" no es una sentencia SQL válida de ACTUALIZACION (UPDATE)")
                                      .arg(newsql);
              data.null = true;
              return data;
@@ -2106,6 +2109,55 @@ ParsedSqlToData SafetTextParser::parseSql(const QString& s, bool parsetomap ) {
      }
      if (data.key.isEmpty() ) {
         data.key = data.fields.at(0);
+        QString newvalue = data.values.at(0).trimmed();
+        SYD << tr("...........PROCESSING POSTACTION. (1)..newvalue:|%1|").arg(newvalue);
+        // *** Para Postgresql
+        if (newvalue.startsWith("nextval")) {
+            QRegExp rx("\\s*nextval\\(([a-zA-Z_0-9'\\-]+)\\s*\\)\\s*");
+
+            int pos = rx.indexIn(newvalue);
+            if (pos == -1) {
+                SYW << tr("Error (POSTACTION) al evaluar nextval en la expresión:\"%1\"")
+                       .arg(newvalue);
+                return data;
+            }
+
+            SYD << tr(".........EN EL CAMBIO...nextval POR currval");
+            QString result = "";
+            QString mysql = QString("SELECT last_value from %1").arg(rx.cap(1));
+
+            SYD << tr("SafetTextParser::parseSQL...MYSQL:|%1|")
+                   .arg(mysql);
+
+            QSqlQuery query( SafetYAWL::currentDb );
+            query.prepare(  mysql );
+
+            SYD << tr(".........CURRVAL_APPEND_parseSQL::execBeforeFunction:|%1|")
+                   .arg(mysql);
+              bool executed = query.exec();
+              if (!executed ) {
+                   SYW << tr(" (email function) no se ejecutó correctamente "
+                         "la sentencia SQL: \"%1\"")
+                                           .arg(mysql);
+
+               }
+              bool isnext = query.next();
+              if ( !isnext ) {
+               SYW << tr(" (email function) No hay registros para ejecutar "
+                      "la sentencia SQL: \"%1\"").arg(mysql);
+              }
+              else {
+
+                result = query.record().value(0).toString();
+              }
+
+
+            SYD << tr("...........PROCESSING POSTACTION. (2)..result:|%1|").arg(result);
+            data.keyvalue = result;
+        }
+        else {
+            data.keyvalue = newvalue;
+        }
      }
      data.null = false;
      if ( parsetomap ) {
