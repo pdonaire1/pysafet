@@ -932,36 +932,95 @@ QString SafetYAWL::processOperatorValue(const QString& s, QString& ope) {
 	return str;
 }
 
+
+bool SafetYAWL::evalSQLValue(const QString& exp) {
+
+
+    QSqlQuery query( SafetYAWL::currentDb );
+    QString command = QString("SELECT %1").arg(exp);
+
+   query.prepare(  command );
+   bool executed = query.exec();
+   if (!executed ) {
+        SYE << tr("Problema con la secuencia \"%1\", no se ejecutó correctamente la sentencia SQL: \"%2\"")
+               .arg(exp).arg(command);
+        return false;
+    }
+
+   bool isnext = query.next();
+   if (!isnext ) {
+       SYE << tr("No hay registros para ejecutar la secuencia \"%1\"").arg(exp);
+       return false;
+   }
+
+   QString value = query.value(0).toString();
+   SYD << tr("...SafetYAWL::evalSQLValue..value:|%1|").arg(value);
+   if (value == "true") {
+       return true;
+   }
+   return false;
+
+
+}
+
 bool SafetYAWL::evalValues(const QString& s1, const QString& s2, const QString& ope ) {
 
-	  int result;
+      if ( (s1.compare("true") == 0)  )
+              return true;
+
+      QString newexp = s1 + ope + s2;
+
+      QRegExp rxfunc("[a-zA-Z0-9\\-_]{3,}\\([a-zA-Z0-9\\-_\\s',]*\\)");
+
+      int pos = rxfunc.indexIn(s2);
+      SYD << tr("SafetYAWL::evalValues...pos:|%1|").arg(pos);
+
+      if (pos >= 0 ) {
+          bool result = SafetYAWL::evalSQLValue(newexp);
+//          SYD << QString("EVALVALUES: result:|%1|")
+//                 .arg(result);
+          return  result;
+      }
+      else {
+          bool result = SafetYAWL::evalStaticValues(s1,s2,ope);
+//          SYD << QString("EVALVALUES: result:|%1|")
+//                 .arg(result);
+          return result;
+      }
+      return true;
+
+}
+
+bool SafetYAWL::evalStaticValues(const QString& s1, const QString& s2, const QString& ope ) {
+
+      int result;
           if ( (s1.compare("true") == 0)  )
               return true;
 
-	  result = QString::compare(ope, "=", Qt::CaseInsensitive);
-	  if ( result == 0 )
-		return s1 == s2;
-	  result = QString::compare(ope, "<", Qt::CaseInsensitive);  
-	  if ( result == 0 )
-		return s1 < s2;
-	  result = QString::compare(ope, ">", Qt::CaseInsensitive);
-	  if ( result == 0 )
-		return s1 > s2;
-	  result = QString::compare(ope, "<=", Qt::CaseInsensitive);
-	  if ( result == 0 )
-		return s1 <= s2;
-	  result = QString::compare(ope, ">=", Qt::CaseInsensitive);
-	  if ( result == 0 )
-		return s1 >= s2;
+      result = QString::compare(ope, "=", Qt::CaseInsensitive);
+      if ( result == 0 )
+        return s1 == s2;
+      result = QString::compare(ope, "<", Qt::CaseInsensitive);
+      if ( result == 0 )
+        return s1 < s2;
+      result = QString::compare(ope, ">", Qt::CaseInsensitive);
+      if ( result == 0 )
+        return s1 > s2;
+      result = QString::compare(ope, "<=", Qt::CaseInsensitive);
+      if ( result == 0 )
+        return s1 <= s2;
+      result = QString::compare(ope, ">=", Qt::CaseInsensitive);
+      if ( result == 0 )
+        return s1 >= s2;
           result = QString::compare(ope, "!=", Qt::CaseInsensitive);
-	  if ( result == 0 )
-		return s1 != s2;
+      if ( result == 0 )
+        return s1 != s2;
           result = QString::compare(ope, "LIKE", Qt::CaseSensitive);
-	  if ( result == 0 ) {
-		QString news2 = s2;
-		news2 = news2.remove(QChar('%'));
-		return s1.contains(news2.trimmed(), Qt::CaseInsensitive);
-	  }
+      if ( result == 0 ) {
+        QString news2 = s2;
+        news2 = news2.remove(QChar('%'));
+        return s1.contains(news2.trimmed(), Qt::CaseInsensitive);
+      }
           result = QString::compare(ope, "NOT IN", Qt::CaseSensitive);
           if ( result == 0 ) {
                 QString news2 = s2;
@@ -976,24 +1035,24 @@ bool SafetYAWL::evalValues(const QString& s1, const QString& s2, const QString& 
           }
 
           result = QString::compare(ope, "IS", Qt::CaseSensitive);
-	  if ( result == 0 ) {
+      if ( result == 0 ) {
               SYD << tr("....SafetYAWL::evalValues....s1...:|%2|...s2:|%1|")
                      .arg(s2)
                      .arg(s1);
-		bool value = false;
+        bool value = false;
                 if ( s2.left(4).compare("NULL", Qt::CaseInsensitive) == 0) {
-		      value =  s1.length() == 0 ;
+              value =  s1.length() == 0 ;
                 } else if ( s2.left(8).compare("NOT NULL", Qt::CaseInsensitive) == 0) {
-		      value =  s1.length() > 0 ;	
-		}
+              value =  s1.length() > 0 ;
+        }
                 SYD << tr("....SafetYAWL::evalValues....value:|%1|")
                        .arg(value);
-		return value;
-	   }	  
-	  if ( result == 0 )
-		return s1 == s2;
+        return value;
+       }
+      if ( result == 0 )
+        return s1 == s2;
 
- 
+
 
 
 }

@@ -432,6 +432,13 @@ public:
 
 	static QString processOperatorValue(const QString& s, QString& ope);
 
+    /**
+     * @brief evalSQLValue evaluar valores tipo SQL
+     * @param exp expresion
+     * @return
+     */
+    static bool evalSQLValue(const QString& exp);
+    static bool evalStaticValues(const QString &s1, const QString &s2, const QString &ope);
 	static bool evalValues(const QString& s1, const QString& s2, const QString& ope);
         /**
 	* \brief Asigna el puntero a funcion para la funcion de evaluacion cuando ocurre un ERROR
@@ -659,7 +666,8 @@ public:
 
 
 
-     private:
+
+private:
 	    QList<SafetWorkflow*> wflist;
             QList<SafetConfiguration*> conflist;
 
