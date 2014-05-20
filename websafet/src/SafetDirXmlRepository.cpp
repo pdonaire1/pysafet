@@ -364,6 +364,12 @@ bool SafetDirXmlRepository::searchDocumentInContainer(const QString& docName){
 
 
 	QString containerPath = internalContainerName;
+
+    SYD << tr(".........SafetDirXmlRepository::searchDocumentInContainer...containerPath:|%1|")
+           .arg(containerPath);
+    SYD << tr(".........SafetDirXmlRepository::searchDocumentInContainer...docName:|%1|")
+           .arg(docName);
+
 	QDir container(containerPath);
 	container.setFilter(QDir::Files | QDir::Hidden | QDir::NoSymLinks);
         if (_firstsearch ) {
@@ -388,6 +394,7 @@ bool SafetDirXmlRepository::searchDocumentInContainer(const QString& docName){
         if (!_documentsmap.contains(docName)) {
             return false;
 	}
+        SYD << tr(".........SafetDirXmlRepository::searchDocumentInContainer...RETURNING TRUE");
 
         return true;
 

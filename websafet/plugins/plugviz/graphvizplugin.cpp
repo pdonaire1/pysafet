@@ -141,7 +141,11 @@ QString graphvizPlugin::checkSES(const QString& s, ExtraInfoShow ex,
 	   
       showrole = ( context[conf()+"show.role"].compare("yes") == 0 );
 
+      bool  usegradient = true;
 
+      if (context.contains(conf()+"usegradient")) {
+            usegradient = ( context[conf()+"usegradient"].compare("yes") == 0 );
+      }
 
       foreach (QString sec, mylist) {
            QString extranode;
@@ -254,17 +258,21 @@ QString graphvizPlugin::checkSES(const QString& s, ExtraInfoShow ex,
                 else if ( porc < 0 ) {
                     othercolor.getHsv (&h,&s,&v);
                     porc = 1-(porc*-1.0);
-                    s = int(porc*255.0);
-                    othercolor.setHsv(h,s,v);
+                    // Usar gradiente **
+                    if ( usegradient ) {
+                        s = int(porc*255.0);
+                        othercolor.setHsv(h,s,v);
+                    }
                     scolor = "," + QString("fillcolor=\"#%1%2%3\"").arg(othercolor.red(),2,16)
                              .arg(othercolor.green(),2,16).arg(othercolor.blue(),2,16);
                 }
                 else {
                     color.getHsv (&h,&s,&v);
                     s = int(porc*255.0);
-//		    if ( s == 0 ) {	
+		    if ( usegradient ) {	
 	                    color.setHsv(h,s,v);
-//		    }
+		    }
+		   
                     scolor = "," + QString("fillcolor=\"#%1%2%3\"").arg(color.red(),2,16)
                              .arg(color.green(),2,16).arg(color.blue(),2,16);
 

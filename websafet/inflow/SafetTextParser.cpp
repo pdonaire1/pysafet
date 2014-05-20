@@ -504,8 +504,8 @@ QList<QPair<QString,QString> > SafetTextParser::getFieldsValues(const QDomElemen
                 QString currnumber = mylist.at(1).trimmed();
 
                 QString myvalue = currvalues.at(2);
-                SYD << tr("......SafetTextParser::getFieldsValues...mynumber: |%1|").arg(mynumber);
-                SYD << tr("...SafetTextParser::getFieldsValues...currnumber: |%1|").arg(currnumber);
+                SYD << tr("......SafetTextParser::getFieldsValues...INPUT_MYVALUE: |%1|").arg(myvalue);
+                SYD << tr("...SafetTextParser::getFieldsValues...INPUT_MYLIST(2): |%1|").arg(mylist.at(2));
                 if (mylist.at(2) == myvalue) {
 
                 }

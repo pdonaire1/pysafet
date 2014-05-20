@@ -8,9 +8,9 @@ DEFINES += QT_DEBUG \
 #DEFINES += SAFET_SMTP
 #DEFINES += SAFET_GSOAP
 DEFINES += SAFET_TAR
-#DEFINES += SAFET_OPENSSL
+DEFINES += SAFET_OPENSSL
 #DEFINES += SAFET_DIGIDOC
-#DEFINES += SAFET_DIGIDOCPP
+DEFINES += SAFET_DIGIDOCPP
 #DEFINES += SAFET_ESMTP
 DEFINES += QT_NO_DEBUG_OUTPUT
 DEFINES += QT_NO_DEBUG
@@ -41,6 +41,7 @@ INCLUDEPATH += /usr/local/include/digidocpp/ \
             /home/vbravo/firmaxml/libfirmaxml/trunk \
               /home/vbravo/estonia/libdigidocpp/src/  \
               /home/vbravo/estonia/libdigidoc/libdigidoc \
+	     /home/vbravo/estonia/libdigidoc/trunk/libdigidoc 
 }
 
 
