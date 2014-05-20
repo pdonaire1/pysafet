@@ -18,7 +18,6 @@
 #include "SafetYAWL.h"
 #include <QTextCodec>
 #include <QColor>
-#include <QDir>
 #include <QStringList>
 extern "C" {
     #include <locale.h>
@@ -255,7 +254,7 @@ QString graphvizPlugin::checkSES(const QString& s, ExtraInfoShow ex,
                 else if ( porc < 0 ) {
                     othercolor.getHsv (&h,&s,&v);
                     porc = 1-(porc*-1.0);
-               //     s = int(porc*255.0);
+                    s = int(porc*255.0);
                     othercolor.setHsv(h,s,v);
                     scolor = "," + QString("fillcolor=\"#%1%2%3\"").arg(othercolor.red(),2,16)
                              .arg(othercolor.green(),2,16).arg(othercolor.blue(),2,16);
@@ -263,9 +262,9 @@ QString graphvizPlugin::checkSES(const QString& s, ExtraInfoShow ex,
                 else {
                     color.getHsv (&h,&s,&v);
                     s = int(porc*255.0);
-		    if ( s == 0 ) {	
+//		    if ( s == 0 ) {	
 	                    color.setHsv(h,s,v);
-		    }
+//		    }
                     scolor = "," + QString("fillcolor=\"#%1%2%3\"").arg(color.red(),2,16)
                              .arg(color.green(),2,16).arg(color.blue(),2,16);
 
@@ -596,16 +595,10 @@ QString graphvizPlugin::renderGraph(const QString&  code, const QString& info,
     GVC_t *gvc; graph_t *g; FILE *fpin, *fpout;
 
     QString infile, outfile;
-//    infile = "/tmp/"+list.at(0).section("/",-1);
-    infile = QDir::tempPath() + "/"+list.at(0).section("/",-1);
-
-	QString outdir = QDir::tempPath();	
-    if ( context.keys().contains("GeneralOptions/generaloptions.dir.media"))  {
-		outdir = context[ "GeneralOptions/generaloptions.dir.media"];
-     }
-    outfile = outdir + "/"+list.at(1).section("/",-1)+"."+_typegraph;
-//    infile = "/var/www/media/"+list.at(0).section("/",-1);
-//    outfile = "/var/www/media/"+list.at(1).section("/",-1)+"."+_typegraph;
+//    infile = "/home/victorrbravo/django/media/archivos/"+list.at(0).section("/",-1);
+//    outfile = "/home/victorrbravo/django/media/archivos/"+list.at(1).section("/",-1)+"."+_typegraph;
+    infile = "/var/www/media/"+list.at(0).section("/",-1);
+    outfile = "/var/www/media/"+list.at(1).section("/",-1)+"."+_typegraph;
 
     gvc = gvContext();
     Q_CHECK_PTR( gvc );

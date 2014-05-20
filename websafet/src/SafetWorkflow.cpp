@@ -564,6 +564,10 @@ SafetTask* SafetWorkflow::searchTask(const QString& idtask) {
 	return NULL;
 }
 
+
+
+
+
 SafetCondition* SafetWorkflow::searchCondition(const QString& idcon) {
         foreach(SafetCondition* cur, conditionlist) {
                 Q_CHECK_PTR( cur);
@@ -1765,6 +1769,8 @@ QStringList SafetWorkflow::listNextStates(const QString& id, SafetWorkflow::Next
              if  ( pos > 0 ) {
                  porc = rx.cap(1).toDouble(&ok);
                  if ( porc > 0.0 || ispassed ) { // es el nodo identificado con ID
+                     SYD << tr("..SafetWorkflow::listNextStates..MARKED BY PORC:|%1|")
+                            .arg(newnode);
                      marked.append(newnode);
                  }
              }
@@ -1781,7 +1787,7 @@ QStringList SafetWorkflow::listNextStates(const QString& id, SafetWorkflow::Next
              Q_ASSERT ( pos >= 0 );
              QString newnode = rx.cap(1);
 
-             SYD << tr("......**SafetWorkflow::listNextStates.........SIGN: ...newnode:|%1|")
+             SYD << tr("......**SafetWorkflow::listNextStates..............newnode:|%1|")
                     .arg(newnode);
 
              rx.setPattern("Patron:\\s*([a-zA-Z0-9_\\.]+)\\s*,");
@@ -1989,6 +1995,8 @@ QStringList SafetWorkflow::listNextStates(const QString& id, SafetWorkflow::Next
                      // ****** Chequear que operadores JOIN
                      foreach(QString m, marked) {
                          if (result.contains(m)) {
+                             SYD << tr(".....SafetWorkflow::listNextStates.....(MARK) REMOVING:|%1|")
+                                    .arg(m);
                              result.removeAt(result.indexOf(m));
                          }
                      }
@@ -1998,7 +2006,11 @@ QStringList SafetWorkflow::listNextStates(const QString& id, SafetWorkflow::Next
      }
 
    }
-     SYD << tr("....SafetWorkflow::listNextStates...exiting");
+     SYD << tr("\n*....SafetWorkflow::listNextStates...result.count():|%1|").arg(result.count());
+     foreach(QString s, result) {
+         SYD << tr("....SafetWorkflow::listNextStates...result:|%1|").arg(s);
+     }
+
     return result;
 
 
@@ -2106,13 +2118,23 @@ QString SafetWorkflow::generateCodeGraph(char* filetype, const QString& info, bo
          }
      }
 
+     SYD << tr("****");
+     foreach(QString n, newresults.keys()) {
+         SYD << tr("newresult NODE:|%2|:->|%1|").arg(newresults[ n ]).arg(n);
+
+     }
+
      for(int i=0; i < hides.count(); i++) {
          QPair<QString,QString> hidenode = hides.at(i);
-         SYD << tr(".....SafetWorkflow::generateCodeGraph...HIDENODE..hide:|%1|").arg(hidenode.first);
          checkDisconnectedNodes(newresults,hidenode.first, hidenode.second,info,neworderresults);
       }
 
+
+
      proccessExtraInfo(newresults,info,neworderresults);
+
+
+     shrinkNodes(newresults);
 
      QString newresult;
 
@@ -2120,161 +2142,251 @@ QString SafetWorkflow::generateCodeGraph(char* filetype, const QString& info, bo
                newresult += newresults[nodename ] +  "\n";
      }
 
-     SYD << tr("......NEW..CONNECTED.....RESULT:\n%1\n")
+     SYD << tr("......NEW..CONNECTED..AFTER_SHRINK...************RESULT:\n%1\n*************")
             .arg(newresult);
 
      return newresult;
 }
+void  SafetWorkflow::shrinkNodes(QMap<QString,QString>&  nodes) {
 
 
+    foreach(QString nodename, nodes.keys()) {
+        QString deletenode = nodename;
+        if (nodemap[nodename]->title() != "::safethide::") {
+                 continue;
+        }
+        SYD << tr("...SHRINK node:|%1|").arg(nodename);
+        QString line = nodes[nodename];
+        SYD << tr("...SHRINK line:|%1|\n").arg(nodename);
+        QStringList myfields = line.split(",",QString::SkipEmptyParts);
+        if (myfields.count() < 3) {
+            SYW << tr("En el proceso de reducción esta mal formado la línea \"%1\"")
+                   .arg(line);
+            continue;
+        }
+        SYD << tr("...SHRINK ...continuating!");
 
 
-void  SafetWorkflow::checkDisconnectedNodes(QMap<QString,QString>&  nodes,const QString& nodestart, const QString& nodeend,const QString& info,QMap<int,QString>& orders) {
+        QStringList unodes;
+        QString oldfield = myfields.at(2).trimmed().mid(QString("Siguiente:").length());
+        unodes = oldfield.split(";",QString::SkipEmptyParts);
+        int result = nodes.remove(nodename);
+        SYD << tr("...SHRINK ...remove result:|%1|").arg(result);
+        foreach(QString othernode, nodes.keys()) {
+            SYD << tr("...PASTE node:|%1|").arg(othernode);
+            QString line = nodes[othernode];
+            SYD << tr("..PASTE line:|%1|").arg(othernode);
+            QString mynode = "";
+            QStringList myfields = line.split(",",QString::SkipEmptyParts);
+            for(int i=0; i < myfields.count(); i++) {
+                if ( i==2 )  {
+                    QString currnodes = myfields.at(i).trimmed().mid(QString("Siguiente:").length());
+                    SYD << tr("..FINAL currnodes:|%1|").arg(currnodes);
+                    QStringList cnodes = currnodes.split(";",QString::SkipEmptyParts);
+                    if (cnodes.contains(deletenode) ) {
+                        cnodes.removeAll(deletenode);
+                        cnodes.append(unodes);
+                        currnodes = "";
+                        foreach(QString c, cnodes) {
+                           currnodes += c;
+                           currnodes += ";";
+                        }
+                        currnodes.chop(1);
+                    }
+
+                    mynode = mynode + QString("Siguiente:%1,").arg(currnodes);
+                }
+                else {
+
+                    mynode = mynode + myfields.at(i) + ",";
+                }
+
+
+            }
+            mynode.chop(1);
+            SYD << tr("..FINAL MYNODE:|%1|\n").arg(mynode);
+            nodes[othernode] = mynode;
+
+        }
+
+    }
+
+}
+
+
+void  SafetWorkflow::checkDisconnectedNodes(QMap<QString,QString>&  nodes,const QString& nodestart, const QString& nodeend,
+                                            const QString& info,QMap<int,QString>& orders) {
 
     bool remainnodes;
     if (!nodes.contains(nodestart) ) {
 
         SYW << tr("El nodo \"%1\" no existe en el grafo, no es posible realizar una nueva conexión").arg(nodestart);
         return;
-   }
+    }
 
     if (!nodes.contains(nodeend) ) {
 
         SYW << tr("El nodo \"%1\" no existe en el grafo, no es posible realizar una nueva conexión").arg(nodeend);
         return;
-   }
+    }
 
-     QString mynode = nodes[nodestart];
-     QStringList myfields = mynode.split(",",QString::SkipEmptyParts);
-     Q_ASSERT(myfields.count() > 2 );
-     nodes.remove(nodestart);
+    QString mynode = nodes[nodestart];
+    QStringList myfields = mynode.split(",",QString::SkipEmptyParts);
+    Q_ASSERT(myfields.count() > 2 );
+    nodes.remove(nodestart);
 
-     mynode = "";
-     SafetTask* mytaskstart = searchTask(nodestart);
-     if (mytaskstart == NULL ) {
-         SYW << tr("No fue posible conseguir la tarea \"%1\"").arg(nodestart);
-         return;
-     }
-     SafetVariable *myvarstart = mytaskstart->getVariables().at(0);
-     SYD << tr("myvarstart == NULL");
-     Q_ASSERT(myvarstart == NULL);
+    mynode = "";
+    SafetTask* mytaskstart = searchTask(nodestart);
+    if (mytaskstart == NULL ) {
+        SYW << tr("No fue posible conseguir la tarea \"%1\"").arg(nodestart);
+        return;
+    }
+    SYD << tr("...SafetWorkflow::checkDisconnectedNodes.. FOUNDED:|%1|").arg(nodestart);
+    SafetVariable *myvarstart = mytaskstart->getVariables().at(0);
+    SYD << tr("myvarstart == NULL");
+    Q_ASSERT(myvarstart == NULL);
 
 
 
-     for(int i=0; i < myfields.count(); i++) {
+    for(int i=0; i < myfields.count(); i++) {
         if ( i==2 )  {
-                mynode = mynode + QString("Siguiente:%1,").arg(nodeend);
+            QString oldfield = myfields.at(i).trimmed().mid(QString("Siguiente:").length());
+            SYD << tr(".....SafetWorkflow::checkDisconnectedNodes...Siguiente..OLDFIELD:|%1|")
+                   .arg(oldfield);
+            //QStringList unodes = oldfield.split(";",QString::SkipEmptyParts);
+            SYD << tr(".....SafetWorkflow::checkDisconnectedNodes...nodeend:|%1|")
+                   .arg(nodeend);
+            mynode = mynode + QString("Siguiente:%1,").arg(nodeend);
         }
         else {
 
-                mynode = mynode + myfields.at(i) + ",";
+            mynode = mynode + myfields.at(i) + ",";
         }
 
 
-     }
-        mynode.chop(1);
+    }
+    mynode.chop(1);
 
-        SYD << tr("\n..... SafetWorkflow::checkDisconnectedNodes....mynode:\n%1")
-                .arg(mynode);
 
-        nodes[ nodestart ] = mynode;
+    SYD << tr("\n..... SafetWorkflow::checkDisconnectedNodes....mynode:\n%1")
+           .arg(mynode);
+
+    nodes[ nodestart ] = mynode;
 
     QRegExp rx; // Para saber si es un nodo marcado
     rx.setPattern("info\\.task\\.(color|size):\\s*([\\-a-zA-Z0-9_\\.]+)\\s*,?");
 
     QMap<QString,QString>  summnodes;
-        while( true ) {
+    while( true ) {
 
-                remainnodes = false;
-                QStringList connectnodes;
-                foreach(QString nodename, nodes.keys()) {
-                            QString mynode = nodes[nodename];
-                            QStringList myfields = mynode.split(",",QString::SkipEmptyParts);
-                            Q_ASSERT(myfields.count() > 2 );
-                            QStringList nextnodes = myfields.at(2).mid(QString("Siguiente:").length()+1).split(";",QString::SkipEmptyParts);
-                            nextnodes.removeAll("final");
-                            Q_ASSERT(nextnodes.count() > 0 );
-                             connectnodes.append(nextnodes);
+        remainnodes = false;
+        QStringList connectnodes;
+        SYD << tr("");
+        foreach(QString nodename, nodes.keys()) {
+            QString mynode = nodes[nodename];
+            QStringList myfields = mynode.split(",",QString::SkipEmptyParts);
+            Q_ASSERT(myfields.count() > 2 );
+            SYD << tr("..........SafetWorkflow::checkDisconnectedNodes...mynode:|%1|").arg(mynode);
+            QString fieldsig = myfields.at(2).trimmed();
+            SYD << tr("..........SafetWorkflow::checkDisconnectedNodes...myfields.at(2):|%1|").arg(fieldsig);
+            QStringList nextnodes = fieldsig.mid(QString("Siguiente:").length()).split(";",QString::SkipEmptyParts);
+            nextnodes.removeAll("final");
+            Q_ASSERT(nextnodes.count() > 0 );
+            foreach(QString n, nextnodes) {
+                if (!connectnodes.contains(n)) {
+                    connectnodes.append(n);
                 }
+            }
 
-                SYD << tr("\n\nite................");
-                foreach(QString nodename, connectnodes) {
-                    SYD << tr("..........SafetWorkflow::checkDisconnectedNodes...nodename:|%1|").arg(nodename);
 
-                }
+        }
 
-                foreach(QString nodename, nodes.keys() ) {
+        SYD << tr("......SafetWorkflow::checkDisconnectedNodes.....connectnodes.count():|%1|")
+               .arg(connectnodes.count());
+        foreach(QString nodename, connectnodes) {
+            SYD << tr("..........SafetWorkflow::checkDisconnectedNodes...nodename:|%1|").arg(nodename);
+        }
 
-                            if (!connectnodes.contains(nodename) && nodename != "final"  && nodename != "inicial" ) {
-                                SafetTask* mytaskremoved = searchTask(nodename);
-                                if (mytaskremoved != NULL ) {
+        foreach(QString nodename, nodes.keys() ) {
 
-                                    SafetVariable* myvar = mytaskremoved->getVariables().at(0);
-                                    SYD << tr("myvar != NULL");
-                                    Q_ASSERT(myvar != NULL);
-                                    QString myrolvalue = myvar->rolfield();
-                                    QString mytsvalue = myvar->timestampfield();
+            if (!connectnodes.contains(nodename) && nodename != "final"  && nodename != "inicial" ) {
+                SafetTask* mytaskremoved = searchTask(nodename);
+                if (mytaskremoved != NULL ) {
 
-                       if ( rx.indexIn( nodes[nodename] ) > 0 ) {
-                        SYD << tr("........SUMMARIZE...nodetocheck:\n%1")
-                        .arg(nodes[nodename]);
+                    SYD << tr("..........SafetWorkflow::checkDisconnectedNodes...mytaskremoved:|%1|")
+                           .arg(mytaskremoved->id());
+                    SafetVariable* myvar = mytaskremoved->getVariables().at(0);
+                    SYD << tr("..........myvar != NULL )(1)");
+                    Q_ASSERT(myvar != NULL);
+                    SYD << tr("..........myvar != NULL )(2)");
+                    QString mytsvalue = myvar->timestampfield();
+
+                    if ( rx.indexIn( nodes[nodename] ) > 0 ) {
                         bool ok;
                         double porc = rx.cap(2).toDouble(&ok);
+//                        SYD << tr(".........SafetWorkflow::checkDisconnectedNodes..nodetocheck:|%1|....porc:|%2|")
+//                               .arg(nodes[nodename])
+//                               .arg(porc);
                         if (porc >  0 ) {
-                //		 SYD << tr("........SUMMARIZE...NODETOCHECK...GETROLVALUE...myrolvalue:\n%1")
-                //				.arg(myrolvalue);
-                                           //myvarstart->setRolfield(myrolvalue);
-                           myvarstart->setTimestampfield(mytsvalue);
-
+                            myvarstart->setTimestampfield(mytsvalue);
                         }
                     }
 
 
 
-                                }
-                                else {
-                                    SYW << tr("No se pudo eliminar la tarea \"%1\" en el proceso de ocultar (hide)")
-                                           .arg(nodename);
+                }
+                else {
+                    SYW << tr("No se pudo eliminar la tarea \"%1\" en el proceso de ocultar (hide)")
+                           .arg(nodename);
 
-                                }
-
-                summnodes[nodename] =  nodes[nodename] + "\n";
-                                nodes.remove(nodename);
-                                remainnodes = true;
-                            }
-                  }
-
-                     if (!remainnodes ) {
-                            break;
                 }
 
-         }
-              proccessExtraInfo(summnodes,info,orders);
-
-           QString mysumm;
-            foreach(QString nodename, summnodes.keys() ) {
-                mysumm = mysumm +  summnodes[nodename] + "\n";
+                SYD << tr("..........SafetWorkflow::checkDisconnectedNodes...PLUS...summnodes:|%1|")
+                       .arg(nodename);
+                summnodes[nodename] =  nodes[nodename] + "\n";
+                nodes.remove(nodename);
+                remainnodes = true;
             }
+        }
 
-                   SYD << tr("..........SafetWorkflow::checkDisconnectedNodes..,,,.**SUMMNODES...MYSUMM...mysumm:\n%1\n").arg(mysumm);
-          QString formularesult = calculateGraphFormula(mysumm,Partial);
-          QString textualresult = formularesult;
-          textualresult.chop(1);
-          //mytaskstart->setTextualinfo(textualresult);
-          QString selectresult = QString("(select 'user %1') as rol").arg(formularesult);
-          myvarstart->setRolfield(selectresult);
+        if (!remainnodes ) {
+            break;
+        }
 
-                   SYD << tr("..........SafetWorkflow::checkDisconnectedNodes..,,,.**SUMMNODES...MYSUMM...textualresult:|%1|").arg(textualresult);
-                   SYD << tr("..........SafetWorkflow::checkDisconnectedNodes..,,,.**SUMMNODES...MYSUMM...selectresult:|%1|").arg(selectresult);
+        proccessExtraInfo(summnodes,info,orders);
+    }
 
+
+    QString mysumm;
+    foreach(QString nodename, summnodes.keys() ) {
+        mysumm = mysumm +  summnodes[nodename] + "\n";
+    }
+
+    SYD << tr("...SafetWorkflow::checkDisconnectedNodes*****************mysumm:\n%1\n***************").arg(mysumm);
+    QString formularesult = calculateGraphFormula(mysumm,Partial);
+    QString textualresult = formularesult;
+    textualresult.chop(1);
+    //mytaskstart->setTextualinfo(textualresult);
+    QString selectresult = QString("(select 'usuario %1') as rol").arg(formularesult);
+    myvarstart->setRolfield(selectresult);
+    QString currts = myvarstart->timestampfield();
+
+    SYD << tr("Disconnected......CURRTS:|%1|").arg(currts);
+    if ( currts.isEmpty() ) {
+
+        QString newts = QString("(select 2323231231) as tiempo");
+        myvarstart->setTimestampfield(newts);
+        SYD << tr("Disconnected..empty....CURRTS:|%1|").arg(currts);
+    }
+
+    SYD << tr("..........SafetWorkflow::checkDisconnectedNodes...MYSUMM...task:|%2| selectresult:|%1|").arg(selectresult)
+           .arg(mytaskstart->id());
 
 
 
 
 
  }
-
-
 
 void SafetWorkflow::proccessExtraInfo( QMap<QString,QString>& codes,const QString& info,
                                         QMap<int,QString>& orders) {
@@ -3668,19 +3780,33 @@ QString SafetWorkflow::generateWhereExpression(const QString& f, const QString& 
 		else  {
                         rx.setPattern(".*\\s+from\\s+.*");
 
-                        if (rx.indexIn( oelement) >= 0 ) {
-                               str +=  (f + " "+ ope + " "+ oelement );
+                        QRegExp rxfunc("[a-zA-Z0-9\\-_]{3,}\\([a-zA-Z0-9\\-_\\s',]*\\)");
+
+                        SYD << tr("RXFUNC...olement:|%1|").arg(oelement);
+                        SYD << tr("RXFUNC...pattern:|%1|").arg(rxfunc.pattern());
+                        int pos = rxfunc.indexIn(oelement);
+                        SYD << tr("RXFUNC...pos:|%1|").arg(pos);
+                        if ( pos  >= 0 ) {
+                            str +=  (f + " "+ ope + " "+ oelement).trimmed();
+
+                            SYD << tr("RXFUNC...str:|%1|").arg(str);
                         }
                         else {
-                           QRegExp rx("((AND|OR|NOT)\\s+|'(.*)')");
-                           rx.setCaseSensitivity( Qt::CaseInsensitive );
-                           int pos = rx.indexIn( oelement );
-                           if ( pos == -1 ) {
-                              str +=  (f + " "+ ope + " '" + oelement +"'").trimmed();
-                           }
-                           else {
-                              str +=  (f + " "+ ope + " " + oelement + " ").trimmed();
-                           }
+
+                            if (rx.indexIn( oelement) >= 0 ) {
+                                   str +=  (f + " "+ ope + " "+ oelement );
+                            }
+                            else {
+                               QRegExp rx("((AND|OR|NOT)\\s+|'(.*)')");
+                               rx.setCaseSensitivity( Qt::CaseInsensitive );
+                               int pos = rx.indexIn( oelement );
+                               if ( pos == -1 ) {
+                                  str +=  (f + " "+ ope + " '" + oelement +"'").trimmed();
+                               }
+                               else {
+                                  str +=  (f + " "+ ope + " " + oelement + " ").trimmed();
+                               }
+                            }
                         }
 		}
 		str += " OR ";
@@ -4498,7 +4624,10 @@ bool SafetWorkflow::checkDocuments(QSqlQuery& query,
 
     QString home = SafetYAWL::getConfFile().getValue("XmlRepository", "xmlrepository.path").toString();
     QString homefile = SafetYAWL::getConfFile().getValue("XmlRepository", "xmlrepository.name").toString();
-    _xmlRepository->openContainer(home + "/" + homefile);
+    QString mypath = home + "/" + homefile;
+    SYD << tr("checkDocument...h:|%1|").arg(mypath);
+
+    _xmlRepository->openContainer(mypath);
 
     bool isremotecontainer = remoteContainer.compare("on",Qt::CaseInsensitive) == 0;
     QStringList signers;
@@ -4511,6 +4640,8 @@ bool SafetWorkflow::checkDocuments(QSqlQuery& query,
                 .arg(signatories);
         return false;
     }
+
+    SYD << tr("checkDocument...(2)....");
     SafetDocument::SignatureOperator signatureOp = SafetDocument::AND;
 
     if ( commapos != -1 )    {
@@ -4536,11 +4667,15 @@ bool SafetWorkflow::checkDocuments(QSqlQuery& query,
 #endif
 
 #ifdef SAFET_DIGIDOCPP
+    SYD << tr("checkDocument...(3)....");
      digidoc::initialize();
+         SYD << tr("checkDocument...(3.1)....");
      digidoc::X509CertStore *store = new digidoc::DirectoryX509CertStore();
+     SYD << tr("checkDocument...(3.2)....");
      digidoc::X509CertStore::init(store);
-
+    SYD << tr("checkDocument...(4)....");
      BDocDocument doc;
+     SYD << tr("checkDocument...(5)....");
 #endif
 
 
@@ -4558,13 +4693,13 @@ bool SafetWorkflow::checkDocuments(QSqlQuery& query,
     while (query.next()) {
         QString documentid = SafetYAWL::getDocumentID(query,true);
 
-        SYD << tr("...........SafetWorkflow::checkDocuments..DOCUMENTID..fieldname:|%1|")
-               .arg(query.record().fieldName(0));
-        SYD << tr("...........SafetWorkflow::checkDocuments....value:|%1|")
-               .arg(query.record().value(0).toString());
+//        SYD << tr("...........SafetWorkflow::checkDocuments..DOCUMENTID..fieldname:|%1|")
+//               .arg(query.record().fieldName(0));
+//        SYD << tr("...........SafetWorkflow::checkDocuments....value:|%1|")
+//               .arg(query.record().value(0).toString());
 
-        SYD << tr("...........SafetWorkflow::checkDocuments..DOCUMENTID..DOCUMENTID:|%1|")
-               .arg(documentid);
+//        SYD << tr("...........SafetWorkflow::checkDocuments..DOCUMENTID..DOCUMENTID:|%1|")
+//               .arg(documentid);
 	// ********* prueba de llamada a metodo remoto de servicio web safet **************
 	// obtener valores del archivo de configuracion	
 
@@ -4572,7 +4707,11 @@ bool SafetWorkflow::checkDocuments(QSqlQuery& query,
             SYA << tr("WebService (GSOAP) actualmente no está soportado");
        }
 
+        if (documentid.startsWith("Ci")) {
+            //        SYD << tr("...........SafetWorkflow::checkDocuments..CiDocument:|%1|")
+            //               .arg(documentid);
 
+        }
 
        if (!_xmlRepository->searchDocumentInContainer(documentid)) {
 

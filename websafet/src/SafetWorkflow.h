@@ -896,7 +896,7 @@ private:
          void checkDisconnectedNodes(QMap<QString, QString>& nodes, const QString& nodestart, const QString& nodeend,const QString& info,
                                QMap<int,QString>& orders);
 
-
+         void shrinkNodes(QMap<QString, QString> &nodes);
 };
 
 #endif /*SAFETWORKFLOW_H_*/
