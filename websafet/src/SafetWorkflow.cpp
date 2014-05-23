@@ -174,7 +174,8 @@ bool SafetWorkflow::putParameters(const QMap<QString,QString>& p) {
                 task->setTitle(normtl);
             }
             else {
-                task->setTitle(Safet::AnyOneObject);
+                //task->setTitle(Safet::AnyOneObject);
+                task->setTitle("::safethide::");
             }
         }
         foreach(SafetPort *port, task->getPorts()) {
@@ -2155,6 +2156,7 @@ void  SafetWorkflow::shrinkNodes(QMap<QString,QString>&  nodes) {
         if (nodemap[nodename]->title() != "::safethide::") {
                  continue;
         }
+
         SYD << tr("...SHRINK node:|%1|").arg(nodename);
         QString line = nodes[nodename];
         SYD << tr("...SHRINK line:|%1|\n").arg(nodename);
