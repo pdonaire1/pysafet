@@ -8866,7 +8866,7 @@ bool MainWindow::login(const QString& name, const QString& pass) {
                 if (curtickets.contains(name)) {
                     curuser = mykey;
                     isticket = true;
-                    SYA << tr("TICKET_LOGIN user: |%1| with TICKET: |%1|")
+                    SYA << tr("TICKET_LOGIN user: |%1| with TICKET: |%2|")
                            .arg(curuser)
                            .arg(name);
                     break;
