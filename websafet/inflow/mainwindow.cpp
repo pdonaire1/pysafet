@@ -516,7 +516,7 @@ QString MainWindow::checkUserRegister(const QString& fullname,
                 .arg(account)
                 .arg(newhash)
                 .arg(fullname + " " + email)
-                .arg("Invitado");
+                .arg("UsuarioFinal");
 
 
         SYD << tr(".......................MainWindow::checkUserRegister....myaction:|%1|")
@@ -8852,6 +8852,7 @@ bool MainWindow::login(const QString& name, const QString& pass) {
 
             QStringList mylist = users[mykey];
 
+            SYD << tr("\n....MainWindow::login...mykey:|%1|").arg(mykey);
             if (mylist.count() > 3 ) {
                 QStringList curtickets = mylist.at(3).split(";",QString::SkipEmptyParts);
                 SYD << tr("....MainWindow::login...CURTICKETS...curtickets...mylist:|%1|")
@@ -8861,9 +8862,13 @@ bool MainWindow::login(const QString& name, const QString& pass) {
                 SYD << tr("....MainWindow::login...CURTICKETS...curtickets.count()..name:|%1|")
                        .arg(name);
 
+
                 if (curtickets.contains(name)) {
                     curuser = mykey;
                     isticket = true;
+                    SYA << tr("TICKET_LOGIN user: |%1| with TICKET: |%1|")
+                           .arg(curuser)
+                           .arg(name);
                     break;
                 }
             }
