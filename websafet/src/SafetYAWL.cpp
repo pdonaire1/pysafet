@@ -874,7 +874,7 @@ QString SafetYAWL::addQuotes(const QString& value) {
     QString result;
 
     bool addquotes =  !(SafetYAWL::canTypeConvert(value, QVariant::Bool)
-                        || SafetYAWL::canTypeConvert(value, QVariant::Int));
+                        && !SafetYAWL::canTypeConvert(value, QVariant::Int));
     if ( addquotes ) {
          result = "'"+ value + "'";
     }
@@ -889,10 +889,12 @@ bool SafetYAWL::canTypeConvert(const QString& s, QVariant::Type t) {
 	bool result = false;
     QRegExp rx("^(true|false|null)$");
 	rx.setCaseSensitivity( Qt::CaseInsensitive );
+    QString news = s;
+
 	switch ( t ) {
 		case QVariant::Int:
- 			rx.setPattern("^\\d+$");
-			result = rx.indexIn( s ) >= 0;
+            rx.setPattern("[\\d]+[\\d\\.]*");
+            result = rx.exactMatch(news.trimmed());
 			break;
 		case QVariant::String:
 			rx.setPattern("^(\\s*(([1|2|3]\\d{3}-\\d{1,2}-\\d{1,2})|(\\d{1,2}-\\d{1,2}-[1|2|3]\\d{3})|(\\d{1,2}/\\d{1,2}/[1|2|3]\\d{3}))\\s*)$");
@@ -968,25 +970,25 @@ bool SafetYAWL::evalValues(const QString& s1, const QString& s2, const QString& 
       if ( (s1.compare("true") == 0)  )
               return true;
 
-      QString newexp = s1 + ope + s2;
+//      QString newexp = s1 + ope + s2;
 
-      QRegExp rxfunc("[a-zA-Z0-9\\-_]{3,}\\([a-zA-Z0-9\\-_\\s',]*\\)");
+//      QRegExp rxfunc("[a-zA-Z0-9\\-_]{3,}\\([a-zA-Z0-9\\-_\\s',]*\\)");
 
-      int pos = rxfunc.indexIn(s2);
-      SYD << tr("SafetYAWL::evalValues...pos:|%1|").arg(pos);
+//      int pos = rxfunc.indexIn(s2);
+//      SYD << tr("SafetYAWL::evalValues...pos:|%1|").arg(pos);
 
-      if (pos >= 0 ) {
-          bool result = SafetYAWL::evalSQLValue(newexp);
+//      if (pos >= 0 ) {
+//          bool result = SafetYAWL::evalSQLValue(newexp);
 //          SYD << QString("EVALVALUES: result:|%1|")
 //                 .arg(result);
-          return  result;
-      }
-      else {
+//          return  result;
+//      }
+//      else {
           bool result = SafetYAWL::evalStaticValues(s1,s2,ope);
-//          SYD << QString("EVALVALUES: result:|%1|")
-//                 .arg(result);
+          SYD << QString("STATIC.....SafetYAWL::EVALVALUES: result:|%1|")
+                 .arg(result);
           return result;
-      }
+//      }
       return true;
 
 }
@@ -994,6 +996,14 @@ bool SafetYAWL::evalValues(const QString& s1, const QString& s2, const QString& 
 bool SafetYAWL::evalStaticValues(const QString& s1, const QString& s2, const QString& ope ) {
 
       int result;
+      QRegExp rx("[\\d\\.]+");
+      QRegExp rxdatepsql(Safet::DATEFORMATPSQL);
+
+      SYD << tr("....STATIC...SafetYAWL::evalStaticValues....s1...:|%2|. ope:|%3|..s2:|%1|")
+             .arg(s2)
+             .arg(s1)
+             .arg(ope);
+
           if ( (s1.compare("true") == 0)  )
               return true;
 
@@ -1001,18 +1011,62 @@ bool SafetYAWL::evalStaticValues(const QString& s1, const QString& s2, const QSt
       if ( result == 0 )
         return s1 == s2;
       result = QString::compare(ope, "<", Qt::CaseInsensitive);
-      if ( result == 0 )
-        return s1 < s2;
+      if ( result == 0 ) {
+        if (rx.exactMatch(s2)) {
+            return s1 < s2;
+        }
+        else {
+            QString news1 = s1;
+            if (rxdatepsql.exactMatch(news1)) {
+                news1.chop(7);
+            }
+            return evalSQLValue(addQuotes(news1)+ope+s2);
+        }
+      }
       result = QString::compare(ope, ">", Qt::CaseInsensitive);
-      if ( result == 0 )
-        return s1 > s2;
+      if ( result == 0 ) {
+          if (rx.exactMatch(s2)) {
+              return s1 > s2;
+          }
+          else {
+              QString news1 = s1;
+              if (rxdatepsql.exactMatch(news1)) {
+                  news1.chop(7);
+              }
+
+              return evalSQLValue(addQuotes(news1)+ope+s2);
+          }
+      }
+
       result = QString::compare(ope, "<=", Qt::CaseInsensitive);
-      if ( result == 0 )
-        return s1 <= s2;
+      if ( result == 0 ) {
+          if (rx.exactMatch(s2)) {
+              return s1 <= s2;
+          }
+          else {
+              QString news1 = s1;
+              if (rxdatepsql.exactMatch(news1)) {
+                  news1.chop(7);
+              }
+
+              return evalSQLValue(addQuotes(news1)+ope+s2);
+          }
+      }
       result = QString::compare(ope, ">=", Qt::CaseInsensitive);
-      if ( result == 0 )
-        return s1 >= s2;
-          result = QString::compare(ope, "!=", Qt::CaseInsensitive);
+      if ( result == 0 ) {
+          if (rx.exactMatch(s2)) {
+              return s1 >= s2;
+          }
+          else {
+              QString news1 = s1;
+              if (rxdatepsql.exactMatch(news1)) {
+                  news1.chop(7);
+              }
+
+              return evalSQLValue(addQuotes(news1)+ope+s2);
+          }
+      }
+      result = QString::compare(ope, "!=", Qt::CaseInsensitive);
       if ( result == 0 )
         return s1 != s2;
           result = QString::compare(ope, "LIKE", Qt::CaseSensitive);
@@ -1036,16 +1090,13 @@ bool SafetYAWL::evalStaticValues(const QString& s1, const QString& s2, const QSt
 
           result = QString::compare(ope, "IS", Qt::CaseSensitive);
       if ( result == 0 ) {
-              SYD << tr("....SafetYAWL::evalValues....s1...:|%2|...s2:|%1|")
-                     .arg(s2)
-                     .arg(s1);
         bool value = false;
                 if ( s2.left(4).compare("NULL", Qt::CaseInsensitive) == 0) {
               value =  s1.length() == 0 ;
                 } else if ( s2.left(8).compare("NOT NULL", Qt::CaseInsensitive) == 0) {
               value =  s1.length() > 0 ;
         }
-                SYD << tr("....SafetYAWL::evalValues....value:|%1|")
+                SYD << tr("....***SafetYAWL::evalValues....value:|%1|")
                        .arg(value);
         return value;
        }

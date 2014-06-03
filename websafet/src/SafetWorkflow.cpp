@@ -3738,22 +3738,6 @@ QString SafetWorkflow::generateWhereExpression(const QString& f, const QString& 
 	myvar = o;
 	QString ope; // Cadena para el operador
         QRegExp rx("\\[([a-zA-Z_0-9\\.:\\-\\s;\\+]+)\\]");
-// ** FIXME
-/*
- 	int pos = o.indexOf( rx );
- 	if ( pos > -1 ) {
- 		ope = "=";
-// 		qDebug("*.......................olement: %s *", qPrintable(o));
- 		QString fields = rx.cap(1);
- //		qDebug("*........................fields: %s *", qPrintable(fields));
- 		checkfieldslist = fields.split(";");			
-		Q_ASSERT( checkfieldslist.count() > 0 );
- 		str +=  (f + " "+ ope + " '" + checkfieldslist.at(checkfieldslist.count()-1) +"'").trimmed();
-// 		qDebug("*.......(1).................str list: |%s| ", qPrintable(str));
- 		return str;
- 	}
-
-*/
 	QString onew = SafetYAWL::processOperatorValue(o, ope).trimmed();
 
 	QStringList oroptions = onew.split(",");
