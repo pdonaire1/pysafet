@@ -559,7 +559,7 @@ SafetYAWL::SafetYAWL(const QString& path)  {
 
         logvar = SafetYAWL::getConf()["Log/debug"];
     if ( logvar.compare("off",Qt::CaseInsensitive) == 0 )  {
-        SYA << tr("turning off DEBUG....(TURNINGOFF)");
+//        SYA << tr("turning off DEBUG....(TURNINGOFF)");
         SafetYAWL::streamlog.turnOff(SafetLog::Debug);
     }
 	logvar = SafetYAWL::getConfFile().getValue("Log", "log.action").toString();
@@ -1316,7 +1316,7 @@ bool SafetYAWL::openDataSources(){
                             return false;
                         }
                         currentDb.setPort(port);
-                        SafetYAWL::streamlog << SafetLog::Action << tr("Configurando acceso de base de datos por el puerto: %1").arg(port);
+//                        SYD  << tr("Configurando acceso de base de datos por el puerto: %1").arg(port);
                         //qDebug("*** antes de _db.open()");
 			SafetYAWL::databaseOpen = currentDb.open();
 //                          qDebug("LAST ERROR: %s", qPrintable(SafetYAWL::currentDb.lastError().databaseText()));
