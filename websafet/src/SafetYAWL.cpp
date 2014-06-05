@@ -558,7 +558,10 @@ SafetYAWL::SafetYAWL(const QString& path)  {
 	SafetYAWL::streamlog.turnOnAll();
 
         logvar = SafetYAWL::getConf()["Log/debug"];
-	if ( logvar.compare("off",Qt::CaseInsensitive) == 0 )  SafetYAWL::streamlog.turnOff(SafetLog::Debug);
+    if ( logvar.compare("off",Qt::CaseInsensitive) == 0 )  {
+        SYA << tr("turning off DEBUG....(TURNINGOFF)");
+        SafetYAWL::streamlog.turnOff(SafetLog::Debug);
+    }
 	logvar = SafetYAWL::getConfFile().getValue("Log", "log.action").toString();
 	if ( logvar.compare("off",Qt::CaseInsensitive) == 0 )  SafetYAWL::streamlog.turnOff(SafetLog::Action);
 	logvar = SafetYAWL::getConfFile().getValue("Log", "log.warning").toString();

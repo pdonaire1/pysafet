@@ -16,6 +16,8 @@
 */
 #include "datetimewidget.h"
 #include "SafetYAWL.h"
+#include <QScriptEngine>
+#include <QCoreApplication>
 
 DateTimeWidget::DateTimeWidget(const QString& t, QObject *parent,bool istextparent)
     :CmdWidget(t,parent,istextparent) {
@@ -222,8 +224,8 @@ QString DateTimeWidget::processInternalFunction(const QString& op) {
     QString result = op;
         QRegExp rx;
 
-        rx.setPattern("bdays\\((\\d+);(\\d+)\\)");
-        SYD << tr(".....DateTimeWidget::isInternalFunction.....(2)...pattern:|%1|").arg(rx.pattern());
+        rx.setPattern("bdays\\((\\d+);([\\d\\.\\+\\-\\*/]+)\\)");
+        SYD << tr(".....DateTimeWidget::processInternalFunction.....(2)...pattern:|%1|").arg(rx.pattern());
 
         if (rx.indexIn(op) == -1) {
             return result;
@@ -234,11 +236,40 @@ QString DateTimeWidget::processInternalFunction(const QString& op) {
         QString myzero = rx.cap(0);
         QString myfirst = rx.cap(1);
         QString mysecond = rx.cap(2);
-        SYD << tr(".....DateTimeWidget::isInternalFunction.....myzero:|%1|").arg(myzero);
-        SYD << tr(".....DateTimeWidget::isInternalFunction.....myfirst:|%1|").arg(myfirst);
-        SYD << tr(".....DateTimeWidget::isInternalFunction.....mysecond:|%1|").arg(mysecond);
+        SYD << tr(".....DateTimeWidget::processInternalFunction....INTERNAL.myzero:|%1|").arg(myzero);
+        SYD << tr(".....DateTimeWidget::processInternalFunction.....myfirst:|%1|").arg(myfirst);
+        SYD << tr(".....DateTimeWidget::processInternalFunction.....mysecond:|%1|").arg(mysecond);
         uint myinit = myfirst.toInt(&ok);
-        uint mydays = mysecond.toInt(&ok);
+        uint mydays = 0;
+        int nargs;
+        char** argv =NULL;
+
+        QCoreApplication myapp(nargs,argv);
+        QScriptEngine myEngine;
+
+        try  {
+
+           QScriptValue myvalue = myEngine.evaluate(mysecond);
+                      QString currvalue = myvalue.toString();
+           SYD << tr("....DateTimeWidget::processInternalFunction...currvalue:|%1|")
+                  .arg(currvalue);
+           if ( currvalue == "undefined") {
+               SYW << tr("Sintaxis INCORRECTA en la funcion bdays: \"%1\"")
+                      .arg(mysecond);
+           }
+           else {
+            mydays = currvalue.toInt(&ok);
+           }
+
+        }
+        catch(...) {
+            SYE << tr("IMPORTANTE:Ocurrió un error (excepcion) al evaluar el script (two)");
+        }
+
+        SYD << tr("....DateTimeWidget::processInternalFunction...mydays:|%1|")
+               .arg(mydays);
+
+//        uint mydays = mysecond.toInt(&ok);
         QDate mydate = QDateTime::fromTime_t(myinit).date();
         QStringList mylist = SafetYAWL::getConf()["Functions/bdays.*"].split(SafetYAWL::LISTSEPARATORCHARACTER,QString::SkipEmptyParts);
 
