@@ -1,4 +1,4 @@
-f/*
+/*
 * SAFET Sistema Automatizado para la Firma Electrónica y Estampado de Tiempo
 * Copyright (C) 2008 Víctor Bravo (vbravo@cenditel.gob.ve), Antonio Araujo (aaraujo@cenditel.gob.ve
 *     
