@@ -1658,6 +1658,37 @@ QStringList SafetWorkflow::listNextStates(const QString& id, SafetWorkflow::Next
      SafetYAWL::_isstatstokenfound = false;
      QStringList mylist = code.split("\n",QString::SkipEmptyParts);
      bool ok;
+     if ( st == SafetWorkflow::CurrentState ) {
+         QString myCurrentState;
+         for(int  i=mylist.count()-1; i >=0; i--) {
+              QString sec = mylist.at(i);
+              QRegExp rx("Nodo:\\s*([a-zA-Z0-9\\+_\\.]+)\\s*,");
+              int pos = rx.indexIn( sec );
+              Q_ASSERT ( pos >= 0 );
+              QString newnode = rx.cap(1);
+
+              rx.setPattern("Patron:\\s*([a-zA-Z0-9_\\.]+)\\s*,");
+              pos = rx.indexIn( sec );
+              Q_ASSERT ( pos >= 0 );
+              // Para el color
+              rx.setPattern("info\\.task\\.color:\\s*([a-zA-Z0-9_\\.]+)\\s*,?");
+              pos = rx.indexIn( sec );
+              double porc = 0;
+              if  ( pos > 0 ) {
+                   porc = rx.cap(1).toDouble(&ok);
+                   if ( porc > 0.0 ) { // es
+                        myCurrentState = newnode;
+                        break;
+                   }
+              }
+         }
+         if (!myCurrentState.isEmpty()) {
+             result.append(myCurrentState);
+         }
+         return result;
+     }
+
+
      if ( st == SafetWorkflow::AllNotCompleted ) {
          QString myCurrentState;
          for(int  i=mylist.count()-1; i >=0; i--) {

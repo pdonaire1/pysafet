@@ -120,7 +120,7 @@ public:
     enum ItemSearched { SearchTask, SearchOption };
     enum OutputFormat { XML, JSON, SVG,JSONARRAY };
         enum TypeStats { Text, Graph };
-        enum NextStates { OnlyNext, NextAndPrev, Previous, Neighbour, AllNotCompleted,  All };
+        enum NextStates { OnlyNext, NextAndPrev, Previous, Neighbour, AllNotCompleted,  All, CurrentState };
 
         /**
          * \brief Devuelve  una objeto consulta (QSqlQuery) con los registros correspondientes a
