@@ -4027,22 +4027,39 @@ QString MainWindow::extractParameters(const QString& action) {
            .arg(action);
 
 
-    int pos = 0;
-    QRegExp rxpars("(parameters\\.)([a-zA-Z0-9_\\-\\./]+)\\s*:\\s*([a-zA-Z_0-9αινσϊρΡ'\\*=\\.\\-\\(\\),;%#\\x3c\\x3e\\x2f\\[\\]/\\?]+)");
+
+    QRegExp rxpars("(parameters\\.)([a-zA-Z0-9_\\-\\./]+)\\s*:\\s*"
+                   "([a-zA-Z_0-9αινσϊρΡ'\\*=\\.\\-\\(\\),;%#\\x3c\\x3e\\x2f\\[\\]/\\?\\s]+)");
     QRegExp rxconf("(configurekey\\.)([a-zA-Z0-9_\\-\\./]+)\\s*:\\s*([a-zA-Z_0-9αινσϊρΡ'\\*=\\.\\-\\(\\),;%#\\x3c\\x3e\\x2f\\[\\]/\\s\\{\\}:\\?]+)");
     QMap<QString,QString> mypars;
     QMap<QString,QString> myconfigs;
 
-    while (pos < action.length()) {
-        pos = action.indexOf(rxpars,pos);
-        if (pos==-1) {
-            break;
-        }
-        mypars[rxpars.cap(2)] = rxpars.cap(3);
-        pos += rxpars.cap(0).length()+1;
-        result.replace(rxpars.cap(0),"");
+    QStringList parlist = action.split("parameters.",QString::SkipEmptyParts);
+    SYD << tr("...MainWindow::extractParameters...PARLIST...parlist.count()):|%1|")
+           .arg(parlist.count());
 
+    int pos = 0;
+    foreach(QString par, parlist) {
+
+        pos = 0;
+        QString newpar = "parameters."+par;
+        SYD << tr("...MainWindow::extractParameters...PARLIST...par:|%1|")
+               .arg(newpar);
+
+        while (pos < newpar.length()) {
+            pos = newpar.indexOf(rxpars,pos);
+            if (pos==-1) {
+                break;
+            }
+            mypars[rxpars.cap(2)] = rxpars.cap(3);
+            pos += rxpars.cap(0).length()+1;
+            result.replace(rxpars.cap(0),"");
+
+        }
     }
+    SYD << tr("...MainWindow::extractParameters...PARLIST...par....result:|%1|")
+           .arg(result);
+
     SYD << tr("...MainWindow::extractParameters...mypars.count()):|%1|")
            .arg(mypars.count());
 
