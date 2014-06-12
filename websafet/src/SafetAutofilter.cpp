@@ -41,11 +41,13 @@ void SafetAutofilter::setFiltertask(SafetTask* t) {
 }
 
 QList<SafetTask*> SafetAutofilter::createTasks(const QString& prefix) {
+     SYD << tr("....SafetAutofilter::createTasks...(1)...");
      QList<SafetTask*> mylist;
      if ( filtertask == NULL || filtertask->parent() == NULL ) {
          return mylist;
      }
 
+     SYD << tr("....SafetAutofilter::createTasks...(2)...");
      SafetVariable *v = NULL;
      if ( filtertask->getVariables().count() > 0 ) {
           v = qobject_cast<SafetVariable*>( filtertask->getVariables().at(0) );
@@ -60,6 +62,7 @@ QList<SafetTask*> SafetAutofilter::createTasks(const QString& prefix) {
      int hinc = logvar.toInt(&ok);
 
      int i = 0;
+     SYD << tr("....SafetAutofilter::createTasks...(3)...");
      foreach(QString s, getoptions) {
           Q_ASSERT(s.split("|").count() > 0 ); // Obtener el nombre de la nueva opcion
           s = s.split("|").at(0).trimmed().replace(QRegExp("[\\.\\-]"),"");
@@ -69,7 +72,7 @@ QList<SafetTask*> SafetAutofilter::createTasks(const QString& prefix) {
           QString title;
 
           if ( filterType() == DateTime ) {
-              SafetYAWL::streamlog << SafetLog::Debug
+              SYD
                       << tr("CreateTasks: Autofiltro es tipo Fecha/Hora con opcion: \"%1\"")
                       .arg(s);
                title = localparser.getFields().at(0);
@@ -79,17 +82,25 @@ QList<SafetTask*> SafetAutofilter::createTasks(const QString& prefix) {
           else {
 
                title = s;
+//               title.replace("_","");
+//               title.replace(" ","");
+               title.replace("á","a");
+               title.replace("é","e");
+               title.replace("í","i");
+               title.replace("ó","o");
+               title.replace("ú","u");
+               title.replace("ñ","n");
+               title.replace("Ñ","N");
+
           }
 
-          SafetYAWL::streamlog
-                  << SafetLog::Debug
-                  << tr("Opcion para el autofiltro: \"%1\" Titulo:\"%2\"")
+          SYD   << tr("....SafetAutofilter::createTasks()....Opcion para el autofiltro: \"%1\" Titulo:\"%2\"")
                   .arg(s)
                   .arg(title);
           SafetTask *mytask = new SafetTask();
           mytask->setParent( qobject_cast<SafetXmlObject*> (wf) );
           Q_CHECK_PTR( mytask );
-          mytask->setId(prefix+tr("_")+title);
+          mytask->setId(title);
           mytask->setTitle(getvaluesoptions.at(i++));
           mytask->setReport( report() );
           //** Para el puerto
@@ -104,13 +115,13 @@ QList<SafetTask*> SafetAutofilter::createTasks(const QString& prefix) {
           SafetVariable* myvariable = new SafetVariable();
           Q_CHECK_PTR( myvariable );
           myvariable->setId( prefix+"_"+title+"_");
-          SafetYAWL::streamlog << SafetLog::Debug << tr("Agregando la tarea de autofiltro: \"%1\"").arg(mytask->id());
+          SYD  << tr(".......SafetAutofilter::createTasks()....Agregando la tarea de autofiltro: \"%1\"").arg(mytask->id());
           if ( v != NULL ) {
                myvariable->setDocumentsource( v->documentsource() );
                myvariable->setTokenlink( v->tokenlink() );
           }
           mytask->addVariable( myvariable );
-          SafetYAWL::streamlog << SafetLog::Debug << tr("Agregando la variable de autofiltro: \"%2\" a la tarea \"%1\"").arg(mytask->id()).arg(myvariable->id());
+          SYD << tr("......SafetAutofilter::createTasks().Agregando la variable de autofiltro: \"%2\" a la tarea \"%1\"").arg(mytask->id()).arg(myvariable->id());
           // ** Para la  conexion
 
           SafetConnection *myconnection = new SafetConnection();
@@ -133,8 +144,7 @@ QList<SafetTask*> SafetAutofilter::createTasks(const QString& prefix) {
                     subprefix = rx.cap(1);
                    }
                   else {
-                      SafetYAWL::streamlog
-                              << SafetLog::Error
+                      SYE
                               << tr("Falla en autofiltro fecha");
                       return mylist;
                   }
@@ -149,7 +159,11 @@ QList<SafetTask*> SafetAutofilter::createTasks(const QString& prefix) {
 
             mylist.push_back( mytask);
      }
+     SYD << tr("..SafetAutofilter::createTasks()...modifyForAutofilter...(1)..mylist.count():|%1|")
+            .arg(mylist.count());
+
      modifyForAutofilter(mylist);
+     SYD << tr("..SafetAutofilter::createTasks()...modifyForAutofilter...(2)");
      // Agregar las tareas al padre
      foreach(SafetTask *t, mylist) {
           wf->addTask( t  );
@@ -169,8 +183,7 @@ QList<SafetTask*> SafetAutofilter::createSubTasks(SafetTask* task, QStringList s
         return result;
     }
     if (_subsql.isEmpty()) {
-        SafetYAWL::streamlog
-                << SafetLog::Error
+        SYE
                 << tr("No se pueden crear un sub-filtro, la expresion SQL esta vacia");
         return result;
     }
@@ -270,12 +283,15 @@ QList<SafetTask*> SafetAutofilter::createSubTasks(SafetTask* task, QStringList s
 void SafetAutofilter::modifyForAutofilter(const QList<SafetTask*>& lt) {
      Q_CHECK_PTR ( filtertask );
      SafetPort *myport = NULL;
+     SYD << tr(".....SafetAutofilter::modifyForAutofilter...AUTOFILTER...entering...(1)...");
      foreach(SafetPort* port, filtertask->getPorts()) {
           Q_CHECK_PTR( port );
           if ( port->type() == type() ) {
                myport = port;
            }
      }
+     SYD << tr(".....SafetAutofilter::modifyForAutofilter...filtertask:|%1|")
+            .arg(filtertask->id());
      if ( myport == NULL ) {
           myport = new SafetPort();
           Q_CHECK_PTR( myport );
@@ -295,6 +311,9 @@ void SafetAutofilter::modifyForAutofilter(const QList<SafetTask*>& lt) {
           if (myport->getConnectionlist().count() < 2 ) {
                myport->setPattern("or");
           }
+          SYD << tr(".....SafetAutofilter::modifyForAutofilter...addConnection for:|%1|")
+                 .arg(task->id());
+
           myport->addConnection( myconnection );
      }
 }
@@ -345,8 +364,7 @@ QStringList SafetAutofilter::generateFilterOptions() {
 
      QString table = localparser.getTablesource();
      if ( localparser.getFields().count() <= 0 ) {
-         SafetYAWL::streamlog
-                 << SafetLog::Error
+         SYE
                  << tr("EL numero de campos (%2)es incorrecta para la sentencia SQL: \"%1\"")
                  .arg(query())
                  .arg(localparser.getFields().count());
@@ -369,8 +387,7 @@ QStringList SafetAutofilter::generateFilterOptions() {
      }
      SafetWorkflow *wf = qobject_cast<SafetWorkflow*>( filtertask->parent() );
      if (wf == NULL ) {
-         SafetYAWL::streamlog
-                 << SafetLog::Error
+         SYE
                  << tr("Ocurrió un error al crear Autofiltro (Falla en la creacion de"
                        " la lista de opciones");
          return QStringList();
@@ -382,18 +399,22 @@ QStringList SafetAutofilter::generateFilterOptions() {
      newsql += table;
      newsql += " ";
      newsql += link;
+     newsql += " ";     
+     newsql += localparser.getWhereClause().replace("_USERNAME", SafetYAWL::currentAuthUser());
      newsql += " ";
      newsql += "ORDER BY";
      newsql += " ";
      newsql += firstfield;
      newsql += ";";
 
+     SYD << tr(".........SafetAutofilter::generateFilterOptions NEWSQL:|%1|")
+            .arg(newsql);
+
      QSqlQuery query(SafetYAWL::currentDb);
      query.prepare(  newsql );
      bool executed = query.exec();
      if ( !executed ) {
-         SafetYAWL::streamlog
-                 << SafetLog::Error
+         SYE
                  << tr("La Sentencia SQL :\" %1 \" es incorrecta. "
                        "Ejecute la sentencia en un cliente del gestor de BD, "
                        "y compruebe resultados"
@@ -409,13 +430,11 @@ QStringList SafetAutofilter::generateFilterOptions() {
          return getoptions;
      }
       if ( genfilter ) {
-          SafetYAWL::streamlog
-                  << SafetLog::Action
+          SYA
                   << tr("Generando filtro de fecha/hora con la expresion SQL  \"%1\"").arg(newsql);
            _filterType = DateTime;
 
-           SafetYAWL::streamlog
-                   << SafetLog::Debug
+           SYD
                    << tr("Numero de opciones del autofiltro (Fecha/Hora) \"%1\"").arg(getoptions.count());
            if ( query.record().count() > 1 ) {
                      //_subsql = "";
@@ -430,13 +449,14 @@ QStringList SafetAutofilter::generateFilterOptions() {
 
       while (query.next()) {
           QString currentfield;          
-          currentfield = query.value(0).toString();
+          QString oricurrentfield = query.value(0).toString();
 
-          currentfield.replace(" ","_");
+          currentfield = oricurrentfield;
+          currentfield.replace(" ","");
           currentfield.replace(",",".");
 
           getoptions.push_back( currentfield );
-          getvaluesoptions.push_back( currentfield ); // Verificar para descripcion
+          getvaluesoptions.push_back( oricurrentfield ); // Verificar para descripcion
 
           qDebug("...getoptions...: %s",qPrintable(currentfield));
           if ( query.record().count() > 1 ) {
@@ -598,7 +618,7 @@ bool SafetAutofilter::generateDateFilters(const QSqlQuery& query, const QString&
           }
 
      }
-     SafetYAWL::streamlog << SafetLog::Debug << tr("Ultima fecha para el autofiltro  \"%1\": \"%2\"").arg(fieldname)
+     SYD << tr("Ultima fecha para el autofiltro  \"%1\": \"%2\"").arg(fieldname)
                .arg(iteDateLast.toString() );
      QDateTime iteDate, nextIteDate;
      iteDate = iteDateFirst;
@@ -623,8 +643,8 @@ bool SafetAutofilter::generateDateFilters(const QSqlQuery& query, const QString&
                             .arg(table+"."+fieldname);
             }
 
-           SafetYAWL::streamlog << SafetLog::Debug << tr("Proxima Fecha del Filtro: \"%1\"").arg(nextIteDate.toString());
-           SafetYAWL::streamlog << SafetLog::Debug << tr("Agregando filtro de fecha: \"%1\"").arg(newfilter);
+           SYD << tr("Proxima Fecha del Filtro: \"%1\"").arg(nextIteDate.toString());
+           SYD << SafetLog::Debug << tr("Agregando filtro de fecha: \"%1\"").arg(newfilter);
            getvaluesoptions.append(QString("%1").arg(iteDate.toString(valuedateformat)));
            getoptions.append(newfilter);
            if (nextIteDate >= iteDateLast ) break;
@@ -636,11 +656,11 @@ bool SafetAutofilter::generateDateFilters(const QSqlQuery& query, const QString&
 }
 
 QString SafetAutofilter::getNextOption() {
-      Q_ASSERT_X( getoptions.count() > 0, qPrintable(tr("Autofilter")),
+      Q_ASSERT_X( getvaluesoptions.count() > 0, qPrintable(tr("Autofilter")),
                   qPrintable(tr("La lista de opciones del \"Autofilter\" esta vacia")));
-      if ( _countoptions < getoptions.count() ) {
-           return getoptions.at( _countoptions++ ) ;
+      if ( _countoptions < getvaluesoptions.count() ) {
+           return getvaluesoptions.at( _countoptions++ ) ;
       }
       _countoptions = 0;
-      return getoptions.at( _countoptions++ ) ;
+      return getvaluesoptions.at( _countoptions++ ) ;
  }

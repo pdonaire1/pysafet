@@ -124,7 +124,7 @@ bool SafetSQLParser::parse(const QString& s) {
 	_fields  = fields.split(QRegExp("\\s*,\\s*"));
 	_tablesource = rxSql.cap(2);
 	if (rxSql.cap(3).length() > 0 ) {
-		Q_ASSERT_X(rxSql.cap(4).length( )>0,"parse",qPrintable(tr("La clausula WHERE estÃ¡ incompleta")));
+        Q_ASSERT_X(rxSql.cap(4).length( )>0,"parse",qPrintable(tr("La clausula WHERE está incompleta")));
 		QString clauses = rxSql.cap(4);
 		QRegExp rxWhere("\\s+(AND|OR|XOR)\\s+");
 		rxWhere.setCaseSensitivity(Qt::CaseInsensitive);
@@ -199,7 +199,7 @@ QString SafetSQLParser::getTablesource() const {
 QString SafetSQLParser::dropWhereClauses(bool drop) {
 	QString str = sql();
 		QRegExp rx;
-                rx.setPattern("\\s*WHERE\\s+([a-zA-Z0-9\\s_\\{\\}\\.\\=<>'\"\\(\\)]+)\\s*");
+                rx.setPattern("\\s*WHERE\\s+([a-zA-Z0-9\\s_\\{\\}\\.\\=<>'\"\\(\\)\\!]+)\\s*");
         rx.setCaseSensitivity( Qt::CaseInsensitive );
 	if ( getWhereclauses().count() > 0 ) str.replace(rx," ");
 
@@ -210,7 +210,7 @@ QString SafetSQLParser::dropWhereClauses(bool drop) {
 QString SafetSQLParser::getWhereClause() {
         QString str = sql();
                 QRegExp rx;
-        rx.setPattern("\\s*WHERE\\s+([a-zA-Z0-9\\s_\\{\\}\\.\\=<>'\"\\(\\)]+)\\s*");
+        rx.setPattern("\\s*WHERE\\s+([a-zA-Z0-9\\s_\\{\\}\\.\\=<>'\"\\(\\)\\!]+)\\s*");
         rx.setCaseSensitivity( Qt::CaseInsensitive );
         int pos = str.indexOf(rx);
         if ( pos >= 0 ) {
