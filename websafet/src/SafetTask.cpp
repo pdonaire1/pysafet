@@ -97,7 +97,13 @@ void SafetTask::addChild(SafetXmlObject* o) {
                 Q_CHECK_PTR( mywf );
                 myyawl = qobject_cast<SafetYAWL*>(mywf->parent());
                 Q_CHECK_PTR( myyawl );
-                Q_CHECK_PTR( myaf );
+                Q_CHECK_PTR( myaf );                
+                SYD << tr("SafetTask::addChild AUTOFILTER..query() (1):|%1|")
+                       .arg(myaf->query());
+                myaf->setQuery(SafetYAWL::replaceArgsflow(myaf->query()));
+                SYD << tr("SafetTask::addChild AUTOFILTER..query() (2):|%1|\n")
+                       .arg(myaf->query());
+
 //                qDebug("...myaf->id(): |%s| ...: mywf->isActiveFilter( myaf->id() ):%d",
 //                       qPrintable(myaf->id()), myyawl->isActiveFilter( myaf->id() ) );
                 if ( myyawl->isActiveFilter( myaf->id() ) ) {

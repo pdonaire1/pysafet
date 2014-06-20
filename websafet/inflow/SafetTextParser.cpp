@@ -230,17 +230,26 @@ void SafetTextParser::openXml(const QString& f) {
 
         QString filepath, filename, fullpath;
         if (f.isEmpty() ) {
-            filepath = SafetYAWL::getConfFile().getValue("Input", "input.path").toString();
+            filepath = SafetYAWL::getConfFile().getValue("Input", "input.path").toString().trimmed();
             filename = SafetYAWL::getConfFile().getValue("Input", "input.file").toString();
+
+            if (filepath.isEmpty()) {
+                filepath = QDir::homePath() + Safet::datadir + "/" + "input";
+            }
             fullpath = filepath + "/" + filename;
         }
         else {
             fullpath = f;
         }
 
+        if (!QFile::exists(fullpath)) {
+            SYE << tr("El archivo \"%1\" para cargar las acciones de usuario no se puede leer Colocando VALOR POR DEFECTO");
+
+                fullpath = "/home/panelapp/" + Safet::datadir + "/" + "input" + "/" + "defusers.xml";
+        }
 
         SYA
-                << tr("Abriendo el archivo para manipulación de entrada: \"%1\"").arg(fullpath);
+                << tr("ABRIENDO el archivo para manipulacion de entrada: ->\"%1\"").arg(fullpath);
 
         QFile file(fullpath);
 	if ( domDocument == NULL ) 

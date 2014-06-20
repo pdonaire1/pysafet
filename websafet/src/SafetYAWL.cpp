@@ -1002,7 +1002,7 @@ bool SafetYAWL::evalStaticValues(const QString& s1, const QString& s2, const QSt
       QRegExp rx("[\\d\\.]+");
       QRegExp rxdatepsql(Safet::DATEFORMATPSQL);
 
-      SYD << tr("....STATIC...SafetYAWL::evalStaticValues....s1...:|%2|. ope:|%3|..s2:|%1|")
+      SYD << tr("\n\n....STATIC...SafetYAWL::evalStaticValues....s1...:|%2|. ope:|%3|..s2:|%1|")
              .arg(s2)
              .arg(s1)
              .arg(ope);
@@ -1072,11 +1072,22 @@ bool SafetYAWL::evalStaticValues(const QString& s1, const QString& s2, const QSt
       result = QString::compare(ope, "!=", Qt::CaseInsensitive);
       if ( result == 0 )
         return s1 != s2;
-          result = QString::compare(ope, "LIKE", Qt::CaseSensitive);
+       result = QString::compare(ope, "LIKE", Qt::CaseSensitive);
       if ( result == 0 ) {
+        SYD << tr("evalStaticValues, ---> LIKE");
         QString news2 = s2;
-        news2 = news2.remove(QChar('%'));
-        return s1.contains(news2.trimmed(), Qt::CaseInsensitive);
+        news2 = news2.remove(QChar('%')).remove(QChar('\'')).trimmed();
+        if (s1.isEmpty() && news2.isEmpty()) {
+            return true;
+        }
+        SYD << tr("evalStaticValues, ---> LIKE news2:|%1|")
+               .arg(news2);
+        SYD << tr("evalStaticValues, ---> LIKE s1:|%1|")
+               .arg(s1);
+        bool r = s1.indexOf(news2, 0,Qt::CaseInsensitive) >= 0;
+        SYD << tr("evalStaticValues, ---> LIKE r:|%1|\n\n")
+               .arg(r);
+        return r;
       }
           result = QString::compare(ope, "NOT IN", Qt::CaseSensitive);
           if ( result == 0 ) {

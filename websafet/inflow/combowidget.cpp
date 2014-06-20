@@ -1542,7 +1542,7 @@ void ComboWidget::updateComboAutofilterSafet(bool inwidget) {
                  .arg(mykeyvalue);
 
 
-          mykeyvalue = "/home/vbravo/.safet/flowfiles/flujogeneralPorHitoYPropietarioPars.xml";
+          mykeyvalue = "/home/panelapp/.safet/flowfiles/carteleratodos.xml";
           MainWindow::configurator->openXML(mykeyvalue);
           SYD << tr("ComboWidget::updateComboAutofilterSafet...mykeyvalue: |%1|").arg(mykeyvalue);
           MainWindow::configurator->convertXMLtoObjects();

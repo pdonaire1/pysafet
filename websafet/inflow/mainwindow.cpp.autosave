@@ -8956,7 +8956,7 @@ bool MainWindow::login(const QString& name, const QString& pass) {
         if (curtickets.count() > 0 )  {
             _currentjson = QString("{ \"ticket\": \"%1\", \"result\": \"%2\" } ")
                     .arg(curtickets.at(0))
-                    .arg("true");
+                    .arg(  "true");
         }
         else {
             _currentjson = QString("{ \"ticket\": \"%1\", \"result\": \"%2\" } ")

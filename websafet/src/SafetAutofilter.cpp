@@ -400,7 +400,7 @@ QStringList SafetAutofilter::generateFilterOptions() {
      newsql += " ";
      newsql += link;
      newsql += " ";     
-     newsql += localparser.getWhereClause().replace("_USERNAME", SafetYAWL::currentAuthUser());
+     newsql += localparser.getWhereClause();
      newsql += " ";
      newsql += "ORDER BY";
      newsql += " ";
