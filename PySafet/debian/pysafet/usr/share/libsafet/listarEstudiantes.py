@@ -10,10 +10,10 @@ myinflow = Safet.MainWindow(myhome)
 myinflow.setMediaPath(mymedia )
 myinflow.setHostURL(myurl) 
 
-myconsult = u"operacion:Listar_datos Cargar_archivo_flujo: %s/.safet/flowfiles/cartelerafirmada.xml Variable: vTicketSigned " % (myhome)
+myconsult = u"operacion:Listar_datos Cargar_archivo_flujo: %s/.safet/flowfiles/flujogeneralsesiones.xml Variable: VariableSesion8" % (myhome)
 
 
-result = myinflow.login("vbravo","zpinquar") 
+result = myinflow.login("vbravo","123456") 
 
 if not result:
 	print "Authentication failed"
