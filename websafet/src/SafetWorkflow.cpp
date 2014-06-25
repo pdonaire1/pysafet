@@ -2888,7 +2888,37 @@ QString SafetWorkflow::getJSONMiles(const QList<SafetWorkflow::Miles>& miles,
 
     return result;
 }
+QString SafetWorkflow::currentGraphJSON() {
+    QString newresult = "";
 
+    QString outformat = QString("{ \"nodes\": [ %1 ] }");
+
+
+    QStringList mynodes = SafetYAWL::lastgraph.split("\n",QString::SkipEmptyParts);
+
+
+    QString nodes = "";
+    foreach(QString mynode, mynodes) {
+        QString nodejson = QString(" { %1 },");
+
+        QStringList myfields = mynode.split(",",QString::SkipEmptyParts);
+
+        QString namenode = myfields.at(0).mid(QString("Nodo:").length());
+
+        nodejson = nodejson.arg(QString(" \"name\": \"%1\"").arg(namenode));
+
+
+        nodes +=  nodejson;
+
+    }
+    nodes.chop(1);
+
+
+    outformat = outformat.arg(nodes);
+    newresult = outformat;
+
+    return newresult;
+}
 
 
 QString SafetWorkflow:: generateGraph(char* filetype, QString& json, const QString& info) {

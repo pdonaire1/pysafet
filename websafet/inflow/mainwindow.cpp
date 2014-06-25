@@ -7704,7 +7704,17 @@ bool MainWindow::genGraph() {
         }
 
         //SafetYAWL::lastinfodate = "";
+
         _currentjson =  drawWorkflow(img); // Dibujar el flujo
+        QString showjson = SafetYAWL::getConf()["Result/graph.formatjson"];
+
+        if (showjson.compare("on",Qt::CaseSensitive) == 0) {
+
+            _currentjson = QString("{ \"filename\": \"%1\", \"data\": %2 }")
+                    .arg(_currentjson)
+                    .arg(configurator->getWorkflows().at(0)->currentGraphJSON());
+        }
+
 
 
 
@@ -7913,6 +7923,9 @@ QMap<QString,QDateTime> MainWindow::doGetPlannedGraph(const QString& namegraph) 
 
     return result;
 }
+
+
+
 
 void MainWindow::listDocuments(const QString& key) {
 //    char buffer[20];
@@ -9087,6 +9100,8 @@ QString MainWindow::currentError() {
 QString MainWindow::currentJSON()   {
     QString result = _currentjson;
 
+    SYD << tr("....MainWindow::currentJSON....JSON:\n %1\n")
+           .arg(result);
     _currentjson = QLatin1String("");
     return result;
 
