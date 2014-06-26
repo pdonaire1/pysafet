@@ -2888,10 +2888,10 @@ QString SafetWorkflow::getJSONMiles(const QList<SafetWorkflow::Miles>& miles,
 
     return result;
 }
-QString SafetWorkflow::currentGraphJSON() {
+QString SafetWorkflow::currentGraphJSON(const QString& codegraph) {
     QString newresult = "";
 
-    QString outformat = QString("{ \"nodes\": [ %1 ],");
+    QString outformat = QString("{ \"nodes\":  [ %1 ],");
 
 
     QStringList mynodes = SafetYAWL::lastgraph.split("\n",QString::SkipEmptyParts);
@@ -2900,6 +2900,11 @@ QString SafetWorkflow::currentGraphJSON() {
     QString nodes = "";
 
     QList<uint> dates;
+
+    if (mynodes.count() == 0 ) {
+        SYD << tr("currentGraphJSON...**MYNODES:\n%1").arg(codegraph);
+        return QString("{ \"nodes\": [ ]");
+    }
 
     foreach(QString mynode, mynodes) {
         int pos = 0;
@@ -2996,13 +3001,14 @@ QString SafetWorkflow::currentGraphJSON() {
 
 
      nodes.chop(1);
+     outformat = outformat.arg(nodes);
     if (dates.count()  > 0 ) {
 
         qSort(dates);
         uint datebegin = dates.at(0);
         uint dateend = dates.at(dates.length()-1);
 
-        outformat = outformat.arg(nodes);
+
         outformat += QString(" \"first_date_number\": \"%1\",").arg(datebegin);
         outformat += QString(" \"last_date_number\": \"%1\",").arg(dateend);
 
@@ -3016,8 +3022,9 @@ QString SafetWorkflow::currentGraphJSON() {
                 .arg(SafetWorkflow::humanizeDate(dateend-datebegin).replace(tr("en espera").trimmed(),""));
 
 
-        outformat.chop(1);
     }
+
+    outformat.chop(1);
 
     outformat += " }";
     newresult = outformat;

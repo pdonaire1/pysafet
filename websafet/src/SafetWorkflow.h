@@ -878,7 +878,7 @@ public:
     QStringList getVariablesByRole(const QString& r);
     bool doSubFlow(const QString& flowname, const QString& passname);
     bool isBackNode(SafetNode *node, const QString &nodename);
-    QString currentGraphJSON();
+    QString currentGraphJSON(const QString& codegraph);
 private:
    QMap<QString,QStringList> _nexts;
    QMap<QString,QStringList> _previouses;
