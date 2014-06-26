@@ -3,6 +3,23 @@ pysafet
 
 python library to use "Safet": a workflow &amp; signature electronic library
 
+Instalación para Debian Wheezy 7.0 (64 bits)
+
+==================================
+
+Agregar al repositorio apt la siguiente línea (/etc/apt/sources.list):
+
+```
+deb http://tibisay.cenditel.gob.ve/repositorio wheezy main
+```
+
+Luego ejecutar:
+
+
+```
+aptitude update
+aptitude install pysafet
+```
 
 Instalación de la librería Libsafet
 

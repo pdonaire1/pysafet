@@ -2898,15 +2898,99 @@ QString SafetWorkflow::currentGraphJSON() {
 
 
     QString nodes = "";
+
+    QString name;
+    QString type;
+    QString next;
+    QString unionnode;
+    QString report;
+    QString pattern;
+    QString title;
+    QString infocolor;
+    QString ndocs;
+    QString tdocs;
+    QString rol;
+    QString date;
+    QString info1;
+    QString info2;
     foreach(QString mynode, mynodes) {
+        int pos = 0;
         QString nodejson = QString(" { %1 },");
 
-        QStringList myfields = mynode.split(",",QString::SkipEmptyParts);
+       // QStringList myfields = mynode.split(",",QString::SkipEmptyParts);
+        QString infonode;
 
-        QString namenode = myfields.at(0).mid(QString("Nodo:").length());
+        QRegExp rx;
+        rx.setPattern("Nodo:\\s*([a-zA-Z0-9\\+_\\.]+)\\s*,");
+        pos = mynode.indexOf(rx);
+        if ( pos != -1 ) {
 
-        nodejson = nodejson.arg(QString(" \"name\": \"%1\"").arg(namenode));
+            infonode += QString(" \"name\": \"%1\",").arg(rx.cap(1));
+        }
 
+        rx.setPattern("Tipo:\\s*([a-zA-Z0-9\\+_\\.]+)\\s*,");
+        pos = mynode.indexOf(rx);
+        if ( pos != -1 ) {
+            infonode += QString(" \"type\": \"%1\",").arg(rx.cap(1));
+        }
+
+        rx.setPattern("Reporte:\\s*([a-zA-Z0-9\\+_\\.]+)\\s*,");
+        pos = mynode.indexOf(rx);
+        if ( pos != -1 ) {
+            infonode += QString(" \"report\": \"%1\",").arg(rx.cap(1));
+        }
+
+        rx.setPattern("Union:\\s*([a-zA-Z0-9\\+_\\.]+)\\s*,");
+        pos = mynode.indexOf(rx);
+        if ( pos != -1 ) {
+            infonode += QString(" \"union\": \"%1\",").arg(rx.cap(1));
+        }
+
+        rx.setPattern("Patron:\\s*([a-zA-Z0-9\\+_\\.]+)\\s*,");
+        pos = mynode.indexOf(rx);
+        if ( pos != -1 ) {
+            infonode += QString(" \"pattern\": \"%1\",").arg(rx.cap(1));
+        }
+
+        rx.setPattern("Titulo:\\s*([a-zA-Z0-9\\+_\\.][a-zA-Z0-9\\+_\\.\\s]+),");
+        pos = mynode.indexOf(rx);
+        if ( pos != -1 ) {
+            infonode += QString(" \"title\": \"%1\",").arg(rx.cap(1));
+        }
+
+        rx.setPattern("info.task.color:\\s*([a-zA-Z0-9\\+_\\.]+)\\s*,");
+        pos = mynode.indexOf(rx);
+        if ( pos != -1 ) {
+            infonode += QString(" \"index\": \"%1\",").arg(rx.cap(1));
+        }
+
+        rx.setPattern("Siguiente:\\s*([a-zA-Z0-9\\+_\\.;]+)\\s*,");
+        pos = mynode.indexOf(rx);
+        if ( pos != -1 ) {
+            QStringList mylist = rx.cap(1).split(";",QString::SkipEmptyParts);
+            QString nexts = "[  ";
+            foreach(QString n, mylist ) {
+                nexts += "\""+ n + "\",";
+            }
+            nexts.chop(1);
+            nexts += "]";
+
+            infonode += QString(" \"following_nodes\": %1,").arg(nexts);
+        }
+
+        QString extrainfo = mynode.section(",",-1);
+        SYD << tr("....SafetWorkflow::currentGraphJSON()...extrainfo:|%1|")
+               .arg(extrainfo);
+        QStringList  extralist = extrainfo.split(QRegExp("\\.\\.\\.|<br/>"),QString::SkipEmptyParts);
+        int i = 1;
+        foreach(QString e, extralist) {
+            infonode += QString(" \"parameter%1\": \"%2\",").arg(i).arg(e);
+            i++;
+        }
+
+        infonode.chop(1);
+
+        nodejson = nodejson.arg(infonode);
 
         nodes +=  nodejson;
 
