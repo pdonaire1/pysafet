@@ -2891,7 +2891,7 @@ QString SafetWorkflow::getJSONMiles(const QList<SafetWorkflow::Miles>& miles,
 QString SafetWorkflow::currentGraphJSON() {
     QString newresult = "";
 
-    QString outformat = QString("{ \"nodes\": [ %1 ] }");
+    QString outformat = QString("{ \"nodes\": [ %1 ],");
 
 
     QStringList mynodes = SafetYAWL::lastgraph.split("\n",QString::SkipEmptyParts);
@@ -2899,20 +2899,8 @@ QString SafetWorkflow::currentGraphJSON() {
 
     QString nodes = "";
 
-    QString name;
-    QString type;
-    QString next;
-    QString unionnode;
-    QString report;
-    QString pattern;
-    QString title;
-    QString infocolor;
-    QString ndocs;
-    QString tdocs;
-    QString rol;
-    QString date;
-    QString info1;
-    QString info2;
+    QList<uint> dates;
+
     foreach(QString mynode, mynodes) {
         int pos = 0;
         QString nodejson = QString(" { %1 },");
@@ -2983,9 +2971,19 @@ QString SafetWorkflow::currentGraphJSON() {
                .arg(extrainfo);
         QStringList  extralist = extrainfo.split(QRegExp("\\.\\.\\.|<br/>"),QString::SkipEmptyParts);
         int i = 1;
+
         foreach(QString e, extralist) {
+
             infonode += QString(" \"parameter%1\": \"%2\",").arg(i).arg(e);
             i++;
+            QDateTime mydate = QDateTime::fromString(e, Safet::DateFormat);
+            if (mydate.isValid()) {
+                uint currdate = mydate.toTime_t();
+                dates.append(currdate);
+//                SYD << tr("\nDATESAPPEND format:|%1|").arg(e);
+//                SYD << tr("DATESAPPEND:|%1|").arg(currdate);
+                infonode += QString(" \"date\": \"%1\",").arg(QString("%1").arg(currdate));
+            }
         }
 
         infonode.chop(1);
@@ -2995,10 +2993,33 @@ QString SafetWorkflow::currentGraphJSON() {
         nodes +=  nodejson;
 
     }
-    nodes.chop(1);
 
 
-    outformat = outformat.arg(nodes);
+     nodes.chop(1);
+    if (dates.count()  > 0 ) {
+
+        qSort(dates);
+        uint datebegin = dates.at(0);
+        uint dateend = dates.at(dates.length()-1);
+
+        outformat = outformat.arg(nodes);
+        outformat += QString(" \"first_date_number\": \"%1\",").arg(datebegin);
+        outformat += QString(" \"last_date_number\": \"%1\",").arg(dateend);
+
+        outformat += QString(" \"first_date_format\": \"%1\",")
+                .arg(QDateTime::fromTime_t(datebegin).toString(Safet::DateFormat));
+        outformat += QString(" \"last_date_format\": \"%1\",")
+                .arg(QDateTime::fromTime_t(dateend).toString(Safet::DateFormat));
+        outformat += QString(" \"lapse_date_nunmber\": \"%1\",")
+                .arg(dateend-datebegin);
+        outformat += QString(" \"lapse_date_text\": \"%1\",")
+                .arg(SafetWorkflow::humanizeDate(dateend-datebegin).replace(tr("en espera").trimmed(),""));
+
+
+        outformat.chop(1);
+    }
+
+    outformat += " }";
     newresult = outformat;
 
     return newresult;
