@@ -7,7 +7,7 @@ myurl = "http://localhost"
 
 myinflow = Safet.MainWindow(myhome)
 
-myinflow.doLoadConfiguration("../apps/panel.tar")
+myinflow.doLoadConfiguration("panel.tar")
 
 
 

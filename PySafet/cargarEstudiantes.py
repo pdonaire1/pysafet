@@ -7,7 +7,7 @@ myurl = "http://localhost"
 
 myinflow = Safet.MainWindow(myhome)
 
-myinflow.doLoadConfiguration("../apps/safetestudiantes.tar")
+myinflow.doLoadConfiguration("safetestudiantes.tar")
 
 
 
