@@ -465,6 +465,7 @@ QList<QPair<QString,QString> > SafetTextParser::getFieldsValues(const QDomElemen
         QDomNamedNodeMap attrs = e.attributes ();
         QDomNode titleNode = attrs.namedItem("title");
         QString currtitle = titleNode.nodeValue().simplified();
+
         QString titleString;
         if ( !titleNode.isNull() ) {
             titleString = titleNode.nodeValue().simplified();
@@ -477,6 +478,14 @@ QList<QPair<QString,QString> > SafetTextParser::getFieldsValues(const QDomElemen
                 continue;
             }
         }
+
+
+        QDomNode typeNode = attrs.namedItem("type");
+        SYD << tr("....SafetTextParser::buildFields...TYPENODE:|%1|")
+               .arg(typeNode.nodeValue().simplified());
+        SYD << tr("....SafetTextParser::buildFields...TYPENODE...namefield:|%1|")
+               .arg(namefield);
+
 
         QDomNode inputAttr = attrs.namedItem("input");
         if (!inputAttr.isNull() ) {
@@ -686,6 +695,29 @@ QList<QPair<QString,QString> > SafetTextParser::getFieldsValues(const QDomElemen
                 valuemap[e.firstChild().nodeValue().trimmed()] = keysforeignmap[attrs.namedItem("foreignkey").nodeValue()];
             }
         }
+
+        if (typeNode.nodeValue().simplified() == "number") {
+            SYD << tr("....SafetTextParser::buildFields...TYPENODE:|NUMBER|");
+                QDomElement einput = ninput.firstChildElement(namefield);
+                if (einput.isNull()) {
+                    einput = ninput.firstChildElement(currtitle);
+                }
+                if (!einput.isNull()) {
+                    SYD << tr("....SafetTextParser::buildFields...TYPENODE...(1)...");
+                    QString newnumber = einput.firstChild().nodeValue().trimmed();
+                    newnumber.replace(".","");
+                    newnumber.replace(",",".");
+                    SYD << tr("....SafetTextParser::buildFields.TYPENODE namefield:|%1|..\n**value(newnumber):|%2|")
+                           .arg(namefield)
+                           .arg(newnumber);
+                    valuemap[namefield] = newnumber;
+                }
+                //continue;
+
+        }
+
+
+
     }
 
     bool nomandatoryfieldnullcontinue; // Para evaluar cuando el campo es nulo
@@ -956,6 +988,7 @@ QPair<QString,QString> SafetTextParser::buildFields(const QDomElement& ecommand,
                 SafetYAWL::fieldtypes.insert(namefield, typeNode.nodeValue().simplified());
             }
             QDomNode inputAttr = attrs.namedItem("input");
+
             if (!inputAttr.isNull() ) {
                 QString str = inputAttr.nodeValue().trimmed();
                 QStringList mylist = str.split("::");
@@ -1158,8 +1191,11 @@ QPair<QString,QString> SafetTextParser::buildFields(const QDomElement& ecommand,
 
                 } else if ( attrs.namedItem("foreignkey").nodeValue().length() > 0 ) {
                     valuemap[namefield] = keysforeignmap[attrs.namedItem("foreignkey").nodeValue()];
+
                 }
             }
+
+
         }
         //QString fieldsname, fieldsvalue;
         SafetYAWL::fieldsname = "";

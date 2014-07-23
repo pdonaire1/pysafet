@@ -45,7 +45,7 @@ QString NumberWidget::html() {
     wprops = conf()["options"].toString().trimmed();
 
     if (wprops.isEmpty()) {
-        wprops = "width: '250px', height: '25px', digits: 3, decimalDigits: 0, spinButtons: true,promptChar:' ', groupSeparator: '', decimalSeparator: '.'";
+        wprops = "width: '250px', height: '25px', digits: 3, decimalDigits: 0, spinButtons: true,promptChar:' '";
     }
     else {
         wprops.replace("::",":");
@@ -54,7 +54,7 @@ QString NumberWidget::html() {
     result =  QString(""
                       "<script  type=\"text/javascript\">\n"
                       "$(function() {"
-                      "$(\"#%1\").jqxNumberInput({ %2,promptChar: ' ', groupSeparator: '', decimalSeparator: '.' });\n"
+                      "$(\"#%1\").jqxNumberInput({ %2,promptChar: ' ' });\n"
                       "%3\n"
                       "  $('#%1').bind('valuechanged', function (event) {\n"
                       "  var value = event.args.value;\n"
@@ -236,8 +236,16 @@ void NumberWidget::setFocus ( Qt::FocusReason reason ) {
 }
 bool NumberWidget::isValid(QString& value) {
     bool okint, okfloat;
-    int vi = value.toInt(&okint);
-    float vf = value.toDouble(&okfloat);
+    QString newvalue = value;
+
+    newvalue.replace(".","");
+    newvalue.replace(",",".");
+
+    SYD << tr("....NumberWidget...validating...NUMBERWIDGET...newvalue:|%1|")
+           .arg(newvalue);
+
+    int vi = newvalue.toInt(&okint);
+    float vf = newvalue.toDouble(&okfloat);
 
     return okint || okfloat;
 
