@@ -1463,10 +1463,20 @@ QString SafetWorkflow::printNodeInformation(SafetNode *node, const QString& next
       }
 
      QString nodetextinfo;
+     QString currvariable = "n/a";
      if (mytask != NULL && !mytask->textualinfo().isEmpty()) {
          QString postfix = SafetYAWL::getConf()["GeneralOptions/textualinfo.postfix"];
          nodetextinfo = QString(",TextualInfo:%1%2,").arg(mytask->textualinfo()).arg(postfix);
+
       }
+
+     if (mytask != NULL ) {
+         SafetVariable *myvar = mytask->getVariables().at(0);
+         if (myvar != NULL ) {
+             currvariable = myvar->id();
+         }
+     }
+
      QString moreinfo = myinfo.length() == 0?tr(""):myinfo;
      saveStates(node->id(),newnode.split(";",QString::SkipEmptyParts));
      result  = tr("Nodo:") + node->id() +", " + tr("Tipo:")+typeNode+", "
@@ -1476,7 +1486,10 @@ QString SafetWorkflow::printNodeInformation(SafetNode *node, const QString& next
                +", "
 	       +tr("Reporte:")+((node->report().isEmpty() || node->report() == "yes")?"yes":"no")
 	       +", "	
-               +tr("Patron:")+ node->port()->pattern()+title+noderole+nodenote+nodetextinfo+moreinfo;
+           +tr("Patron:")+ node->port()->pattern()
+           +", "
+           +tr("Variable:")+ currvariable
+           +title+noderole+nodenote+nodetextinfo+moreinfo;
 
      if (_mystats) {
          delete _mystats;
