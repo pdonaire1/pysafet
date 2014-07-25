@@ -2964,6 +2964,13 @@ QString SafetWorkflow::currentGraphJSON(const QString& codegraph) {
             infonode += QString(" \"title\": \"%1\",").arg(rx.cap(1));
         }
 
+        rx.setPattern("Variable:\\s*([a-zA-Z0-9\\+_\\.][a-zA-Z0-9\\+_\\.\\s]+),");
+        pos = mynode.indexOf(rx);
+        if ( pos != -1 ) {
+            infonode += QString(" \"variable\": \"%1\",").arg(rx.cap(1));
+        }
+
+
         rx.setPattern("info.task.color:\\s*([a-zA-Z0-9\\+_\\.]+)\\s*,");
         pos = mynode.indexOf(rx);
         if ( pos != -1 ) {
