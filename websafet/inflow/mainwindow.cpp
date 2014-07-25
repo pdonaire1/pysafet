@@ -7710,9 +7710,10 @@ bool MainWindow::genGraph() {
 
         if (showjson.compare("on",Qt::CaseSensitive) == 0) {
 
-            _currentjson = QString("{ \"filename\": \"%1\", \"data\": %2 }")
+            _currentjson = QString("{ \"filename\": \"%1\", \"id\": \"%3\",\"data\": %2 }")
                     .arg(_currentjson)
-                    .arg(configurator->getWorkflows().at(0)->currentGraphJSON());
+                    .arg(configurator->getWorkflows().at(0)->currentGraphJSON(""))
+                    .arg(configurator->getWorkflows().at(0)->id());
         }
 
 
