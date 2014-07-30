@@ -659,6 +659,7 @@ QList<QPair<QString,QString> > SafetTextParser::getFieldsValues(const QDomElemen
 
 
 
+
         if ( attrs.namedItem("default").nodeValue().length() == 0) {
             valuemap[e.firstChild().nodeValue().trimmed()] = "";
             if ( attrs.namedItem("function").nodeValue().length() > 0 ) {
@@ -718,6 +719,36 @@ QList<QPair<QString,QString> > SafetTextParser::getFieldsValues(const QDomElemen
 
 
 
+        QString currvalidation = attrs.namedItem("validation").nodeValue();
+        SYD << tr("..:SafetTextParser::getFieldsValues..CURRVALIDATION.currvalidation:|%1|")
+               .arg(currvalidation);
+        if ( currvalidation.startsWith("validatefunction:")) {
+            QString format = attrs.namedItem("format").nodeValue().simplified();
+            if ( format.length() == 0 ) format = "default";
+            QString func = currvalidation.mid(QString("validatefunction:").length());
+            QString value = getValueForFunction( func,format,currmap,keyvalue);
+            SYD << tr("......:SafetTextParser::getFieldsValues..CURRVALIDATION...value:|%1|")
+                   .arg(value);
+            QDomElement einput = ninput.firstChildElement(namefield);
+            if (einput.isNull()) {
+                einput = ninput.firstChildElement(currtitle);
+            }
+            if (!einput.isNull()) {
+
+                QString newvalue = einput.firstChild().nodeValue().trimmed();
+
+                if (value == "false") {
+                    valuemap[namefield] = newvalue +"::safetvalidatefalse";
+                }
+                else if (value == "true") {
+                    valuemap[namefield] = newvalue +"::safetvalidatetrue";
+                }
+            }
+
+
+        }
+
+
     }
 
     bool nomandatoryfieldnullcontinue; // Para evaluar cuando el campo es nulo
@@ -725,6 +756,7 @@ QList<QPair<QString,QString> > SafetTextParser::getFieldsValues(const QDomElemen
     QString usertip;
     // Evaluando valuemaps...
     int i = 0;
+
 
     for ( int inccount = 0; inccount < valuemap.keys().count(); inccount++ ) {
 
@@ -743,6 +775,7 @@ QList<QPair<QString,QString> > SafetTextParser::getFieldsValues(const QDomElemen
         mypair.first =  valuemap.keys().at(i);
         newfieldname = valuemap.keys().at(i);
 
+        QString containvalidatefunction = "";
 
         if ( valuemap[ valuemap.keys().at(i) ].length() == 0 ) {
             QString newfieldname = valuemap.keys().at(i);
@@ -834,7 +867,22 @@ QList<QPair<QString,QString> > SafetTextParser::getFieldsValues(const QDomElemen
         }
         else {
 
+
+
             mypair.second = valuemap[ valuemap.keys().at(i) ].trimmed();
+
+
+
+            if (mypair.second.endsWith("::safetvalidatefalse")) {
+               mypair.second.replace("::safetvalidatefalse","");
+               containvalidatefunction = "::safetvalidatefalse";
+
+            }
+            else if  (mypair.second.endsWith("::safetvalidatetrue")) {
+                containvalidatefunction = "::safetvalidatetrue";
+                 mypair.second.replace("::safetvalidatetrue","");
+            }
+
             QRegExp rx;
             rx.setPattern("(\\.png|\\.jpg|\\.gif|\\.ogg|\\.mov|\\.mp3)$");
 
@@ -852,56 +900,78 @@ QList<QPair<QString,QString> > SafetTextParser::getFieldsValues(const QDomElemen
         else {
             SafetYAWL::fieldsvalue = SafetYAWL::fieldsvalue +mypair.second+",";
         }
-        if (  mandatories.contains(valuemap.keys().at(i)) ){
+
+
+
+        if (  mandatories.contains(valuemap.keys().at(i)) ) {
             QString namefield = valuemap.keys().at(i);
             QString value = mypair.second.replace("'","");                                        
             bool resultDoValidation;
             QString origValue = value;
-            if ( titles.contains(valuemap.keys().at(i))) {
-                for(int j = 0; j < titles.values(valuemap.keys().at(i)).count();j++) {
-                    namefield = titles.values(valuemap.keys().at(i)).at(j);
-                    resultDoValidation = doFieldValidation(nameoperation, namefield,value,usertip,
-                                                           fieldkeysvalues);
-                    if (resultDoValidation) {
-                        break;
-                    }
-                }
+            if (containvalidatefunction.endsWith("false")) {
+
+                QString namefield = valuemap.keys().at(i);
+                QString value = mypair.second.replace("'","");
+
+                usertip = "n/a";
+                SYE << tr("Error de validación: No es válido el valor "
+                          "<b>\"%2\"</b> del campo <b>%1</b> :\"%3\"")
+                       .arg(namefield)
+                       .arg(value)
+                       .arg(usertip);
+
+                return fieldspairnull;
+            }
+            else if (containvalidatefunction.endsWith("true")) {
+
             }
             else {
-                resultDoValidation = doFieldValidation(nameoperation, namefield,value,usertip,
-                                                       fieldkeysvalues);
-            }
-
-            if (!resultDoValidation  && currentCommand()== 0) {
-
-                if (usertip.isEmpty()) {
-                            SYE << tr("Error de validación: No es válido el valor "
-                                  "<b>\"%2\"</b> del campo <b>%1</b>")
-                            .arg(namefield)
-                            .arg(value);
+                if ( titles.contains(valuemap.keys().at(i))) {
+                    for(int j = 0; j < titles.values(valuemap.keys().at(i)).count();j++) {
+                        namefield = titles.values(valuemap.keys().at(i)).at(j);
+                        resultDoValidation = doFieldValidation(nameoperation, namefield,value,usertip,
+                                                               fieldkeysvalues);
+                        if (resultDoValidation) {
+                            break;
+                        }
+                    }
                 }
                 else {
-
-                            SYE << tr("Error de validación: No es válido el valor "
-                                  "<b>\"%2\"</b> del campo <b>%1</b> :\"%3\"")
-                            .arg(namefield)
-                            .arg(value)
-                            .arg(usertip);
+                    resultDoValidation = doFieldValidation(nameoperation, namefield,value,usertip,
+                                                           fieldkeysvalues);
                 }
-                return fieldspairnull;
 
-            }
-            else {
-                if ( origValue != value ) {
-                    int lastpos = mypair.second.lastIndexOf(origValue);
-                    if ( lastpos < 0 ) {
-                        // Error
-                        return fieldspairnull;
+                if (!resultDoValidation  && currentCommand()== 0) {
+
+                    if (usertip.isEmpty()) {
+                                SYE << tr("Error de validación: No es válido el valor "
+                                      "<b>\"%2\"</b> del campo <b>%1</b>")
+                                .arg(namefield)
+                                .arg(value);
                     }
-                    mypair.second.replace(lastpos, origValue.length(),value);
-                }
-            }
+                    else {
 
+                                SYE << tr("Error de validación: No es válido el valor "
+                                      "<b>\"%2\"</b> del campo <b>%1</b> :\"%3\"")
+                                .arg(namefield)
+                                .arg(value)
+                                .arg(usertip);
+                    }
+                    return fieldspairnull;
+
+                }
+                else {
+                    if ( origValue != value ) {
+                        int lastpos = mypair.second.lastIndexOf(origValue);
+                        if ( lastpos < 0 ) {
+                            // Error
+                            return fieldspairnull;
+                        }
+                        mypair.second.replace(lastpos, origValue.length(),value);
+                    }
+                }
+
+            }
         }
         if ( mypair.first == theprimarykey ) {
             listfieldspair.push_front(mypair);
