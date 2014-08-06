@@ -8948,7 +8948,8 @@ bool MainWindow::login(const QString& name, const QString& pass) {
     if ( !users.contains(curuser) ) {
 
         SYE  <<
-		tr("El usuario \"%1\" no existe en la base de datos de autorización"); 
+        tr("El usuario \"%1\" no existe en la base de datos de autorización")
+                .arg(curuser);
 
         return false;
 

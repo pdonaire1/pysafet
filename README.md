@@ -13,12 +13,20 @@ Agregar al repositorio apt la siguiente línea (/etc/apt/sources.list):
 deb http://tibisay.cenditel.gob.ve/repositorio wheezy main
 ```
 
+Obtener la clave (GPG) del repositorio Debian, utilizando la siguiente línea de comandos:
+
+```
+> wget http://tibisay.cenditel.gob.ve/repositorio/apt-seguridad.gpg.asc
+> apt-key add apt-seguridad.gpg.asc
+
+```
+
 Luego ejecutar:
 
 
 ```
-aptitude update
-aptitude install pysafet
+> aptitude update
+> aptitude install pysafet
 ```
 
 Instalación de la librería Libsafet
