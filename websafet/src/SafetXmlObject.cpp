@@ -36,8 +36,8 @@ bool SafetXmlObject::syncAttributes(const QDomElement& e) {
    	for(int i = 0; i < attrs.count(); i++) {
    		 int index = metaObject()->indexOfProperty( qPrintable(attrs.item(i).nodeName()) );
    		 if ( index != -1 ) {
-   			 metaObject()->property(index).write(this,
-   					 QVariant(qPrintable(attrs.item(i).nodeValue())));
+             metaObject()->property(index).write(this,
+                     attrs.item(i).nodeValue() );
    		 }
    	 }
     return true;    

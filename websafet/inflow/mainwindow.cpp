@@ -4034,6 +4034,13 @@ QString MainWindow::replaceMarks(const QString& s) {
 
     result.replace(Safet::COLONMARK,":");
     result.replace(Safet::COMMAMARK,",");
+    result.replace("Safet::aacute","á");
+    result.replace("Safet::eacute","é");
+    result.replace("Safet::iacute","í");
+    result.replace("Safet::oacute","ó");
+    result.replace("Safet::uacute","ú");
+    result.replace("Safet::ntilde","ñ");
+    result.replace("Safet::Ntilde","Ñ");
     return result;
 }
 
@@ -7710,10 +7717,19 @@ bool MainWindow::genGraph() {
 
         if (showjson.compare("on",Qt::CaseSensitive) == 0) {
 
+            QString myid = configurator->getWorkflows().at(0)->id();
+            SYD << tr("MainWindow.:genGraph...*MYID (1):|%1|")
+                   .arg(myid);
+
+            //myid = MainWindow::replaceMarks(myid);
+            SYD << tr("MainWindow.:genGraph...*MYID (2):|%1|")
+                   .arg(myid);
+
             _currentjson = QString("{ \"filename\": \"%1\", \"id\": \"%3\",\"data\": %2 }")
                     .arg(_currentjson)
                     .arg(configurator->getWorkflows().at(0)->currentGraphJSON(""))
-                    .arg(configurator->getWorkflows().at(0)->id());
+                    .arg(myid);
+
         }
 
 

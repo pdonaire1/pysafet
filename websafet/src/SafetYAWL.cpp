@@ -613,7 +613,7 @@ void SafetYAWL::loadAllConfFiles(int option) {
 void SafetYAWL::openXML(const QString& s) {
          bool result;
          QFile file(s);
-         result = file.open(QIODevice::ReadOnly);
+         result = file.open(QIODevice::ReadOnly | QIODevice::Text);
          if ( !QFile::exists(s) ) {
              SYE
                      <<
@@ -679,9 +679,8 @@ bool SafetYAWL::checkDTD(const char *filename) {
     /* check if parsing suceeded */
     if (doc == NULL) {
  	//(*SafetYAWL::evalExit())( SafetYAWL::streamlog.eval(false, tr("Ocurrio un error de analisis sintactico (parser) para el archivo:  %1").arg(QString(filename))) );
-        SafetYAWL::streamlog
-                << SafetLog::Error
-                << trUtf8("Ocurrió un error de análisis sintáctico "
+        SYE
+                << trUtf8("Ocurrio un error de analisis sintactico "
                       "(parser) para el archivo:  %1")
                 .arg(QString(filename));
         return false;
