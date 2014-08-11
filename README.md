@@ -1,7 +1,8 @@
 pysafet
 =======
 
-python library to use "Safet": a workflow &amp; signature electronic library
+PySafet : a workflow engine (library) with signature electronic features available for Python and C++
+
 
 1. Instalación para Debian Wheezy 7.0 (64 bits)
 ===============================================
