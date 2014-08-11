@@ -3,7 +3,7 @@ pysafet
 
 python library to use "Safet": a workflow &amp; signature electronic library
 
-Instalación para Debian Wheezy 7.0 (64 bits)
+1. Instalación para Debian Wheezy 7.0 (64 bits)
 
 ==================================
 
@@ -29,9 +29,9 @@ Luego ejecutar:
 > aptitude install pysafet
 ```
 
-Instalación de la librería Libsafet
 
-===================================
+2. Instalación desde los archivos fuentes 
+======================================
 
 
 El código fuente de la librería Libsafet se encuentra alojada en una plataforma de desarrollo colaborativo de software (forja) llamada Github, esta plataforma utiliza como sistema de control de versión el software Git. Para la compilación se requiere que se instale los siguientes dependencias:
