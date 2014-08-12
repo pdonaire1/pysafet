@@ -1665,7 +1665,7 @@ QStringList SafetWorkflow::listNextStates(const QString& id, SafetWorkflow::Next
      QString code = generateCodeGraph("png",id,true);
      SYD << tr("....SafetWorkflow::listNextStates...id:|%1|")
             .arg(id);
-     SYD << tr("....SafetWorkflow::listNextStates...(code):\n|%1|")
+     SYA << tr("...SafetWorkflow::listNextStates GENERATECODEGRAPH:\n|%1|")
             .arg(code);
 
      SafetYAWL::_isstatstokenfound = false;
@@ -3063,7 +3063,7 @@ QString SafetWorkflow:: generateGraph(char* filetype, QString& json, const QStri
     SafetYAWL::_isstatstokenfound = false; // Inicializando por si es un unico token
     codeGraph = generateCodeGraph(filetype, info);
 
-    SYD << tr("........SafetWorkflow::generateGraph....(before)code:\n|%1|\n")
+    SYA << tr("........SafetWorkflow::generateGraph....GENERATECODEGRAPH:\n|%1|\n")
            .arg(codeGraph);
 
     QString newCodeGraph;
@@ -3077,7 +3077,7 @@ QString SafetWorkflow:: generateGraph(char* filetype, QString& json, const QStri
     if (!codeGraph.isEmpty()) {
         QStringList codenodes;
         foreach(QString currnode, mylist) {
-            QString nodename = currnode.split(",").at(0).mid(QString("Nodo:").length()+1);
+            QString nodename = currnode.split(",").at(0).mid(QString("Nodo:").length());
             SYD << tr("........CODENODE:|%1|").arg(nodename);
             codenodes.append(nodename);
         }
@@ -3302,7 +3302,6 @@ QString SafetWorkflow:: generateGraph(char* filetype, QString& json, const QStri
         codeGraph = SafetWorkflow::paintGraph(codeGraph);
 
     }
-
     SafetYAWL::_isstatstokenfound = false;
     QString type = QString(filetype);
     SafetYAWL::lastgraph = codeGraph;
@@ -3342,6 +3341,10 @@ QString SafetWorkflow:: generateGraph(char* filetype, QString& json, const QStri
     QMap<QString,QString> mymap = SafetYAWL::getConf().getMap();
 
 
+
+
+    SYD << tr("...SafetWorkflow::generateGraph...parseCodeGraph....codeGraph (2):\n|%1|")
+           .arg(codeGraph);
 
     parsedCodeGraph = SafetYAWL::curOutputInterface->parseCodeGraph(codeGraph, mymap);
     SafetYAWL::filelog.close();
@@ -3408,6 +3411,7 @@ QString SafetWorkflow::calculateGraphFormula(const QString& code, SafetWorkflow:
     QString finalnode;
     int totalporc = 0;
     int totalcount = 0;
+    int totaldocs = 0;
 
     SYD << tr("....SafetWorkflow::calculateGraphFormula....epattern0:|%1|").arg(epatttern0);
     SYD << tr("....SafetWorkflow::calculateGraphFormula....eformula:|%1|").arg(eformula);
@@ -3416,7 +3420,7 @@ QString SafetWorkflow::calculateGraphFormula(const QString& code, SafetWorkflow:
     foreach(QString mynode, mynodes) {
 
         QString mynewnode = mynode;
-        QString s = mynode.section(",",-1);
+        QString s = mynode.section(",",-1).trimmed();
         QString namenode = mynode.section(",",0,0).section(":",1,1);
 
 
@@ -3432,27 +3436,35 @@ QString SafetWorkflow::calculateGraphFormula(const QString& code, SafetWorkflow:
 
         if (mynode.startsWith("Nodo:final,")) {
 
-            mynewnode += QString(tr("%2 %1...  ..."));
+            mynewnode += QString(tr("...%2 %1...  ..."));
             finalnode = mynewnode;
             continue;
         }
         else {
 
-            if (myinfos.count() > 2 ) {
-                //QString myinfotext = myinfos.at(2);
-                QString myinfotext = s;
-                QRegExp myrx(epatttern0);
-                int pos = myinfotext.indexOf(myrx);
-                if (pos >= 0) {
-                    bool ok;
-                    totalporc += myrx.cap(1).toInt(&ok);
-                    totalcount++;
-                    nodesmap[namenode].first = myrx.cap(1);
-                    nodesmap[namenode].second = "";
+            if (myinfos.count()  > 0 ) {
 
-                }
-                else {
+                bool ok;
+                totaldocs += myinfos.at(0).toInt(&ok);
 
+
+                if (myinfos.count() > 2 ) {
+                    //QString myinfotext = myinfos.at(2);
+                    QString myinfotext = s;
+                    QRegExp myrx(epatttern0);
+                    int pos = myinfotext.indexOf(myrx);
+                    SYD << tr("....SafetWorkflow::calculateGraphFormula....myinfotext:|%1|").arg(myinfotext);
+                    if (pos >= 0) {
+                        bool ok;
+                        totalporc += myrx.cap(1).toInt(&ok);
+                        totalcount++;
+                        nodesmap[namenode].first = myrx.cap(1);
+                        nodesmap[namenode].second = "";
+
+                    }
+                    else {
+
+                    }
                 }
             }
 
@@ -3461,13 +3473,19 @@ QString SafetWorkflow::calculateGraphFormula(const QString& code, SafetWorkflow:
         }
     }
 
+    SYD << tr("....SafetWorkflow::calculateGraphFormula. (5)");
+    SYD << tr("....SafetWorkflow::calculateGraphFormula. totalcount:|%1|").arg(totalcount);
     if ( eformula == Safet::SUMALL) {
   //      _porc = QString("%1%").arg(totalporc);
     if (rtype == Partial ) {
+        SYD << tr("....SafetWorkflow::calculateGraphFormula. (6)");
         return QString("%1%").arg(totalporc);
     }
     else {
-             result += finalnode.arg(QString("%1%").arg(totalporc)).arg(tr("Suma total:"));
+        SYD << tr("....SafetWorkflow::calculateGraphFormula. (7)");
+             QString newfinal = finalnode.arg(QString("%1").arg(totaldocs)).arg(tr("Total:"));
+             SYD << tr("....SafetWorkflow::calculateGraphFormula. newfinal:|%1|").arg(newfinal);
+             result += newfinal;
     }
     }
     else if ( eformula == Safet::AVGALL ) {
