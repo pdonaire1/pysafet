@@ -130,6 +130,18 @@ QString graphvizPlugin::checkSES(const QString& s, ExtraInfoShow ex,
           statsstyle = context[conf()+"stats.style"];
 
     }
+      bool showfinal  = false;
+
+      qDebug("...graphviz::parseCodeGraph...showfinal:|%d|",showfinal);
+
+      if (context.contains(conf()+"extrainfo.showfinal") ) {
+        showfinal = context[conf()+"extrainfo.showfinal"]
+                                                .compare("on",
+                                                Qt::CaseSensitive) == 0;
+        qDebug("...graphviz::parseCodeGraph...contains showfinal");
+      }
+
+      qDebug("...graphviz::parseCodeGraph...showfinal (2):|%d|",showfinal);
       bool showheretokens = context[conf()+"extrainfo.showwheretokens"]
                                                 .compare("on",
                                                 Qt::CaseSensitive) == 0;
@@ -244,12 +256,12 @@ QString graphvizPlugin::checkSES(const QString& s, ExtraInfoShow ex,
           QString scolor = " ,fillcolor=\""+ processColor(context[conf()+"task.fillcolor"]) +"\" ";
 
           qDebug(".....parseCodeGraph...newnode:|%s|",qPrintable(newnode));
-          if  ( pos > 0 || newnode == "final") {
+          if  ( pos > 0 || ( newnode == "final" && showfinal) ) {
               bool ok;
               QString cgradient = context[conf()+"stats.colorgradient"];
               Q_ASSERT( cgradient.length() > 0 );
 
-              if ( newnode == "final" ) {
+              if ( newnode == "final"  && showfinal) {
                 qDebug(".....parseCodeGraph...YES newnode:|%s|",qPrintable(newnode));
                  showheretokens = false;
                  curshow = 0x08;

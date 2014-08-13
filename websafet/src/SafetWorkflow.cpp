@@ -3483,7 +3483,14 @@ QString SafetWorkflow::calculateGraphFormula(const QString& code, SafetWorkflow:
     }
     else {
         SYD << tr("....SafetWorkflow::calculateGraphFormula. (7)");
-             QString newfinal = finalnode.arg(QString("%1").arg(totaldocs)).arg(tr("Total:"));
+                QString newfinal;
+             if (epatttern0 == "Safet::Totaldocs")  {
+                newfinal = finalnode.arg(QString("%1").arg(totaldocs)).arg(tr("Total:"));
+             }
+             else {
+                newfinal = finalnode.arg(QString("%1").arg(totalporc)).arg(tr("Total:"));
+             }
+
              SYD << tr("....SafetWorkflow::calculateGraphFormula. newfinal:|%1|").arg(newfinal);
              result += newfinal;
     }
