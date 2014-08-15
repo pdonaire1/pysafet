@@ -4185,7 +4185,37 @@ bool  MainWindow::toInputConsole(const QString& action,bool withpermises) {
         SYD  << tr("\n\nMainWindow::toInputConsole.............***parser.operationName():|%1|")
                 .arg(parser.operationName());
 
-        if ( parser.operationName().startsWith("Listar_",Qt::CaseSensitive)
+        if (parser.operationName().compare("listar_usuarios") == 0) {
+            SYD << "Listando usuarios...";
+            QString selectrol = MainWindow::replaceMarks(data.map["Rol"]);
+            SYD << tr("......MainWindow::toInputConsole....Listar_usuarios...selectrol: |%1|")
+                   .arg(selectrol);
+            SafetYAWL::streamlog.initAllStack();
+
+            bool myresult = true;
+
+            _currentjson = doListUsers(selectrol);
+
+            SYD << tr("MainWindow::doListUsers...result:\n|%1|")
+                   .arg(_currentjson);
+
+            if ( queryForErrors() ) {
+                 _currentjson = currentError();
+                 myresult = false;
+            }
+            return myresult;
+//            if ( !myresult ) {
+//                _currentjson = currentError();
+//                SYD << tr("......MainWindow::toInputConsole....doListUsers..._currentjson: |%1|")
+//                       .arg(_currentjson);
+
+//            }
+
+
+
+        }
+
+        else if ( parser.operationName().startsWith("Listar_",Qt::CaseSensitive)
                 && parser.operationName().indexOf("_autofiltro") == -1
                 && parser.operationName().indexOf("_filtrorecursivo") == -1
                 && parser.operationName().indexOf("_para_clave") == -1
@@ -4886,6 +4916,7 @@ bool  MainWindow::toInputConsole(const QString& action,bool withpermises) {
 
 
         }
+
         else if (parser.operationName().startsWith("Agregar_grafo") ) {
             SYD << "Agregando grafo...";
             QString namegraph = MainWindow::replaceMarks(data.map["Nombre_grafo"]);
@@ -4893,6 +4924,7 @@ bool  MainWindow::toInputConsole(const QString& action,bool withpermises) {
                    .arg(namegraph);
             SafetYAWL::streamlog.initAllStack();
             bool myresult =   addXmlMenuGroupForm(namegraph);
+
             SYD << tr("......MainWindow::toInputConsole....addXmlMenuGroupForm...result: |%1|")
                    .arg(myresult);
 
@@ -4912,6 +4944,22 @@ bool  MainWindow::toInputConsole(const QString& action,bool withpermises) {
 
 }
 
+
+QString MainWindow::doListUsers(const QString& selectrol) {
+
+    QString result = QString("[ %1 ]");
+
+    QString listusers  = "";
+
+    foreach(QString u, users.keys()) {
+        listusers += QString("\"%1\",").arg(u);
+    }
+    listusers.chop(1);
+
+    result = result.arg(listusers);
+
+    return result;
+}
 
 QString MainWindow::doModifyDateGraph(const QString& nametask,const QDateTime& mydate,
                                       const QString& code) {

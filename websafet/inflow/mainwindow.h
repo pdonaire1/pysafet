@@ -100,6 +100,8 @@ const QString BRACKETOPENMARK = "##SAFETBRACKETOPEN##";
 const QString BRACKETCLOSEMARK = "##SAFETBRACKETCLOSE##";
 const QString MPIPEMARK = "##SAFETPIPE##";
 
+const QString ALL = "Safet::all";
+
 const int NOKEY = 10;
 const QString EMAIL_PATTERN =
                    QString("[_A-Za-z0-9-\\+]+(\\.[_A-Za-z0-9-]+)*@")
@@ -903,6 +905,7 @@ public:
        */
       QString genTicket(const QString& user);
 
+
 public Q_SLOTS: // Slots para el manejo de los servicios de Escritorio (QDesktopServices)
 
         void browse( const QUrl &url );
@@ -1111,6 +1114,7 @@ private:
     bool replaceDocumentid(QString &t, const QString& idkey);
     void executeWithoutJSON();
     void executeWithJSON();
+    QString doListUsers(const QString &selectrol);
 private slots:
     void executeJSCodeAfterLoad( /*bool ok */ );
 
