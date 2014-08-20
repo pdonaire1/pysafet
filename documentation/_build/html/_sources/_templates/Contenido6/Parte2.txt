@@ -1,0 +1,112 @@
+
+============================================
+:index:`Insertar datos en la base de datos`
+============================================
+
+ ::
+
+	Nos vamos al archivo deftrac.xml <HOME>.safet/input/deftrac.xml
+
+
+ **Encabesado**
+
+ ::
+
+	<?xml version="1.0" encoding="UTF-8" ?>
+	<!--
+	Documento  : deftrac.xml
+	Creado     : Víctor Bravo
+	Autor      : Victor Bravo
+	Descripcion: Archivo de Entrada para SAFET - Inflow
+	-->
+
+ **Ruta del archivo**
+
+ ::
+
+	
+	<!DOCTYPE operations SYSTEM "file:///home/cenditel/.safet/dtd/yawlinput.dtd">
+
+
+ **Operaciones a realizar "Agregar,Modificar,Eliminar,Listar"**
+
+ ::
+
+	<operations suffix=":" commandname="operacion">
+
+
+	<operation  name="Mensajes"  desc="Agregar,Modificar,Eliminar,Listar" icon="firmadoc.png"> </operation>
+
+
+
+ **Operación Agregar en este caso seria "mensaje"**
+
+ ::
+
+
+	<operation  name="agregar_mensaje"  desc="Agregar un nuevo ticket para la fase de Conceptualización" icon="plus.png">
+
+	<command id ="1" type="agregar" table="mensajes" >
+		<fields>
+			<field type="string" icon="resumen.png" mandatory="yes" validation="" title="Titulo" desc="Escribir un titulo corto del ticket">
+				mensaje
+			</field>
+			<field type="string" literal="iniciado" mandatory="yes" >
+				status
+			</field>
+	
+		</fields>
+	</command>
+	<command id ="1" type="agregar" table="mensajes_registro" >
+		            <fields>
+				  <field type="datetime" mandatory="yes"  function="seq from sqlite_sequence where name='mensajes'"  input="no">
+		                              mensajeid
+		                    </field>
+		                    <field type="datetime" mandatory="yes"  function="datetime('now')" format="time_t" input="no">
+		                    fecha
+		                    </field>
+		                    <field type="string" literal="_USERNAME" mandatory="yes" >
+		                     rol      
+		                    </field>
+			       <field type="string" literal="iniciado" mandatory="yes" >
+		                     regstatus
+		                    </field>
+
+		            </fields>
+		    </command>
+
+	</operation>
+
+
+
+	</operations>
+
+ 
+
+
+
+ >>> import Safet
+ ... import os
+ ...
+ ... myhome = os.getenv("HOME")
+ ... mymedia = myhome + "/tmp"
+ ... myurl = "http://localhost"
+ ... 
+ ... myinflow = Safet.MainWindow(myhome)
+ ... 
+ ... myinflow.setMediaPath(mymedia)
+ ... myinflow.setHostURL(myurl)
+ ... 
+ ... result = myinflow.login("admin","admin")
+ ... myconsult = u"operacion:agregar_mensaje Titulo: Hola mundo"
+ ... 
+ ... if result:
+ ...	 result = myinflow.toInputForm(myconsult)
+ ... else:
+ ...	 print " no autenticado "
+ ...
+ ... if result:
+ ...	 print "ok"
+ ... else:
+ ...	 print " no ok"
+

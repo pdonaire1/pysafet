@@ -1,0 +1,403 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>Despliegue de la acciones de un CRUD &mdash; PySafet</title>
+    
+    <link rel="stylesheet" href="../../_static/nature.css" type="text/css" />
+    <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../../',
+        VERSION:     '',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../../_static/jquery.js"></script>
+    <script type="text/javascript" src="../../_static/underscore.js"></script>
+    <script type="text/javascript" src="../../_static/doctools.js"></script>
+    <script type="text/javascript" src="../../_static/translations.js"></script>
+    <link rel="top" title="PySafet" href="../../index.html" />
+    <link rel="next" title="Clase MainWindow(Safet.MainWindow)" href="../Contenido5/Api.html" />
+    <link rel="prev" title="CRUD (Configuración de archivo de entrada)" href="deftrac_xml.html" /> 
+  </head>
+  <body>
+    <div class="related">
+      <h3>Navegación</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../genindex.html" title="Índice General"
+             accesskey="I">índice</a></li>
+        <li class="right" >
+          <a href="../Contenido5/Api.html" title="Clase MainWindow(Safet.MainWindow)"
+             accesskey="N">siguiente</a> |</li>
+        <li class="right" >
+          <a href="deftrac_xml.html" title="CRUD (Configuración de archivo de entrada)"
+             accesskey="P">anterior</a> |</li>
+        <li><a href="../../index.html">PySafet</a> &raquo;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <div class="section" id="despliegue-de-la-acciones-de-un-crud">
+<h1><span class="target" id="index-0"></span>Despliegue de la acciones de un CRUD<a class="headerlink" href="#despliegue-de-la-acciones-de-un-crud" title="Enlazar permanentemente con este título">¶</a></h1>
+<blockquote>
+<div>En la <strong class="command">sección 2.1</strong> utilizamos la etiqueta <strong class="command">&lt;operation&gt;</strong> que nos genera en link para acceder a la acción.</div></blockquote>
+<div class="section" id="elementos-de-un-formulario">
+<h2><span class="target" id="index-1"></span>Elementos de un formulario<a class="headerlink" href="#elementos-de-un-formulario" title="Enlazar permanentemente con este título">¶</a></h2>
+<blockquote>
+<div><p><strong class="command">1.- Elemento operation:</strong></p>
+<div class="highlight-python"><div class="highlight"><pre>&lt;!ELEMENT operation (command*) &gt; ----&gt; &lt;!-- operation va a tener como elemento: command --&gt;
+&lt;!ATTLIST operation name CDATA ----&gt; #IMPLIED
+                    desc CDATA -----&gt; #IMPLIED
+                    subtitle  (yes|no) &quot;no&quot;
+                    icon CDATA  ---&gt; #IMPLIED &gt;
+</pre></div>
+</div>
+<p><strong class="command">Operation</strong>  va a contener solo el elemento <strong class="command">(command*)</strong>, el símbolo <strong class="command">(*)</strong> significa que el elemento puede no aparecer o aparecer una o más veces. Tendrá como atributo:</p>
+<ul class="simple">
+<li><strong class="command">name:</strong> Nombre de la acción</li>
+<li><strong class="command">desc:</strong> Descripción de la acción</li>
+<li><strong class="command">subtitle:</strong> (yes|no).</li>
+<li><strong class="command">icon:</strong> se especifica la imagen asociado a la acción</li>
+</ul>
+<p><strong class="command">2.- Elemento command:</strong></p>
+<div class="highlight-python"><div class="highlight"><pre>&lt;!ELEMENT command (fields) &gt;  -----&gt; &lt;!-- command va a tener como elemento: fields --&gt;
+&lt;!ATTLIST command   id CDATA  -----&gt;#IMPLIED
+                    type (actualizar|eliminar|agregar) -----&gt; &quot;agregar&quot;
+                    table CDATA -----&gt; #IMPLIED &gt;
+</pre></div>
+</div>
+<p><strong class="command">Command</strong> va a contener solo el elemento fields y tendrá como atributo:</p>
+<ul class="simple">
+<li><strong class="command">id :</strong></li>
+<li><strong class="command">type:</strong> que refiera al tipo de acción que realizara en la base de datos, puede tener como valor actualizar, eliminar y agregar. Por defecto tomara la acción “agregar”</li>
+<li><strong class="command">table:</strong>  la tabla de la base de datos a la que va ejecutar el tipo de acción</li>
+</ul>
+<p><strong class="command">3.- Elemento fields:</strong></p>
+<div class="highlight-python"><div class="highlight"><pre>&lt;!ELEMENT fields (field+) &gt; ----&gt; &lt;!-- fields va a tener como elemento: field --&gt;
+</pre></div>
+</div>
+<p><strong class="command">Fields</strong> va a contener solo el elemento field, el símbolo <strong class="command">(+)</strong>  significa que el elemento tiene que aparecer una o más veces (no puede no aparecer), no posee atributo.</p>
+<p><strong class="command">4.- Elemento field:</strong></p>
+<div class="highlight-python"><div class="highlight"><pre>&lt;!ELEMENT field (#PCDATA) &gt; &lt;!-- no tiene elemento --&gt;
+&lt;!ATTLIST field     type CDATA #IMPLIED
+                    mandatory CDATA #IMPLIED
+                    title CDATA #IMPLIED
+                    primarykey (yes|no) &quot;no&quot;
+                    validation CDATA #IMPLIED
+                    options CDATA #IMPLIED
+                    function CDATA #IMPLIED
+                    format (time_t|integer) &quot;time_t&quot;
+                    desc CDATA #IMPLIED
+                    literal CDATA #IMPLIED
+                    sequence CDATA #IMPLIED
+                    typesequence (next|current) &quot;next&quot;
+                    input CDATA #IMPLIED
+                    path CDATA #IMPLIED
+                    visible CDATA #IMPLIED
+                    order (asc|desc|none) &quot;asc&quot;
+                    icon CDATA #IMPLIED
+                    index CDATA #IMPLIED
+                    filter CDATA #IMPLIED
+                    changefor CDATA #IMPLIED
+                    changekey CDATA #IMPLIED
+                    enablethis CDATA #IMPLIED
+                    repetible (yes|no) &quot;no&quot; &gt;
+</pre></div>
+</div>
+<p><strong class="command">Field</strong> no contiene elemento y tendrá como atributo:</p>
+<ul>
+<li><p class="first"><strong class="command">mandatory:</strong> Este atributo indica si el campo es o no obligatorio, puedo o no aparecer</p>
+</li>
+<li><p class="first"><strong class="command">title:</strong> Este atributo indica el nombre del campo (y es lo que aparece en la interfaz), puedo o no aparecer</p>
+</li>
+<li><p class="first"><strong class="command">primarykey:</strong> Este atributo indica si el campo es clave primaria de la tabla, puedo o no aparecer</p>
+</li>
+<li><p class="first"><strong class="command">validation:</strong> Este atributo se utiliza para validar el contenido del campo, por lo general se coloca expresiones regulares, puedo o no aparecer</p>
+</li>
+<li><p class="first"><strong class="command">options:</strong> Este atributo se utilizar para varias opciones dependiendo del tipo de campo que se va a utilizar, ejemplo:</p>
+<ul class="simple">
+<li><strong class="command">type=</strong>&#8220;datetime&#8221; options=&#8221;calendarPopup::true,displayFormat::dd/MM/yy&#8221; indica el formato de la fecha.</li>
+<li><strong class="command">type=</strong>&#8220;combolisttable&#8221; options=&#8221;id:proyecto_poa::&#8217;(&#8216; || id || &#8216;) &#8216; || nombre&#8221; consulta sql para mostrar las opciones del campo (para este ejemplo el sql seria select &#8216;(&#8216; || id || &#8216;) &#8216; || nombre from proyecto_poa; ) .</li>
+<li><strong class="command">type=</strong>&#8220;stringbox&#8221; options=&#8221;wiki&#8221; indica que el campo es de tipo wiki</li>
+<li><strong class="command">type=</strong>&#8220;combolistliteral&#8221; options=&#8221;Opcion1::Opcion1::Opcion1,Opcion2::Opcion2::Opcion2,Opcion3::Opcion3::Opcion3&#8221; Muestra las opciones del campo de selección: Opcion1, Opcion2 y Opcion3</li>
+<li><strong class="command">type=</strong>&#8220;comboflow&#8221; options=&#8221;all&#8221;: Muestra todos los archivos de flujos</li>
+</ul>
+</li>
+<li><p class="first"><strong class="command">function:</strong> este atributo permite realizar una operación ya sea definida en el sistema o consulta a la base de datos, ejemplo:</p>
+<ul class="simple">
+<li>&lt;field type=&#8221;datetime&#8221; function=&#8221;now()&#8221;, toma la fecha del servidor</li>
+<li><strong class="command">function=</strong>&#8220;date_part(&#8216;year&#8217;, to_timestamp({#fecha_ingreso}))+1&#8221; corresponde a una consulta sql: select   date_part(&#8216;year&#8217;, to_timestamp({#fecha_ingreso}))+1, este select toma  #fecha_ingreso el año y le suma 1</li>
+</ul>
+</li>
+<li><p class="first"><strong class="command">format:</strong> este atributo indica el tipo de formato que va tomar el campo, ejemplo</p>
+<ul class="simple">
+<li>&lt;type=&#8221;datetime&#8221; format=&#8221;time_t&#8221; este campo toma el formato de tiempo</li>
+<li>&lt;type=&#8221;datetime&#8221; format=&#8221;integer&#8221; este campo toma el formato de número entero</li>
+</ul>
+</li>
+<li><p class="first"><strong class="command">desc:</strong> este atributo permite colocar una descripción del campo ejemplo:
+- <strong class="command">desc=</strong>&#8220;La explicación más detallada&#8221;&gt;</p>
+</li>
+<li><p class="first"><strong class="command">literal:</strong> este atributo indica el valor del campo, ejemplo:</p>
+<ul class="simple">
+<li><strong class="command">literal=</strong>&#8220;nueva&#8221; el campo toma el valor nueva</li>
+<li><strong class="command">literal=</strong>&#8220;_USERNAME&#8221;  el campo toma el valor del usuario autenticado</li>
+</ul>
+</li>
+<li><p class="first"><strong class="command">sequence:</strong> este atributo se indica la variable de la secuencia para generar numero en la base de datos, el número que genere corresponde al valor que va tomar el campo, ejemplo:</p>
+<ul class="simple">
+<li><strong class="command">sequence=</strong>&#8220;actividad_por_accion_id_seq&#8221;  generar el nuevo número en la tabla de la base de datos en la tabla actividad_por_accion tipesequence.</li>
+</ul>
+</li>
+<li><p class="first"><strong class="command">input:</strong> este atributo permite indicar si el campo se mostrara en la interfaz gráfica del sistema</p>
+</li>
+<li><p class="first"><strong class="command">path:</strong> este atribute se indica la dirección de una archivo, ejemplo:</p>
+<ul class="simple">
+<li><strong class="command">path=</strong>&#8220;/home/vbravo/.safet/flowfiles/SolicitudVistaVacacionessp.xml&#8221;</li>
+</ul>
+<p>Visible</p>
+</li>
+<li><p class="first"><strong class="command">order:</strong> este atributo permite ordenar el listado de datos en orden descendiente o ascendente , ejemplo:</p>
+<ul class="simple">
+<li><strong class="command">order=</strong>&#8220;desc&#8221; ordena la lista de datos en descendiente</li>
+</ul>
+</li>
+<li><p class="first"><strong class="command">icon:</strong> este atributo permite indicar la imagen asociada al campo, ejemplo:</p>
+<ul class="simple">
+<li><strong class="command">icon=</strong>&#8220;resumen.png&#8221;</li>
+</ul>
+<p>index</p>
+</li>
+<li><p class="first"><strong class="command">filter:</strong> este atributo permite filtrar la información de los directorios, ejemplo:
+- <strong class="command">filter=&#8221;Archivos de flujo (*.xml);;Todos (*)&#8221;</strong> Filtra o permite mostrar todos los archivos contenidos en un directorio indicado</p>
+</li>
+<li><p class="first"><strong class="command">changefor:</strong> este atributo permite traer el valor del campo de la base de datos una vez que cambia el campo indicado en el atributo, ejemplo:
+- <strong class="command">changefor=&#8221;id&#8221;</strong>  el campo tomo el valor que tiene almacena en la base de datos cuando selecciona el valor del campo id</p>
+</li>
+<li><p class="first"><strong class="command">changekey</strong></p>
+</li>
+<li><p class="first"><strong class="command">enablethis</strong></p>
+</li>
+<li><p class="first"><strong class="command">repetible</strong></p>
+</li>
+</ul>
+</div></blockquote>
+</div>
+<div class="section" id="accion-de-agregar-un-nuevo-proyecto">
+<h2><span class="target" id="index-2"></span>Acción de agregar un nuevo proyecto<a class="headerlink" href="#accion-de-agregar-un-nuevo-proyecto" title="Enlazar permanentemente con este título">¶</a></h2>
+<blockquote>
+<div><p>Esta acción va contener los siguientes campos:</p>
+<ul class="simple">
+<li>Campo para agregar un nuevo registro a la base de datos, este campo utiliza una sequence</li>
+<li>Nombre</li>
+<li>Código proyecto poa</li>
+<li>Descripción</li>
+<li>Objetivo general</li>
+<li>Objetivo especifico</li>
+<li>Problema a enfrentar</li>
+</ul>
+<div class="highlight-python"><div class="highlight"><pre># Archivo deftrac.xml
+
+&lt;operation  name=&quot;POA&quot;  desc=&quot;Acciones del Plan Operativo Anual&quot; icon=&quot;project.png&quot;&gt;
+&lt;/operation&gt;
+&lt;operation  name=&quot;agregar_proyecto_poa&quot;  desc=&quot;Agregar un nuevo proyecto POA&quot; icon=&quot;plus.png&quot;&gt;
+&lt;command id =&quot;1&quot; type=&quot;agregar&quot; table=&quot;proyecto_poa&quot; &gt;
+&lt;fields&gt;
+        &lt;field type=&quot;string&quot; mandatory=&quot;yes&quot; primarykey=&quot;yes&quot; sequence=&quot;proyecto_poa_id_seq&quot; title=&quot;proyecto_a_agregar&quot;&gt;
+                id
+        &lt;/field&gt;
+        &lt;field type=&quot;string&quot; icon=&quot;resumen.png&quot; mandatory=&quot;yes&quot; validation=&quot;&quot; title=&quot;Nombre&quot; desc=&quot;Nombre del Proyecto POA&quot;&gt;
+                nombre
+        &lt;/field&gt;
+         &lt;field type=&quot;string&quot; icon=&quot;resumen.png&quot; mandatory=&quot;yes&quot; validation=&quot;&quot; title=&quot;Codigo_proyecto_poa&quot; desc=&quot;codigo del proyecto POA a agregar&quot;&gt;
+                codigo_proyecto
+        &lt;/field&gt;
+
+        &lt;field type=&quot;stringbox&quot; icon=&quot;desc.png&quot; mandatory=&quot;yes&quot;  options=&quot;wiki&quot; title=&quot;Descripcion&quot; desc=&quot;La explicación más detallada&quot;&gt;
+                descripcion
+        &lt;/field&gt;
+        &lt;field type=&quot;stringbox&quot; mandatory=&quot;yes&quot; title=&quot;Objetivo_General&quot; desc=&quot;Objetivo general del proyecto&quot;&gt;
+                objetivo_general
+        &lt;/field&gt;
+        &lt;field type=&quot;stringbox&quot; mandatory=&quot;yes&quot; title=&quot;Objetivo_Especifico&quot; desc=&quot;Objetivo especifico del proyecto&quot;&gt;
+                objetivo_especifico
+        &lt;/field&gt;
+        &lt;field type=&quot;stringbox&quot; mandatory=&quot;yes&quot; title=&quot;problema_a_enfrentar&quot; desc=&quot;Problema a enfrentar&quot;&gt;
+                problema_a_enfrentar
+        &lt;/field&gt;
+&lt;/fields&gt;
+&lt;/command&gt;
+&lt;/operation&gt;
+</pre></div>
+</div>
+<p>Esta acción que corresponde a unas de las operaciones de Proyectos POA, se mostraría la interfaz gráfica del sistema de la siguiente manera:</p>
+<a class="reference internal image-reference" href="../../_images/Formulario1_poa.png"><img alt="../../_images/Formulario1_poa.png" src="../../_images/Formulario1_poa.png" style="width: 1000px;" /></a>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Figura 9:</th><td class="field-body">Interfaz gráfica para la acción, Agregar proyecto POA.</td>
+</tr>
+</tbody>
+</table>
+</div></blockquote>
+</div>
+<div class="section" id="accion-de-modificar-un-proyecto">
+<h2><span class="target" id="index-3"></span>Acción de modificar un proyecto<a class="headerlink" href="#accion-de-modificar-un-proyecto" title="Enlazar permanentemente con este título">¶</a></h2>
+<blockquote>
+<div><p>Esta acción va contener los siguientes campos:</p>
+<ul class="simple">
+<li>Identificador del proyecto en la base de datos:</li>
+<li>Nombre</li>
+<li>Código proyecto poa</li>
+<li>Descripción</li>
+<li>Objetivo general</li>
+<li>Objetivo especifico</li>
+<li>Problema a enfrentar</li>
+</ul>
+<div class="highlight-python"><div class="highlight"><pre># Archivo deftrac.xml
+
+&lt;operation  name=&quot;modificar_proyecto_poa&quot;  desc=&quot;Modificar un proyecto poa existente&quot; icon=&quot;&quot;&gt;
+&lt;command id =&quot;1&quot; type=&quot;actualizar&quot; table=&quot;proyecto_poa&quot;&gt;
+        &lt;fields&gt;
+                &lt;field type=&quot;combolisttable&quot; options=&quot;id:proyecto_poa::&#39;(&#39; || id || &#39;) &#39; || nombre&quot; mandatory=&quot;yes&quot; primarykey=&quot;yes&quot; title=&quot;id&quot; order=&quot;desc&quot; changekey=&quot;yes&quot;&gt;
+                         id
+                &lt;/field&gt;
+
+                                        &lt;field type=&quot;string&quot; icon=&quot;resumen.png&quot; mandatory=&quot;yes&quot; validation=&quot;.*&quot; title=&quot;Nombre&quot; desc=&quot;Nombre del Proyecto POA&quot; changefor=&quot;id&quot;&gt;
+                        nombre
+                &lt;/field&gt;
+
+                &lt;field type=&quot;string&quot; icon=&quot;resumen.png&quot; mandatory=&quot;yes&quot; validation=&quot;&quot; title=&quot;Codigo_proyecto_poa&quot; desc=&quot;Nombre de la acción específica&quot; changefor=&quot;id&quot;&gt;
+                       codigo_proyecto
+               &lt;/field&gt;
+
+                &lt;field type=&quot;stringbox&quot; icon=&quot;desc.png&quot; mandatory=&quot;yes&quot;  options=&quot;wiki&quot; title=&quot;Descripcion&quot; desc=&quot;La explicación más detallada&quot; changefor=&quot;id&quot; &gt;
+                        descripcion
+                &lt;/field&gt;
+
+                &lt;field type=&quot;stringbox&quot; mandatory=&quot;yes&quot; title=&quot;Objetivo_General&quot; desc=&quot;Objetivo general del proyecto&quot; changefor=&quot;id&quot; &gt;
+                                                objetivo_general
+                &lt;/field&gt;
+
+                &lt;field type=&quot;stringbox&quot; mandatory=&quot;yes&quot; title=&quot;Objetivo_Especifico&quot; desc=&quot;Objetivo especifico del proyecto&quot; changefor=&quot;id&quot; &gt;
+                                                objetivo_especifico
+                &lt;/field&gt;
+
+                    &lt;field type=&quot;stringbox&quot; mandatory=&quot;yes&quot; title=&quot;problema_a_enfretar&quot; desc=&quot;Problema a enfrentar&quot; changefor=&quot;id&quot;&gt;
+                                                problema_a_enfrentar
+                &lt;/field&gt;
+        &lt;/fields&gt;
+&lt;/command&gt;
+&lt;/operation&gt;
+</pre></div>
+</div>
+<p>Esta acción que corresponde a unas de las operaciones de Proyectos POA, se mostraría la interfaz gráfica del sistema de la siguiente manera:</p>
+<a class="reference internal image-reference" href="../../_images/Formulario2_poa.png"><img alt="../../_images/Formulario2_poa.png" src="../../_images/Formulario2_poa.png" style="width: 1000px;" /></a>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Figura 10:</th><td class="field-body">Interfaz gráfica, acción modificar proyecto POA, selección del identificador del proyecto</td>
+</tr>
+</tbody>
+</table>
+<p>En la <strong>figura 10</strong> se muestra en el momento que se va a seleccionar el proyecto poa a modificar, este wiget de selección correspondería a esta parte del código.</p>
+<div class="highlight-python"><div class="highlight"><pre>&lt;field type=&quot;combolisttable&quot; options=&quot;id:proyecto_poa::&#39;(&#39; || id || &#39;) &#39; || nombre&quot;
+                                                                        mandatory=&quot;yes&quot; primarykey=&quot;yes&quot; title=&quot;id&quot; order=&quot;desc&quot; changekey=&quot;yes&quot;&gt;
+id
+&lt;/field&gt;
+</pre></div>
+</div>
+<p>En el código de la operación modificar un proyecto poa, podemos observar que el resto de los campo tomara el valor que esta almacenado en la base de datos una ves que selecciona el identificador del proyecto <strong>(changefor=&#8221;id&#8221;&gt;)</strong>. Una ves seleccionada el identificador del proyecto poa la interfaz gráfica del sistema se mostraría de la siguiente manera:</p>
+<a class="reference internal image-reference" href="../../_images/Formulario3_poa.png"><img alt="../../_images/Formulario3_poa.png" src="../../_images/Formulario3_poa.png" style="width: 1000px;" /></a>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Figura 11:</th><td class="field-body">Interfaz gráfica, acción Modificar proyecto POA, una ves seleccionado el proyecto POA.</td>
+</tr>
+</tbody>
+</table>
+</div></blockquote>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+  <h3><a href="../../index.html">Tabla de Contenidos</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">Despliegue de la acciones de un CRUD</a><ul>
+<li><a class="reference internal" href="#elementos-de-un-formulario">Elementos de un formulario</a></li>
+<li><a class="reference internal" href="#accion-de-agregar-un-nuevo-proyecto">Acción de agregar un nuevo proyecto</a></li>
+<li><a class="reference internal" href="#accion-de-modificar-un-proyecto">Acción de modificar un proyecto</a></li>
+</ul>
+</li>
+</ul>
+
+  <h4>Tema anterior</h4>
+  <p class="topless"><a href="deftrac_xml.html"
+                        title="capítulo anterior">CRUD (Configuración de archivo de entrada)</a></p>
+  <h4>Próximo tema</h4>
+  <p class="topless"><a href="../Contenido5/Api.html"
+                        title="próximo capítulo">Clase MainWindow(Safet.MainWindow)</a></p>
+  <h3>Esta página</h3>
+  <ul class="this-page-menu">
+    <li><a href="../../_sources/_templates/Contenido2/Formulario_Accion.txt"
+           rel="nofollow">Mostrar el código</a></li>
+  </ul>
+<div id="searchbox" style="display: none">
+  <h3>Búsqueda rápida</h3>
+    <form class="search" action="../../search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Ir a" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Introduzca los términos de búsqueda o un nombre de módulo, clase o función.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navegación</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../genindex.html" title="Índice General"
+             >índice</a></li>
+        <li class="right" >
+          <a href="../Contenido5/Api.html" title="Clase MainWindow(Safet.MainWindow)"
+             >siguiente</a> |</li>
+        <li class="right" >
+          <a href="deftrac_xml.html" title="CRUD (Configuración de archivo de entrada)"
+             >anterior</a> |</li>
+        <li><a href="../../index.html">PySafet</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer">
+        &copy; Copyright 2014, Cenditel.
+      Creado con <a href="http://sphinx-doc.org/">Sphinx</a> 1.2.2.
+    </div>
+  </body>
+</html>

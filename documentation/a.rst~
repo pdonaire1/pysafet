@@ -1,0 +1,334 @@
+Sphinx
+######
+
+Jerarquía de los títulos de un texto
+====================================
+
+El título de un libro se escribe, por ejemplo como::
+
+  Las aventuras de Alicia en el país de las maravillas
+  ####################################################
+
+El título de un capítulo se escribe, por ejemplo como sigue::
+
+  Capítulo I: El descenso por la madriguera
+  =========================================
+
+Los títulos de las secciones se escribe, por ejemplo::
+
+  Sección A: Sobre el libro de la hermana de Alicia
+  -------------------------------------------------
+
+Las subsecciones se escriben, por ejemplo::
+
+  SubSección A1: Primer teorema de la hermana
+  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+Por último, los párrafos se escriben::
+
+  SubSubSección A1.1: Corolario de la hermana
+  """""""""""""""""""""""""""""""""""""""""""
+
+.. warning::
+   El largo del subrayado de los títulos siempre debe ser igual o
+   mayor que el texto que subrayan.
+
+Formato de texto
+================
+
+Se puede obtener *italics*, **negritas**, `color` e ``imprenta``::
+
+  *italics*, **negritas**, `color` e ``imprenta``
+
+
+Listas y listas numeradas
+==========================
+
+Se usar * para listas y #. para listas numeradas. Los espacios
+delante de los signos indican anidamiento y **antes** de cada lista debe haber una línea
+en blanco::
+
+  #. Punto uno
+  #. Punto dos
+
+     * Punto dos coma uno
+     * Punto dos coma dos
+  #. Punto tres
+
+lo que produce:
+
+#. Punto uno
+#. Punto dos
+
+   * Punto dos coma uno
+   * Punto dos coma dos
+#. Punto tres
+
+.. warning:: Recordar que la correcta indentación es importante.
+
+Definiciones
+=============
+
+Una definición se realiza mediante el ambiente `topic` que permite generar definiciones (aplicable a teoremas, corolarios, etc.). El código a utilizar es el siguiente::
+
+  .. topic:: Recursividad
+
+     Ver definición de recursivo.
+
+que produce:
+
+.. topic:: Recursividad
+
+   Ver definición de recursivo.
+
+Por ejemplo, aplicándolo a un teorema, se tiene:
+
+.. topic:: Teorema del buen teoremizador
+
+   Los teoremas :math:`\tau` deben ser válidos y aplicables a por
+   lo menos un objeto :math:`\alpha` existente:
+
+   .. math::
+      \int_0^1 x^2\ dx = \frac{1}{3}
+
+Notas y Advertencias
+=====================
+
+Una aclaración o nota utiliza el ambiente `note`::
+
+  .. note::
+     Esta es una nota
+
+lo que produce:
+
+.. note::
+   Esta es una nota
+
+Mientras que una advertencia se realiza en ambiente `warning`::
+
+  .. warning::
+     Esta es una severa advertencia
+
+lo que produce:
+
+.. warning::
+   Esta es una severa advertencia
+
+Citas
+=====
+
+Una citación puede realizarse mediante el ambiente `epigraph`::
+
+  .. epigraph::
+
+     No matter where you go, there you are.
+
+     -- Buckaroo Banzai
+
+lo que produce:
+
+.. epigraph::
+
+   No matter where you go, there you are.
+
+   -- Buckaroo Banzai
+
+
+Tablas
+======
+
+El código::
+
+  ========   =======
+  Lenguaje   Interés
+  ========   =======
+  Python     Alto
+  Java       Medio
+  Fortran    Bajo
+  ========   =======
+
+produce la tabla
+
+========   =======
+Lenguaje   Interés
+========   =======
+Python     Alto
+Java       Medio
+Fortran    Bajo
+========   =======
+
+Otro tipo de tabla es una tabla csv::
+
+	.. csv-table:: Tabla csv de muestra:
+	   :header: "Treat","Quantity","Description"
+	   :widths: 3, 4, 5
+	
+	   "Albatross", 2.99, "On a stick!"
+	   "Crunchy Frog", 1.49, "Crossing the road"
+	   "Gannet Ripple", 1.99, "On a stick!"
+
+lo que produce
+
+.. csv-table:: Tabla csv de muestra:
+   :header: "Treat","Quantity","Description"
+   :widths: 3, 4, 5
+
+   "Albatross", 2.99, "On a stick!"
+   "Crunchy Frog", 1.49, "Crossing the road"
+   "Gannet Ripple", 1.99, "On a stick!"
+
+.. _SeccionReferencias:
+
+Referencias dentro del texto
+=============================
+
+El código de anclaje (el **label** de latex) se escribe::
+
+  .. _nombre_etiqueta:
+
+Para llamar a un anclaje o label (el **ref** de latex) se usa::
+
+  :ref:`nombre_etiqueta`
+
+.. warning::
+  El código de anclaje se escribe antes del objeto que se quiere referenciar::
+
+    .. _SeccionReferencias:
+
+    Referencias dentro del texto
+    =============================
+
+  permite llamar a la sección :ref:`SeccionReferencias`.
+  En el caso de imágenes, es necesario colocar un texto para enlazar (ver :ref:`refImagen`).
+
+
+Hipervinculos (internet)
+========================
+
+Para links externos, se usa::
+
+  `MMGeoLab <http://mmgeo.dim.uchile.cl>`_
+
+Lo que produce el enlace correspondiente `MMGeoLab <http://mmgeo.dim.uchile.cl>`_
+
+Citas bibliográficas
+====================
+
+Las referencias a publicaciones se realizan mediante los comandos ``[Ref]_`` y ``.. [Ref]``. 
+El primero constituye el llamado a la publicación, por ejemplo, [LibroEjemplo]_ mientras que el segundo
+constituye el detalle de la referencia
+
+.. [LibroEjemplo] Libro de referencia a utilizar.
+
+Las referencias y el detalle pueden colocarse en cualquier lugar del texto, incluso fuera de éste, mientras se
+incluya en un archivo que es compilado (biblio.rst por ejemplo). El latex crea una sección bibliography automaticamente, aunque
+sin hipervínculos.
+
+Escribiendo Código
+===================
+
+Para escribir código se utiliza *::*, y a continuación, se escribe el código con una indentación. Por ejemplo, el texto::
+
+  produce::
+
+    import numpy as np
+    x = np.random.rand(12)
+	
+produce::
+
+  import numpy as np
+  x = np.random.rand(12)
+
+Para escribir código en distintos lenguajes se puede utilizar por ejemplo::
+
+  .. code-block:: matlab
+
+     function [x,y,z] = foo(p,q,r)
+
+que produce:
+
+.. code-block:: matlab
+
+   function [x,y,z] = foo(p,q,r)
+
+Existen muchos tipos de `code-block`, entre ellos destacan: `c`, `c++`, `python`,
+`matlab`, `ruby`, `php`, `perl`, `java` y muchos más, para una completa lista ver
+`lenguajes soportados <http://pygments.org/languages/>`_.
+
+Incluyendo código desde archivo
+======================================
+
+Es posible incluir código directamente usando el comando::
+
+  .. literalinclude:: codigo/ejemplo.py
+
+lo que muestra todo el código del archivo `ejemplo.py` como se muestra a continuación
+
+.. literalinclude:: codigo/ejemplo.py
+
+.. warning:: 
+	Debe utilizarse el directorio relativo respecto al archivo sphinx que se esté editando.
+
+Imágenes
+==========
+
+Para mostrar una determinada imagen, por ejemplo
+
+.. figure:: imagenes/logoMMGeo.png
+
+
+Se usa el siguiente formato::
+
+  .. figure:: imagenes/logoMMGeo.png
+
+Otros formatos aceptados son jpg y pdf. 
+
+Para indicar otras opciones (label, aumentar/disminuir tamaño, caption) se usa::
+
+  .. _refImagen:
+
+  .. figure:: imagenes/logoMMGeo.png
+     :width: 300
+
+     Fig Iésima: Texto de la Imagen.
+
+lo que produce
+
+.. _refImagen:
+
+.. figure:: imagenes/logoMMGeo.png
+   :width: 300
+
+   Fig Iésima: Texto de la Imagen.
+
+.. warning:: 
+	Debe utilizarse el directorio relativo respecto al archivo sphinx que se esté editando.
+
+Símbolos y Fórmulas Matemáticas
+===============================
+
+Para mostrar ecuaciones matemáticas se encierra el código latex con el comando math::
+
+  :math:`\alpha+\beta = \gamma`
+
+lo que entrega la ecuación que se muestra en la misma línea (:math:`a^2 + \beta^2 = c^2`). 
+
+También se puede incrustar ecuaciones se usa::
+
+   .. math::
+      \int_0^1 x^2\ dx = \frac{1}{3}
+
+
+.. math::
+	\int_0^1 x^2\ dx = \frac{1}{3}
+
+
+El ambiente **.. math::** admite la utilización de **&** y **\\\\** para el alineamiento de ecuaciones, tal como en el ambiente **align** de latex::
+
+	.. math::
+		\alpha x + \beta y &= \delta \\
+		\epsilon x + \varphi y &= \theta
+
+.. math::
+	\alpha x + \beta y &= \delta \\
+	\epsilon x + \varphi y &= \theta

@@ -1,0 +1,7 @@
+
+
+.. _Pysafet_home:
+
+
+:command:`Instalacion de pysafe en nuestro HOME `
+================================================

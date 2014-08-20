@@ -1,0 +1,42 @@
+
+
+Bienvenidos a la   documentacion Pysafet
+=========================================
+
+
+:command:`1.-` :index:`Instalación  Pysafet`
+
+
+.. toctree::
+	:maxdepth: 4
+
+
+	_templates/Contenido1/Introduccion_safet.rst
+	_templates/Contenido1/Safet_para_Debian.rst
+	_templates/Contenido1/Safet_para_Ubuntu.rst
+	_templates/Contenido1/Pysafet_home.rst
+	_templates/Contenido1/Explicacion_safet.rst
+	
+	
+
+
+:command:`2.-` :index:`Configuración del  sistema Web-Safet`
+
+
+.. toctree::
+	:maxdepth: 2
+
+
+
+
+
+
+
+.. centered:: LICENCIA	
+
+.. toctree::
+	:maxdepth: 4
+
+	_templates/Contenido1/Sphinx.rst
+
+
