@@ -154,9 +154,8 @@ void GetFileWidget::insertAndClose() {
 
 void GetFileWidget::updateCombo() {
 
-    SYD << tr("...GetFileWidget::updateCombo().............(1)..............");
+    SYD << tr("...GetFileWidget::updateCombo()....(1)");
     QStringList myoptions = conf()["options"].toString().split(",",QString::SkipEmptyParts);
-
 
     _selected.clear();
     foreach(QString op, myoptions) {
@@ -189,12 +188,9 @@ void GetFileWidget::updateCombo() {
         }
     }
 
-    /**
-      * FIXME: Implementar un algoritmo mas rapido para mostrar los nombres de los flujos
-      * Quitar _showfilename
-      */
-        _showfilename = true;
+    /* FIXME ver un algoritmo para mostrar los id de los graficos 
 
+    //_showfilename = true;
     SYD << tr("........GetFileWidget::updateCombo......._selected.count():|%1|")
            .arg(_selected.count());
 
@@ -207,7 +203,7 @@ void GetFileWidget::updateCombo() {
         _wfids.clear();
 
 
-        SYD << tr("...........GetFileWidget::updateCombo(out)............**.mimes.count():|%1|")
+        SYD << tr("...........GetFileWidget::updateCombo(out).............mimes.count():|%1|")
                .arg(mimes.count());
 
         for(int i=0; i < mimes.count(); i++) {
@@ -237,6 +233,7 @@ void GetFileWidget::updateCombo() {
                    .arg(mimes.at(i)).arg(i);
         }
         SYD << tr("...........****GetFileWidget::updateCombo(out).............");
+
 
 }
 
