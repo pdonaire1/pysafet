@@ -188,7 +188,7 @@ void GetFileWidget::updateCombo() {
         }
     }
 
-    /* FIXME ver un algoritmo para mostrar los id de los graficos 
+    /* FIXME ver un algoritmo para mostrar los id de los graficos */
 
     //_showfilename = true;
     SYD << tr("........GetFileWidget::updateCombo......._selected.count():|%1|")
