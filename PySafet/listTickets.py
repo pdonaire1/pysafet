@@ -13,7 +13,7 @@ myinflow.setHostURL(myurl)
 myconsult = u"operacion:Listar_datos Cargar_archivo_flujo: %s/.safet/flowfiles/cartelerafirmada.xml Variable: vTicketSigned " % (myhome)
 
 
-result = myinflow.login("vbravo","zpinquar") 
+result = myinflow.login("fulano","fulano") 
 
 if not result:
 	print "Authentication failed"

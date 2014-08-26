@@ -200,7 +200,9 @@ bool CmdWidget::isValid(QString& value) {
     if ( !conf().contains("validation")) {
         return true;
     }
+
     QString mypattern = conf()["validation"].toString().trimmed();
+
 
     if (mypattern.isEmpty()) {
         return true;
