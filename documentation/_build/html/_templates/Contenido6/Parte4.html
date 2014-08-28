@@ -1,0 +1,334 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>Crear el flujo de trabajo utilizando un archivo XML &mdash; PySafet</title>
+    
+    <link rel="stylesheet" href="../../_static/nature.css" type="text/css" />
+    <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../../',
+        VERSION:     '',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../../_static/jquery.js"></script>
+    <script type="text/javascript" src="../../_static/underscore.js"></script>
+    <script type="text/javascript" src="../../_static/doctools.js"></script>
+    <script type="text/javascript" src="../../_static/translations.js"></script>
+    <link rel="top" title="PySafet" href="../../index.html" />
+    <link rel="next" title="Listar los datos de la tabla de la base de datos" href="Parte3.html" />
+    <link rel="prev" title="Operaciones CRUD+(flujo) utilizando PySafet" href="Parte2.html" /> 
+  </head>
+  <body>
+    <div class="related">
+      <h3>Navegación</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../genindex.html" title="Índice General"
+             accesskey="I">índice</a></li>
+        <li class="right" >
+          <a href="Parte3.html" title="Listar los datos de la tabla de la base de datos"
+             accesskey="N">siguiente</a> |</li>
+        <li class="right" >
+          <a href="Parte2.html" title="Operaciones CRUD+(flujo) utilizando PySafet"
+             accesskey="P">anterior</a> |</li>
+        <li><a href="../../index.html">PySafet</a> &raquo;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <div class="section" id="crear-el-flujo-de-trabajo-utilizando-un-archivo-xml">
+<h1><span class="target" id="index-0"></span>Crear el flujo de trabajo utilizando un archivo XML<a class="headerlink" href="#crear-el-flujo-de-trabajo-utilizando-un-archivo-xml" title="Enlazar permanentemente con este título">¶</a></h1>
+<blockquote>
+<div><blockquote>
+<div>Visualizamos el archivo <strong>productos.xml</strong> que se encuentra en el directorio <strong>&lt;HOME&gt;.safet/flowfiles/</strong> consta de los siguiente:</div></blockquote>
+<ol class="arabic">
+<li><p class="first"><strong>Encabezado:</strong></p>
+<blockquote>
+<div><div class="highlight-python"><div class="highlight"><pre>&lt;?xml version=&#39;1.0&#39; encoding=&#39;UTF-8&#39;?&gt;
+&lt;!DOCTYPE yawl SYSTEM &#39;file:///home/cenditel/.safet/dtd/yawlworkflow.dtd&#39;&gt;
+&lt;!--
+Documento  : tickets.xml
+Creado     : 16/10/08 09:27 AM
+Autor      : nombre_autor
+Descripcion: Archivo generado por plantilla de la Libreria SAFET
+--&gt;
+
+&lt;!--&lt;!DOCTYPE yawl SYSTEM &quot;http://trac-safet.cenditel.gob.ve/dtd/yawlworkflow.dtd&quot;&gt;--&gt;
+</pre></div>
+</div>
+</div></blockquote>
+</li>
+<li><p class="first"><strong>Condición inicial:</strong></p>
+<blockquote>
+<div><div class="highlight-python"><div class="highlight"><pre># Etiqueta principal yawl
+&lt;yawl version=&quot;0.01&quot;&gt;
+
+ # Nombre del flujo
+ &lt;workflow id=&quot;productos&quot;&gt;
+
+  # ficha: Nombre de la tabla  y Nombre del campo
+  &lt;token keysource=&quot;productos&quot; key=&quot;id&quot;/&gt;
+
+  # Condición inicial
+  &lt;condition type=&quot;start&quot; id=&quot;inicial&quot;&gt;
+
+   &lt;port side=&quot;forward&quot; type=&quot;split&quot;&gt;
+
+    # Slq donde el inicio me aparecerá en el grafo apuntando a registrado
+     &lt;connection query=&quot;select status from productos&quot; options=&quot;Registrado&quot; source=&quot;Registrado&quot;/&gt;
+
+    &lt;/port&gt;
+
+ &lt;/condition&gt;
+</pre></div>
+</div>
+</div></blockquote>
+</li>
+<li><p class="first"><strong>Registrado:</strong></p>
+<blockquote>
+<div><div class="highlight-python"><div class="highlight"><pre># Condición de Registrado la cual puede pasar un caso
+&lt;task title=&quot;en inventario&quot; id=&quot;Registrado&quot;&gt;
+
+ # Registrado apunta a una opción
+  &lt;port side=&quot;forward&quot; type=&quot;split&quot;&gt;
+
+        # Cambio de estado ahora Registado  apunta a Pedido
+        &lt;connection query=&quot;select status from productos&quot; options=&quot;Pedido&quot; source=&quot;Pedido&quot;/&gt;
+
+   &lt;/port&gt;
+
+  # Variable vRegistro donde me aparecerá un mensaje la hora en el cuaal se hizo ese registro
+  &lt;variable config=&quot;1&quot; documentsource=&quot;select id,mensaje,status from productos&quot; type=&quot;sql&quot; tokenlink=&quot;&quot; id=&quot;vRegistrado&quot;
+     rolfield=&quot;(select rol from productos_registro where productoid=productos.id and regstatus=&#39;Registrado&#39;)
+     as rol&quot; scope=&quot;task&quot; timestampfield=&quot;(select fecha from
+     productos_registro where productoid=productos.id and regstatus=&#39;Registrado&#39;) as fecha&quot;/&gt;
+
+&lt;/task&gt;
+</pre></div>
+</div>
+</div></blockquote>
+</li>
+<li><p class="first"><strong>Pedido:</strong></p>
+<blockquote>
+<div><div class="highlight-python"><div class="highlight"><pre># Condición de Pedido la cual pueden pasar 2 casos
+&lt;task title=&quot;&quot; id=&quot;Pedido&quot; textualinfo=&quot;&quot;&gt;
+
+      # Producto pedido apunta a dos opciones
+       &lt;port pattern=&quot;or&quot; side=&quot;forward&quot; type=&quot;split&quot;&gt;
+
+      # Producto pedido apunta a Disponible
+      &lt;connection query=&quot;select status from productos&quot; options=&quot;Disponible&quot; source=&quot;Disponible&quot;/&gt;
+
+      # Producto pedido apunta a Por_llegar
+      &lt;connection query=&quot;select status from productos&quot; options=&quot;Por_llegar&quot; source=&quot;Por_llegar&quot;/&gt;
+
+       &lt;/port&gt;
+
+       # Variable vpedido donde nos aparecerá un mensaje el id , el status y fecha y hora de esa acción
+       &lt;variable config=&quot;1&quot; documentsource=&quot;select id,mensaje,status from productos&quot; type=&quot;sql&quot; tokenlink=&quot;&quot; id=&quot;vPedido&quot;
+           rolfield=&quot;(select rol from&amp;#xa;productos_registro where productoid=productos.id and regstatus=&#39;Pedido&#39;)
+           as rol&quot; scope=&quot;task&quot;timestampfield=&quot;(select fecha from productos_registro where productoid=productos.id
+           and regstatus=&#39;Pedido&#39;) as fecha&quot;/&gt;
+
+&lt;/task&gt;
+</pre></div>
+</div>
+</div></blockquote>
+</li>
+<li><p class="first"><strong>Por_llegar:</strong></p>
+<blockquote>
+<div><div class="highlight-python"><div class="highlight"><pre># Producto Por_llegar la cual puede pasar un caso
+&lt;task title=&quot;&quot; id=&quot;Por_llegar&quot; textualinfo=&quot;&quot;&gt;
+
+ # Por_llegar apunta a una opción
+ &lt;port pattern=&quot;none&quot; side=&quot;forward&quot; type=&quot;split&quot;&gt;
+
+        # Producto Por_llegar apunta a  Por_agotarse
+        &lt;connection query=&quot;select status from productos&quot; options=&quot;Por_agotarse&quot; source=&quot;Por_agotarse&quot;/&gt;
+
+ &lt;/port&gt;
+
+   # Variable vPor_llegar donde nos aparecerá un mensaje el id , el status y fecha y hora de esa acción
+   &lt;variable config=&quot;1&quot; documentsource=&quot;select id,mensaje,status from productos&quot; type=&quot;sql&quot; tokenlink=&quot;&quot; id=&quot;vPor_llegar&quot;
+         rolfield=&quot;(select rol from productos_registro where productoid=productos.id and regstatus=&#39;Por_llegar&#39;)
+         as rol&quot; scope=&quot;task&quot; timestampfield=&quot;(select fecha from productos_registro where productoid=productos.id
+         and regstatus=&#39;Por_llegar&#39;) as fecha&quot;/&gt;
+
+&lt;/task&gt;
+</pre></div>
+</div>
+</div></blockquote>
+</li>
+<li><p class="first"><strong>Disponible:</strong></p>
+<blockquote>
+<div><div class="highlight-python"><div class="highlight"><pre># Producto Disponible la cual puede pasar un caso
+&lt;task title=&quot;&quot; id=&quot;Disponible&quot; textualinfo=&quot;&quot;&gt;
+
+   # Disponible apunta a una opción
+   &lt;port side=&quot;forward&quot; type=&quot;split&quot;&gt;
+
+      # Producto Disponible apunta a  Por_agotarse
+      &lt;connection query=&quot;select status from productos&quot; options=&quot;Por_agotarse&quot; source=&quot;Por_agotarse&quot;/&gt;
+
+   &lt;/port&gt;
+
+   # Variable vDisponible donde nos aparecerá un mensaje el id , el status y fecha y hora de esa acción
+   &lt;variable config=&quot;1&quot; documentsource=&quot;select id,mensaje,status from productos&quot; type=&quot;sql&quot; tokenlink=&quot;&quot; id=&quot;vDisponible&quot;
+            rolfield=&quot;(select rol from&amp;#xa;productos_registro where productoid=productos.id and regstatus=&#39;Disponible&#39;)
+            as&amp;#xa;rol&quot; scope=&quot;task&quot; timestampfield=&quot;(select fecha from productos_registro where&amp;#xa;productoid=productos.id
+            and regstatus=&#39;Disponible&#39;) as fecha&quot;/&gt;
+
+&lt;/task&gt;
+</pre></div>
+</div>
+</div></blockquote>
+</li>
+<li><p class="first"><strong>Por_agotarse:</strong></p>
+<blockquote>
+<div><div class="highlight-python"><div class="highlight"><pre># Producto Por_agotarse la cual puede pasar un caso
+&lt;task title=&quot;&quot; id=&quot;Por_agotarse&quot; textualinfo=&quot;&quot;&gt;
+
+  # Disponible apunta a una opción
+  &lt;port side=&quot;forward&quot; type=&quot;split&quot;&gt;
+
+       # Producto Por_agotarse apunta a Agotado
+       &lt;connection query=&quot;select status from productos&quot; options=&quot;Agotado&quot; source=&quot;Agotado&quot;/&gt;
+
+  &lt;/port&gt;
+
+  # Variable vPor_agotarse donde nos aparecerá un mensaje el id , el status y fecha y hora de esa acción
+  &lt;variable config=&quot;1&quot; documentsource=&quot;select id,mensaje,status from productos&quot; type=&quot;sql&quot; tokenlink=&quot;&quot; id=&quot;vPor_agotarse&quot;
+      rolfield=&quot;(select rol from&amp;#xa;productos_registro where productoid=productos.id and regstatus=&#39;Por_agotarse&#39;)
+      as&amp;#xa;rol&quot; scope=&quot;task&quot; timestampfield=&quot;(select fecha from productos_registro where&amp;#xa;productoid=productos.id
+      and     regstatus=&#39;Por_agotarse&#39;) as fecha&quot;/&gt;
+
+ &lt;/task&gt;
+</pre></div>
+</div>
+</div></blockquote>
+</li>
+<li><p class="first"><strong>Agotado:</strong></p>
+<blockquote>
+<div><div class="highlight-python"><div class="highlight"><pre># Producto Agotado la cual puede pasar un caso
+&lt;task title=&quot;&quot; id=&quot;Agotado&quot; textualinfo=&quot;&quot;&gt;
+
+ # Agotado apunta a dos opción
+ &lt;port side=&quot;forward&quot; type=&quot;split&quot;&gt;
+
+      # Producto Agotado apunta a Pedido
+      &lt;connection query=&quot;select status from productos&quot; options=&quot;Pedido&quot; back=&quot;yes&quot; source=&quot;Pedido&quot;/&gt;
+
+      # Producto Agotado apunta a final
+      &lt;connection query=&quot;true&quot; options=&quot;&quot; source=&quot;final&quot;/&gt;
+
+ &lt;/port&gt;
+
+ # Variable vAgotado donde nos aparecerá un mensaje el id , el status y fecha y hora de esa acción
+ &lt;variable config=&quot;1&quot; documentsource=&quot;select id,mensaje,status from productos&quot; type=&quot;sql&quot; tokenlink=&quot;&quot; id=&quot;vAgotado&quot;
+      rolfield=&quot;(select rol from productos_registro where productoid=productos.id and regstatus=&#39;Agotado&#39;)
+      as rol&quot; scope=&quot;task&quot; timestampfield=&quot;(select fecha from productos_registro where productoid=productos.id
+      and regstatus=&#39;Agotado&#39;) as     fecha&quot;/&gt;
+
+ &lt;/task&gt;
+</pre></div>
+</div>
+</div></blockquote>
+</li>
+<li><p class="first"><strong>Condition Final:</strong></p>
+<blockquote>
+<div><div class="highlight-python"><div class="highlight"><pre>  # Condición final
+  &lt;condition id=&quot;final&quot;&gt;
+
+    &lt;port side=&quot;forward&quot; type=&quot;split&quot;&gt;
+
+      &lt;connection source=&quot;&quot;/&gt;
+
+   &lt;/port&gt;
+
+   &lt;/condition&gt;
+
+ # Cerramos la etiqueta del flujo workflow
+&lt;/workflow&gt;
+
+ #
+ &lt;configuration id=&quot;1&quot; connectstring=&quot;psql:seguridad.cenditel.gob.ve:ticket:vbravo:vbravo_&quot;/&gt;
+
+# Cerramos la principal etiqueta yawl
+&lt;/yawl&gt;
+</pre></div>
+</div>
+</div></blockquote>
+</li>
+</ol>
+</div></blockquote>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+  <h4>Tema anterior</h4>
+  <p class="topless"><a href="Parte2.html"
+                        title="capítulo anterior">Operaciones CRUD+(flujo) utilizando PySafet</a></p>
+  <h4>Próximo tema</h4>
+  <p class="topless"><a href="Parte3.html"
+                        title="próximo capítulo">Listar los datos de la tabla de la base de datos</a></p>
+  <h3>Esta página</h3>
+  <ul class="this-page-menu">
+    <li><a href="../../_sources/_templates/Contenido6/Parte4.txt"
+           rel="nofollow">Mostrar el código</a></li>
+  </ul>
+<div id="searchbox" style="display: none">
+  <h3>Búsqueda rápida</h3>
+    <form class="search" action="../../search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Ir a" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Introduzca los términos de búsqueda o un nombre de módulo, clase o función.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navegación</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../genindex.html" title="Índice General"
+             >índice</a></li>
+        <li class="right" >
+          <a href="Parte3.html" title="Listar los datos de la tabla de la base de datos"
+             >siguiente</a> |</li>
+        <li class="right" >
+          <a href="Parte2.html" title="Operaciones CRUD+(flujo) utilizando PySafet"
+             >anterior</a> |</li>
+        <li><a href="../../index.html">PySafet</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer">
+        &copy; Copyright 2014, Cenditel.
+      Creado con <a href="http://sphinx-doc.org/">Sphinx</a> 1.2.2.
+    </div>
+  </body>
+</html>
