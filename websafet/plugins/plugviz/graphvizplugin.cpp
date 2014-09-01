@@ -187,7 +187,8 @@ QString graphvizPlugin::checkSES(const QString& s, ExtraInfoShow ex,
               taskshape = "Mrecord";
           }
 
-          QString titlePattern ="Titulo:\\s*([a-zA-Z\\s0-9;\\+_\\.][a-zA-Z\\s0-9;\\0351\\0341\\+\\-/:_\\s\\.]+[a-zA-Z\\s0-9;\\+_\\.])\\s*,";
+//          QString titlePattern ="Titulo:\\s*([a-zA-Z\\s0-9;\\+_\\.][a-zA-Z\\s0-9;\\0351\\0341\\+\\-/:_\\s\\.]+[a-zA-Z\\s0-9;\\+_\\.])\\s*,?";
+          QString titlePattern ="Titulo:\\s*([a-zA-Z\\s0-9;\\0351\\0341\\+\\-/:_\\s\\.]+)\\s*,?";
           rx.setPattern(titlePattern);
           pos = rx.indexIn( sec );
           Q_ASSERT ( pos >= 0 );
@@ -632,8 +633,27 @@ QString graphvizPlugin::renderGraph(const QString&  code, const QString& info,
     QString infile, outfile;
 //    infile = "/home/victorrbravo/django/media/archivos/"+list.at(0).section("/",-1);
 //    outfile = "/home/victorrbravo/django/media/archivos/"+list.at(1).section("/",-1)+"."+_typegraph;
-    infile = "/var/www/media/"+list.at(0).section("/",-1);
-    outfile = "/var/www/media/"+list.at(1).section("/",-1)+"."+_typegraph;
+
+    QString keyinfile = conf()+"infile";
+    QString keyoutfile = conf()+"outfile";
+
+    if ( context.contains(keyinfile) ) {
+        qDebug("keyinfile:|%s|",qPrintable(keyinfile));
+        infile = context[keyinfile]+ "/"+ list.at(0).section("/",-1);
+    }
+    else {
+        infile = "/tmp/"+list.at(0).section("/",-1);
+    }
+    if ( context.contains(keyinfile) ) {
+        qDebug("keyoutfile:|%s|",qPrintable(keyoutfile));
+           outfile = context[keyoutfile] + "/" + list.at(1).section("/",-1)+"."+_typegraph;
+    }
+    else {
+        outfile = "/tmp/"+list.at(1).section("/",-1)+"."+_typegraph;
+    }
+
+    qDebug("infile:|%s|",qPrintable(infile));
+    qDebug("outfile:|%s|",qPrintable(outfile));
 
     gvc = gvContext();
     Q_CHECK_PTR( gvc );

@@ -158,22 +158,43 @@ bool SafetWorkflow::putParameters(const QMap<QString,QString>& p) {
      QString strin, strout;
     foreach(SafetTask* task, getTasklist()) {
         strin = task->title();
+        SYD << tr("....SafetWorkflow::putParameters...strin:|%1|")
+               .arg(strin);
         strout = replaceArg(strin,p);
+        SYD << tr("....SafetWorkflow::putParameters...strout:|%1|")
+               .arg(strout);
 
         if (strin != strout ) {
+            SYD << tr("....SafetWorkflow::putParameters..(1)...");
             if ( strout.indexOf(QRegExp("\\s+NULL\\s*"),Qt::CaseInsensitive) == -1 ) {
                 QString normtl = strout;
-                normtl.replace("á","a");
-                normtl.replace("é","e");
-                normtl.replace("í","i");
-                normtl.replace("ó","o");
-                normtl.replace("ú","u");
-                normtl.replace("ñ","n");
-                normtl.replace("Ñ","N");
+
+                QRegExp rx("\\d{10,10}");
+
+                if (rx.exactMatch(normtl)) {
+                    SYD << tr("....SafetWorkflow::putParameters..(4rx)...");
+                    bool ok;
+                    normtl = QDateTime::fromTime_t(normtl.toInt(&ok)).toString(Safet::DateOnlyFormat);
+                }
+                else {
+                    normtl.replace("á","a");
+                    normtl.replace("é","e");
+                    normtl.replace("í","i");
+                    normtl.replace("ó","o");
+                    normtl.replace("ú","u");
+                    normtl.replace("ñ","n");
+                    normtl.replace("Ñ","N");
+                    normtl.replace(" ","_");
+                }
+                SYD << tr("....**SafetWorkflow::putParameters..*normtl:|%1|")
+                       .arg(normtl);
 
                 task->setTitle(normtl);
+               // task->setTitle("tipo");
+                SYD << tr("....SafetWorkflow::putParameters....(3)...title:|%1|").arg(task->title());
             }
             else {
+                SYD << tr("....SafetWorkflow::putParameters..(2)...");
                 //task->setTitle(Safet::AnyOneObject);
                 task->setTitle("::safethide::");
             }
@@ -283,8 +304,13 @@ void SafetWorkflow::addChild(SafetXmlObject* o) {
 	case 2: // SafetTask
 		ptask = qobject_cast<SafetTask*>(o);
 		Q_ASSERT(ptask);
-                ptask->setTitle(SafetYAWL::replaceArgsflow(ptask->title()));
+        SYD << tr("....SafetWorkflow::addChild..ADDCHILD..(1)..ptask->title():|%1|")
+               .arg(ptask->title());
+         ptask->setTitle(SafetYAWL::replaceArgsflow(ptask->title()));
 		tasklist.push_back(ptask);
+        SYD << tr(".....SafetWorkflow::addChild..ADDCHILD.(2)..ptask->title():|%1|")
+               .arg(ptask->title());
+
 		nodemap.insert(ptask->id(),qobject_cast<SafetNode*>(o));
 		visitnodemap.insert( ptask->id(),false);              
 
