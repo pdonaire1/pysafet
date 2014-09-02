@@ -5428,7 +5428,7 @@ void MainWindow::proccessConfFile(const QString& sql, const QString& filename, b
      newsql.replace("'","");
       QString updatePattern = "UPDATE\\s+([αινσϊρΡa-zA-Z0-9_\\.\\(\\)#%][αινσϊρΡa-zA-Z0-9_,'\\.\\(\\)\\-#%\\x3c\\x3e\\x2f]*)"
                              "\\s+SET\\s+"
-                             "([αινσϊρΡa-zA-Z0-9_\\.\\(\\)\\*;#%][αινσϊρΡa-zA-Z0-9_,'\\=\\.\\(\\)\\-\\s\\*;#%]*"
+                             "([αινσϊρΡa-zA-Z0-9_\\.\\(\\)\\*;#%@][αινσϊρΡa-zA-Z0-9_,'\\=\\.\\(\\)\\-\\s\\*;#%@]*"
                              "[αινσϊρΡa-zA-Z0-9_,'\\=\\.\\(\\)\\-\\*;#@]\\s+)?WHERE\\s+"
                              "([αινσϊρΡa-zA-Z0-9_\\.\\(\\)\\*;#%][αινσϊρΡa-zA-Z0-9_,'\\=\\.\\(\\)\\s\\-\\*;#%\\x3c\\x3e\\x2f]*"
                              "[αινσϊρΡa-zA-Z0-9_,'\\=\\.\\(\\)\\-\\*;#%\\x3c\\x3e\\x2f])";
@@ -5438,7 +5438,7 @@ void MainWindow::proccessConfFile(const QString& sql, const QString& filename, b
 
      QString insertPattern = "INSERT INTO\\s+([a-zA-Z0-9_][a-zA-Z0-9_\\.\\-]*)\\s+"
                              "\\(([a-zA-Z0-9_\\.\\(\\)][a-zA-Z0-9_,'\\=\\.\\(\\)\\-\\*]*)\\)\\s+"
-                             "VALUES\\s+\\(([a-zA-Z0-9_'\\./\\(\\)][a-zA-Z0-9_,'\\=\\.\\-/\\*\\s\\x3c\\x3e\\x2f@]*)\\)\\s*";
+                             "VALUES\\s+\\(([a-zA-Z0-9_'\\./\\(\\)@][a-zA-Z0-9_,'\\=\\.\\-/\\*\\s\\x3c\\x3e\\x2f@]*)\\)\\s*";
 
 
      QString deletePattern = "DELETE FROM\\s+([αινσϊρΡa-zA-Z0-9_\\.\\(\\)][αινσϊρΡa-zA-Z0-9_,'\\.\\(\\)\\-]*)"
@@ -5537,9 +5537,9 @@ void MainWindow::proccessConfFile(const QString& sql, const QString& filename, b
 
      //qDebug("   processConffile...(1)...firstkeyfield: %s", qPrintable(firstkeyfield));
 
-     QString searchtext = QString("\\s*(%1)\\s*\\=\\s*([αινσϊρΡa-zA-Z0-9\\*\\$\\#/\\-\\._/:!\\?\\^\\$\\(\\)#%\\x3c\\x3e\\x2f]"
-                             "[αινσϊρΡa-zA-Z0-9\\*\\$\\#/\\-\\._/:!\\?\\^\\$\\s\\(\\);#%\\x3c\\x3e\\x2f]*)"
-                             "[αινσϊρΡa-zA-Z0-9\\*\\$\\#/\\-\\._/:!\\?\\^\\$\\(\\);#%\\x3c\\x3e\\x2f]")
+     QString searchtext = QString("\\s*(%1)\\s*\\=\\s*([αινσϊρΡa-zA-Z0-9\\*\\$\\#/\\-\\._/:!\\?\\^\\$\\(\\)#%\\x3c\\x3e\\x2f@]"
+                             "[αινσϊρΡa-zA-Z0-9\\*\\$\\#/\\-\\._/:!\\?\\^\\$\\s\\(\\);#%\\x3c\\x3e\\x2f@]*)"
+                             "[αινσϊρΡa-zA-Z0-9\\*\\$\\#/\\-\\._/:!\\?\\^\\$\\(\\);#%\\x3c\\x3e\\x2f@]")
              .arg(firstkeyfield);
      QString replacetext;
      QString currentfirstkeyfield;
@@ -5553,7 +5553,7 @@ void MainWindow::proccessConfFile(const QString& sql, const QString& filename, b
      currentfirstkeyfield = firstkeyfield;
 
 
-     SYD << tr(".....MainWindow::proccessConfFile...----->**searchtext: |%1|").arg(searchtext);
+     SYD << tr(".....MainWindow::proccessConfFile...SEARCHTEXT----->**searchtext: |%1|").arg(searchtext);
      SYD << tr(".....MainWindow::proccessConfFile...----->**replacetext: |%1|").arg(replacetext);
      SafetYAWL::replaceTextInFile(fileconf,
                                   searchtext,
@@ -5759,6 +5759,8 @@ void MainWindow::doInsertInAuthConfFile(QRegExp& rx) {
                                    +" = " + SafetYAWL::getAuthConf()[ key ] + "\n";
                     SYD << tr(".........MainWindow::doInsertAuthConfFile..........SI CONTIENE...(1)...key:|%1|")
                            .arg(key);
+                   // SYD << tr(".........MainWindow::doInsertAuthConfFile..........REPLACETEXT:|%1|")
+                     //      .arg(replacetext);
                 }
             }
 
