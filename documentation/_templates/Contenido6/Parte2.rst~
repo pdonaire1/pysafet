@@ -3,16 +3,6 @@
 :index:`Operaciones CRUD+(flujo) utilizando PySafet` 
 =====================================================
 
- **Operación** `CRUD`_ .
-
- - las operaciones **CRUB** son acciones generales que representan un modelo basíco para la creación de sistema de información. Puede ser una descripción más detallada en el siguiente enlace `SOBRE CRUD`_.
-
- - El simbolo **"+"** indica las adición de operaciones asociada a flujo de trabajo
-
-	
-.. _crud: http://es.wikipedia.org/wiki/CRUD
-.. _sobre crud: http://www.dotnettwitter.com/2012/04/curd-operations-on-xml-file.html
-
 
  Editamos el archivo **deftrac.xml** que se encuentra en el directorio **<HOME>.safet/input/**
 

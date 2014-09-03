@@ -288,7 +288,7 @@ Etiquetas Principales
  - **<port>:** Registrado apunta a una opción.
  - **<variable>:** Variable vRegistro donde me aparecerá un mensaje la hora en el cual se hizo ese registro.
 
- Abrimos el archivo **productos.xml** y insertamos el código **(xml)** de la **tarea Registrado** como se muestra a continuación:
+ Abrimos el archivo **productos.xml** y insertamos el código **(xml)** de la **tarea Registrado** como se muestra acontinuación:
 
  .. code-block:: xml
 

@@ -18,7 +18,7 @@ Documentación de PySafet
 
 
 .. toctree::
-	:maxdepth: 3
+	:maxdepth: 1
 
 
 	_templates/Contenido1/Safet_para_Debian.rst									
@@ -31,7 +31,7 @@ Documentación de PySafet
 
 
 .. toctree::
-	:maxdepth: 2
+	:maxdepth: 1
 
 
 	_templates/Contenido1/Pysafet_home.rst
@@ -44,7 +44,7 @@ Documentación de PySafet
 
 
 .. toctree::
-	:maxdepth: 3
+	:maxdepth: 1
 	
 	_templates/Contenido2/libsafet_auth_conft.rst 
 	_templates/Contenido2/safet_conf.rst 
@@ -55,7 +55,7 @@ Documentación de PySafet
 
 
 .. toctree::
-	:maxdepth: 3
+	:maxdepth: 1
 
 	_templates/Contenido5/Api.rst
 	_templates/Contenido5/Clase2.rst
@@ -68,12 +68,12 @@ Documentación de PySafet
 
 
 .. toctree::
-	:maxdepth: 6
+	:maxdepth: 1
 
 	_templates/Contenido6/manual_Parte1.rst
 	_templates/Contenido6/Parte2.rst
 	_templates/Contenido6/Parte4.rst
-	_templates/Contenido6/Parte3.rst	
+	_templates/Contenido6/Parte3.rst
 	_templates/Contenido6/Parte6.rst
 
 

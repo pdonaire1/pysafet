@@ -53,228 +53,383 @@
   <div class="section" id="crear-el-flujo-de-trabajo-utilizando-un-archivo-xml">
 <h1><span class="target" id="index-0"></span>Crear el flujo de trabajo utilizando un archivo XML<a class="headerlink" href="#crear-el-flujo-de-trabajo-utilizando-un-archivo-xml" title="Enlazar permanentemente con este título">¶</a></h1>
 <blockquote>
-<div><blockquote>
-<div>Visualizamos el archivo <strong>productos.xml</strong> que se encuentra en el directorio <strong>&lt;HOME&gt;.safet/flowfiles/</strong> consta de los siguiente:</div></blockquote>
-<ol class="arabic">
-<li><p class="first"><strong>Encabezado:</strong></p>
+<div>El flujo de trabajo (workflow) es el estudio de los aspectos operacionales de una actividad de trabajo: cómo se estructuran las tareas, cómo se realizan, cuál es su orden correlativo, cómo se sincronizan, cómo fluye la información que soporta las tareas y cómo se le hace seguimiento al cumplimiento de las tareas. Más información <a class="reference external" href="http://es.wikipedia.org/wiki/Flujo_de_trabajo">AQUI</a>.</div></blockquote>
+<p><strong>A continuación seguimos los siguientes paso:</strong></p>
+<div class="section" id="primer-paso">
+<h2>1° PRIMER PASO<a class="headerlink" href="#primer-paso" title="Enlazar permanentemente con este título">¶</a></h2>
+<ul class="simple">
+<li>Crearemos un archivo llamado <strong>productos.xml</strong>.</li>
+<li>Lo guardamos en el siguiente directorio <strong>&lt;HOME&gt;.safet/flowfiles/</strong>.</li>
+</ul>
+</div>
+<div class="section" id="segundo-paso">
+<h2>2° SEGUNDO PASO<a class="headerlink" href="#segundo-paso" title="Enlazar permanentemente con este título">¶</a></h2>
+<div class="section" id="encabezado">
+<span id="id1"></span><h3>Encabezado<a class="headerlink" href="#encabezado" title="Enlazar permanentemente con este título">¶</a></h3>
 <blockquote>
-<div><div class="highlight-python"><div class="highlight"><pre>&lt;?xml version=&#39;1.0&#39; encoding=&#39;UTF-8&#39;?&gt;
-&lt;!DOCTYPE yawl SYSTEM &#39;file:///home/cenditel/.safet/dtd/yawlworkflow.dtd&#39;&gt;
-&lt;!--
-Documento  : tickets.xml
-Creado     : 16/10/08 09:27 AM
-Autor      : nombre_autor
-Descripcion: Archivo generado por plantilla de la Libreria SAFET
---&gt;
+<div><p>Abrimos el archivo <strong>productos.xml</strong> y Escribimos el siguiente encabezado <strong>(XML)</strong>:</p>
+<div class="highlight-xml"><div class="highlight"><pre><span class="cp">&lt;?xml version=&#39;1.0&#39; encoding=&#39;UTF-8&#39;?&gt;</span>
+<span class="cp">&lt;!DOCTYPE yawl SYSTEM &#39;file:///home/cenditel/.safet/dtd/yawlworkflow.dtd&#39;&gt;</span>
 
-&lt;!--&lt;!DOCTYPE yawl SYSTEM &quot;http://trac-safet.cenditel.gob.ve/dtd/yawlworkflow.dtd&quot;&gt;--&gt;
+<span class="c">&lt;!--</span>
+<span class="c">Documento  : productos.xml</span>
+<span class="c">Creado     : 16/10/08 09:27 AM</span>
+<span class="c">Autor      : nombre_autor</span>
+<span class="c">Descripcion: Archivo generado por plantilla de la Libreria SAFET</span>
+<span class="c">--&gt;</span>
+</pre></div>
+</div>
+<div class="admonition note">
+<p class="first admonition-title">Nota</p>
+<p class="last">El comentario es opcional.</p>
+</div>
+</div></blockquote>
+</div>
+</div>
+<div class="section" id="tercer-paso">
+<h2>3° TERCER PASO<a class="headerlink" href="#tercer-paso" title="Enlazar permanentemente con este título">¶</a></h2>
+<div class="section" id="etiquetas-principales">
+<span id="tercerpaso"></span><h3>Etiquetas Principales<a class="headerlink" href="#etiquetas-principales" title="Enlazar permanentemente con este título">¶</a></h3>
+<blockquote>
+<div><p>En el archivo <strong>productos.xml</strong> se utilizaran las siguientes <strong>etiquetas principales (XML)</strong>:</p>
+<ul class="simple">
+<li><strong>&lt;yawl&gt;:</strong> Etiqueta principal yawl.</li>
+<li><strong>&lt;workflow&gt;:</strong> Nombre del flujo.</li>
+<li><strong>&lt;token&gt;:</strong> Ficha: Nombre de la tabla  y Nombre del campo.</li>
+</ul>
+<p>Abrimos el archivo <strong>productos.xml</strong> y debajo del <a class="reference internal" href="#encabezado"><em>Encabezado</em></a> copiamos el siguiente código <strong>(XML)</strong>:</p>
+<div class="highlight-xml"><div class="highlight"><pre><span class="nt">&lt;yawl</span> <span class="na">version=</span><span class="s">&quot;0.01&quot;</span><span class="nt">&gt;</span>
+ <span class="nt">&lt;workflow</span> <span class="na">id=</span><span class="s">&quot;productos&quot;</span><span class="nt">&gt;</span>
+  <span class="nt">&lt;token</span> <span class="na">keysource=</span><span class="s">&quot;productos&quot;</span> <span class="na">key=</span><span class="s">&quot;id&quot;</span><span class="nt">/&gt;</span>
+
+   <span class="c">&lt;!--  **CUERPO**</span>
+<span class="c">    Aqui vamos a colocar todos los estados o tareas.</span>
+<span class="c">          #########################</span>
+<span class="c">          ## - INICIAL           ##</span>
+<span class="c">          ##    - REGISTRADO.    ##</span>
+<span class="c">          ##    - PEDIDO         ##</span>
+<span class="c">          ##      - DISPONIBLE   ##</span>
+<span class="c">          ##      - POR_LLEGAR   ##</span>
+<span class="c">          ##    - POR_AGOTARSE   ##</span>
+<span class="c">          ##    - AGOSTADO       ##</span>
+<span class="c">          ## - FINAL             ##</span>
+<span class="c">          #########################</span>
+<span class="c">   --&gt;</span>
+
+ <span class="nt">&lt;/workflow&gt;</span>
+<span class="nt">&lt;/yawl&gt;</span>
+</pre></div>
+</div>
+<div class="admonition note">
+<p class="first admonition-title">Nota</p>
+<ul class="last simple">
+<li>EL cuadro se me muestra comentado es opcional solo para visualizar como van hacer las tareas.</li>
+<li>Todas las tareas o estados van donde esta el cuadro opcional.</li>
+</ul>
+</div>
+</div></blockquote>
+</div>
+</div>
+<div class="section" id="cuarto-paso">
+<h2>4° CUARTO PASO<a class="headerlink" href="#cuarto-paso" title="Enlazar permanentemente con este título">¶</a></h2>
+<div class="section" id="condiciones-principales-inicial-y-final">
+<span id="condiciones"></span><h3>Condiciones Principales (INICIAL Y FINAL)<a class="headerlink" href="#condiciones-principales-inicial-y-final" title="Enlazar permanentemente con este título">¶</a></h3>
+<blockquote>
+<div><p>En las <strong>condiciones principal (inicial y final)</strong> se utilizaran las siguientes <strong>etiquetas (XML)</strong>:</p>
+<ul class="simple">
+<li><strong>&lt;condition&gt;:</strong></li>
+<li><strong>&lt;port&gt;:</strong></li>
+<li><strong>&lt;connection&gt;:</strong> Como no hay nada registrado inicio apunta a final</li>
+</ul>
+<p>Abrimos el archivo <strong>productos.xml</strong> y dentro de las <a class="reference internal" href="#tercerpaso"><em>Etiquetas Principales</em></a> insertamos el siguiente código <strong>(XML)</strong>:</p>
+<div class="highlight-xml"><div class="highlight"><pre><span class="c">&lt;!--</span>
+<span class="c">#####################</span>
+<span class="c"># Condición inicial #</span>
+<span class="c">#####################</span>
+<span class="c">--&gt;</span>
+  <span class="nt">&lt;condition</span> <span class="na">type=</span><span class="s">&quot;start&quot;</span> <span class="na">id=</span><span class="s">&quot;inicial&quot;</span><span class="nt">&gt;</span>
+   <span class="nt">&lt;port</span> <span class="na">side=</span><span class="s">&quot;forward&quot;</span> <span class="na">type=</span><span class="s">&quot;split&quot;</span><span class="nt">&gt;</span>
+    <span class="nt">&lt;connection</span> <span class="na">query=</span><span class="s">&quot;true&quot;</span> <span class="na">options=</span><span class="s">&quot;&quot;</span> <span class="na">source=</span><span class="s">&quot;final&quot;</span><span class="nt">/&gt;</span>
+   <span class="nt">&lt;/port&gt;</span>
+  <span class="nt">&lt;/condition&gt;</span>
+
+<span class="c">&lt;!--</span>
+<span class="c">###################</span>
+<span class="c"># Condición final #</span>
+<span class="c">###################</span>
+<span class="c">--&gt;</span>
+  <span class="nt">&lt;condition</span> <span class="na">id=</span><span class="s">&quot;final&quot;</span><span class="nt">&gt;</span>
+   <span class="nt">&lt;port</span> <span class="na">side=</span><span class="s">&quot;forward&quot;</span> <span class="na">type=</span><span class="s">&quot;split&quot;</span><span class="nt">&gt;</span>
+    <span class="nt">&lt;connection</span> <span class="na">source=</span><span class="s">&quot;&quot;</span><span class="nt">/&gt;</span>
+   <span class="nt">&lt;/port&gt;</span>
+  <span class="nt">&lt;/condition&gt;</span>
+</pre></div>
+</div>
+<p><strong>Ahora ejecutaremos los siguiente pasos:</strong></p>
+<ul class="simple">
+<li>Crearemos una carpeta llamada <strong>tmp</strong> en directorio <strong>$HOME/tmp</strong>, desde la consola de comando.</li>
+</ul>
+<blockquote>
+<div><div class="highlight-bash"><div class="highlight"><pre><span class="nv">$ </span>mkdir <span class="nv">$HOME</span>/tmp
 </pre></div>
 </div>
 </div></blockquote>
-</li>
-<li><p class="first"><strong>Condición inicial:</strong></p>
+<ul class="simple">
+<li>Crearemos un archivo con extensión <strong>.py</strong> en directorio <strong>$HOME</strong>,desde la consola de comando.</li>
+</ul>
 <blockquote>
-<div><div class="highlight-python"><div class="highlight"><pre># Etiqueta principal yawl
-&lt;yawl version=&quot;0.01&quot;&gt;
-
- # Nombre del flujo
- &lt;workflow id=&quot;productos&quot;&gt;
-
-  # ficha: Nombre de la tabla  y Nombre del campo
-  &lt;token keysource=&quot;productos&quot; key=&quot;id&quot;/&gt;
-
-  # Condición inicial
-  &lt;condition type=&quot;start&quot; id=&quot;inicial&quot;&gt;
-
-   &lt;port side=&quot;forward&quot; type=&quot;split&quot;&gt;
-
-    # Slq donde el inicio me aparecerá en el grafo apuntando a registrado
-     &lt;connection query=&quot;select status from productos&quot; options=&quot;Registrado&quot; source=&quot;Registrado&quot;/&gt;
-
-    &lt;/port&gt;
-
- &lt;/condition&gt;
+<div><div class="highlight-bash"><div class="highlight"><pre><span class="nv">$ </span>touch <span class="nv">$HOME</span>/Script_graficos.py
 </pre></div>
 </div>
 </div></blockquote>
-</li>
-<li><p class="first"><strong>Registrado:</strong></p>
+<ul class="simple">
+<li>Abrimos el archivo <strong>.py</strong> que creamos en el paso anterior la cual lo llamamos <strong>Script_graficos.py</strong> y copiamos el siguiente Script**(python)**:</li>
+</ul>
 <blockquote>
-<div><div class="highlight-python"><div class="highlight"><pre># Condición de Registrado la cual puede pasar un caso
-&lt;task title=&quot;en inventario&quot; id=&quot;Registrado&quot;&gt;
+<div><div class="highlight-python"><div class="highlight"><pre><span class="c"># -*- coding: utf-8 -*-</span>
 
- # Registrado apunta a una opción
-  &lt;port side=&quot;forward&quot; type=&quot;split&quot;&gt;
+<span class="kn">import</span> <span class="nn">Safet</span>
+<span class="kn">import</span> <span class="nn">os</span>
 
-        # Cambio de estado ahora Registado  apunta a Pedido
-        &lt;connection query=&quot;select status from productos&quot; options=&quot;Pedido&quot; source=&quot;Pedido&quot;/&gt;
+<span class="n">myhome</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">getenv</span><span class="p">(</span><span class="s">&quot;HOME&quot;</span><span class="p">)</span>
+<span class="n">mymedia</span> <span class="o">=</span> <span class="n">myhome</span> <span class="o">+</span> <span class="s">&quot;/tmp&quot;</span>
+<span class="n">myurl</span> <span class="o">=</span> <span class="s">&quot;http://localhost&quot;</span>
 
-   &lt;/port&gt;
+<span class="n">myinflow</span> <span class="o">=</span> <span class="n">Safet</span><span class="o">.</span><span class="n">MainWindow</span><span class="p">(</span><span class="n">myhome</span><span class="p">)</span>
 
-  # Variable vRegistro donde me aparecerá un mensaje la hora en el cuaal se hizo ese registro
-  &lt;variable config=&quot;1&quot; documentsource=&quot;select id,mensaje,status from productos&quot; type=&quot;sql&quot; tokenlink=&quot;&quot; id=&quot;vRegistrado&quot;
-     rolfield=&quot;(select rol from productos_registro where productoid=productos.id and regstatus=&#39;Registrado&#39;)
-     as rol&quot; scope=&quot;task&quot; timestampfield=&quot;(select fecha from
-     productos_registro where productoid=productos.id and regstatus=&#39;Registrado&#39;) as fecha&quot;/&gt;
+<span class="n">myinflow</span><span class="o">.</span><span class="n">setMediaPath</span><span class="p">(</span><span class="n">mymedia</span> <span class="p">)</span>
+<span class="n">myinflow</span><span class="o">.</span><span class="n">setHostURL</span><span class="p">(</span><span class="n">myurl</span><span class="p">)</span>
 
-&lt;/task&gt;
+<span class="n">result</span> <span class="o">=</span> <span class="n">myinflow</span><span class="o">.</span><span class="n">login</span><span class="p">(</span><span class="s">&quot;admin&quot;</span><span class="p">,</span><span class="s">&quot;admin&quot;</span><span class="p">)</span>
+
+<span class="n">myconsult</span> <span class="o">=</span> <span class="s">u&quot;operacion:Generar_gráfico_coloreado </span><span class="se">\</span>
+<span class="s">        Cargar_archivo_flujo: </span><span class="si">%s</span><span class="s">/.safet/flowfiles/productos.xml&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="n">myhome</span><span class="p">)</span>
+
+<span class="k">if</span> <span class="ow">not</span> <span class="n">result</span><span class="p">:</span>
+    <span class="k">print</span> <span class="s">&quot;Authentication failed&quot;</span>
+    <span class="nb">exit</span><span class="p">()</span>
+
+<span class="n">result</span> <span class="o">=</span> <span class="n">myinflow</span><span class="o">.</span><span class="n">toInputConsole</span><span class="p">(</span><span class="n">myconsult</span><span class="p">)</span>
+
+<span class="k">if</span> <span class="ow">not</span> <span class="n">result</span><span class="p">:</span>
+    <span class="k">print</span> <span class="s">&quot;Consult failed error: </span><span class="si">%s</span><span class="s">&quot;</span>  <span class="o">%</span> <span class="p">(</span><span class="n">myinflow</span><span class="o">.</span><span class="n">currentError</span><span class="p">())</span>
+    <span class="nb">exit</span><span class="p">()</span>
+
+<span class="k">print</span> <span class="s">u&quot;</span><span class="si">%s</span><span class="s">&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="n">myinflow</span><span class="o">.</span><span class="n">currentJSON</span><span class="p">())</span>
 </pre></div>
 </div>
 </div></blockquote>
-</li>
-<li><p class="first"><strong>Pedido:</strong></p>
+<ul class="simple">
+<li>Ejecutamos el archivo <strong>Script_graficos.py</strong>, desde la consola de comando como usuario normal.</li>
+</ul>
 <blockquote>
-<div><div class="highlight-python"><div class="highlight"><pre># Condición de Pedido la cual pueden pasar 2 casos
-&lt;task title=&quot;&quot; id=&quot;Pedido&quot; textualinfo=&quot;&quot;&gt;
-
-      # Producto pedido apunta a dos opciones
-       &lt;port pattern=&quot;or&quot; side=&quot;forward&quot; type=&quot;split&quot;&gt;
-
-      # Producto pedido apunta a Disponible
-      &lt;connection query=&quot;select status from productos&quot; options=&quot;Disponible&quot; source=&quot;Disponible&quot;/&gt;
-
-      # Producto pedido apunta a Por_llegar
-      &lt;connection query=&quot;select status from productos&quot; options=&quot;Por_llegar&quot; source=&quot;Por_llegar&quot;/&gt;
-
-       &lt;/port&gt;
-
-       # Variable vpedido donde nos aparecerá un mensaje el id , el status y fecha y hora de esa acción
-       &lt;variable config=&quot;1&quot; documentsource=&quot;select id,mensaje,status from productos&quot; type=&quot;sql&quot; tokenlink=&quot;&quot; id=&quot;vPedido&quot;
-           rolfield=&quot;(select rol from&amp;#xa;productos_registro where productoid=productos.id and regstatus=&#39;Pedido&#39;)
-           as rol&quot; scope=&quot;task&quot;timestampfield=&quot;(select fecha from productos_registro where productoid=productos.id
-           and regstatus=&#39;Pedido&#39;) as fecha&quot;/&gt;
-
-&lt;/task&gt;
+<div><div class="highlight-bash"><div class="highlight"><pre><span class="nv">$ </span>python <span class="nv">$HOME</span>/Script_graficos.py
+</pre></div>
+</div>
+<div class="admonition note">
+<p class="first admonition-title">Nota</p>
+<p>Al ejecutar el archivo <strong>.py (Script_graficos.py)</strong> nos mostrara un mensaje donde salen reflejadas las 2 <a class="reference internal" href="#condiciones"><em>Condiciones Principales (INICIAL Y FINAL)</em></a>:</p>
+<blockquote class="last">
+<div><div class="highlight-bash"><div class="highlight"><pre>QFSFileEngine::open: No file name specified
+QSqlDatabasePrivate::removeDatabase: connection <span class="s1">&#39;/home/cenditel/.safet/mydb.db&#39;</span>
+is still in use, all queries will cease to work.
+.............wheretokens: on
+.......newnode: |inicial|  <span class="c"># Condición inicial</span>
+.......newnode: |final|    <span class="c"># Condición final</span>
+qt_temp.XM6827.svg         <span class="c"># Octenemos el nombre de la imagen donde esta el gráfico</span>
 </pre></div>
 </div>
 </div></blockquote>
-</li>
-<li><p class="first"><strong>Por_llegar:</strong></p>
+</div>
+</div></blockquote>
+<ul class="simple">
+<li>Nos vamos al directorio <strong>$HOME/tmp</strong>,desde la consola de comando.</li>
+</ul>
 <blockquote>
-<div><div class="highlight-python"><div class="highlight"><pre># Producto Por_llegar la cual puede pasar un caso
-&lt;task title=&quot;&quot; id=&quot;Por_llegar&quot; textualinfo=&quot;&quot;&gt;
-
- # Por_llegar apunta a una opción
- &lt;port pattern=&quot;none&quot; side=&quot;forward&quot; type=&quot;split&quot;&gt;
-
-        # Producto Por_llegar apunta a  Por_agotarse
-        &lt;connection query=&quot;select status from productos&quot; options=&quot;Por_agotarse&quot; source=&quot;Por_agotarse&quot;/&gt;
-
- &lt;/port&gt;
-
-   # Variable vPor_llegar donde nos aparecerá un mensaje el id , el status y fecha y hora de esa acción
-   &lt;variable config=&quot;1&quot; documentsource=&quot;select id,mensaje,status from productos&quot; type=&quot;sql&quot; tokenlink=&quot;&quot; id=&quot;vPor_llegar&quot;
-         rolfield=&quot;(select rol from productos_registro where productoid=productos.id and regstatus=&#39;Por_llegar&#39;)
-         as rol&quot; scope=&quot;task&quot; timestampfield=&quot;(select fecha from productos_registro where productoid=productos.id
-         and regstatus=&#39;Por_llegar&#39;) as fecha&quot;/&gt;
-
-&lt;/task&gt;
+<div><div class="highlight-bash"><div class="highlight"><pre><span class="nv">$ </span><span class="nb">cd</span> <span class="nv">$HOME</span>/tmp
+</pre></div>
+</div>
+<div class="admonition note">
+<p class="first admonition-title">Nota</p>
+<p>En el directorio <strong>$HOME/tmp</strong> se escriben los archivos de grafos <strong>(.svg o .png)</strong>, usted puede definir el directorio de escritura y temporal utilizando los siguientes parámetros en el archivo <strong>safet.conf</strong> que se encuentra en el directorio <strong>$HOME/.safet/</strong>.</p>
+<div class="last highlight-bash"><div class="highlight"><pre>plugins.graphviz.infile <span class="o">=</span>  /home/fulano/tmp   <span class="c"># directorio para archivos temporales</span>
+plugins.graphviz.outfile <span class="o">=</span>  /home/fulano/tmp  <span class="c"># directorio de salida para archivos de grafo (.svg o .png)</span>
+</pre></div>
+</div>
+</div>
+</div></blockquote>
+<ul class="simple">
+<li>Escribimos el comando <strong>ls</strong> para ver las imágenes <strong>.svg</strong>,desde la consola de comando.</li>
+</ul>
+<blockquote>
+<div><div class="highlight-bash"><div class="highlight"><pre>tmp<span class="nv">$ </span>ls
+qt_temp.XM7929.svg
 </pre></div>
 </div>
 </div></blockquote>
-</li>
-<li><p class="first"><strong>Disponible:</strong></p>
+<ul class="simple">
+<li>Con el comando <strong>eog</strong> vemos la primera imagen <strong>.svg(qt_temp.XM6827.svg )</strong> ,desde la consola de comando.</li>
+</ul>
 <blockquote>
-<div><div class="highlight-python"><div class="highlight"><pre># Producto Disponible la cual puede pasar un caso
-&lt;task title=&quot;&quot; id=&quot;Disponible&quot; textualinfo=&quot;&quot;&gt;
+<div><div class="highlight-bash"><div class="highlight"><pre>tmp<span class="nv">$ </span>eog qt_temp.XM6827.svg
+</pre></div>
+</div>
+<div class="admonition note">
+<p class="first admonition-title">Nota</p>
+<p>Si realizó los pasos correctos se mostrara el grafo, en el cual se define lo siguiente:</p>
+<blockquote>
+<div><div class="figure align-center" id="figura28">
+<a class="reference internal image-reference" href="../../_images/grafo_inflow.png"><img alt="../../_images/grafo_inflow.png" src="../../_images/grafo_inflow.png" style="width: 200px; height: 250px;" /></a>
+<p class="caption"><strong>Figura 28: Condiciones (inicial y final).</strong></p>
+</div>
+</div></blockquote>
+<p>Descripción de la <a class="reference internal" href="#figura28"><em>Figura 28: Condiciones (inicial y final).</em></a>:</p>
+<ul class="last simple">
+<li>El circulo <strong>inicial</strong> apunta al circulo <strong>final</strong>.</li>
+<li>En este inventario esta vacío.</li>
+<li>En esta imagen vemos como se conectan las condiciones <strong>inicial y final</strong>.</li>
+</ul>
+</div>
+<div class="admonition note">
+<p class="first admonition-title">Nota</p>
+<p class="last">En esta imagen no se muestran ninguna tarea ya que no hemos realizado ninguna, para ello pasamos al <strong>QUINTO PASO</strong> donde comenzaremos a realizar las tareas.</p>
+</div>
+</div></blockquote>
+</div></blockquote>
+</div>
+</div>
+<div class="section" id="quinto-paso">
+<h2>5° QUINTO PASO<a class="headerlink" href="#quinto-paso" title="Enlazar permanentemente con este título">¶</a></h2>
+<div class="section" id="primera-tarea-registrado">
+<h3>5.1 - PRIMERA TAREA (Registrado)<a class="headerlink" href="#primera-tarea-registrado" title="Enlazar permanentemente con este título">¶</a></h3>
+<blockquote>
+<div><p>En la primera tarea <strong>(Registrado)</strong> se utilizaran las siguientes <strong>etiquetas (XML)</strong>:</p>
+<ul class="simple">
+<li><strong>&lt;condition&gt; Inicial:</strong></li>
+<li><strong>&lt;connection&gt; Registado:</strong> registrado apunta a final.</li>
+<li><strong>&lt;task&gt;:</strong> Condición de Registrado la cual puede pasar un caso.</li>
+<li><strong>&lt;port&gt;:</strong> Registrado apunta a una opción.</li>
+<li><strong>&lt;variable&gt;:</strong> Variable vRegistro donde me aparecerá un mensaje la hora en el cual se hizo ese registro.</li>
+</ul>
+<p>Abrimos el archivo <strong>productos.xml</strong> y insertamos el código <strong>(xml)</strong> de la <strong>tarea Registrado</strong> como se muestra a continuación:</p>
+<div class="highlight-xml"><div class="highlight"><pre><span class="c">&lt;!--</span>
+<span class="c">*********************</span>
+<span class="c">| Condición inicial |</span>
+<span class="c">*********************</span>
+<span class="c">--&gt;</span>
+  <span class="nt">&lt;condition</span> <span class="na">type=</span><span class="s">&quot;start&quot;</span> <span class="na">id=</span><span class="s">&quot;inicial&quot;</span><span class="nt">&gt;</span>
+   <span class="nt">&lt;port</span> <span class="na">side=</span><span class="s">&quot;forward&quot;</span> <span class="na">type=</span><span class="s">&quot;split&quot;</span><span class="nt">&gt;</span>
+    <span class="nt">&lt;connection</span> <span class="na">query=</span><span class="s">&quot;select status from productos&quot;</span> <span class="na">options=</span><span class="s">&quot;Registrado&quot;</span> <span class="na">source=</span><span class="s">&quot;Registrado&quot;</span><span class="nt">/&gt;</span>
+   <span class="nt">&lt;/port&gt;</span>
+  <span class="nt">&lt;/condition&gt;</span>
 
-   # Disponible apunta a una opción
-   &lt;port side=&quot;forward&quot; type=&quot;split&quot;&gt;
 
-      # Producto Disponible apunta a  Por_agotarse
-      &lt;connection query=&quot;select status from productos&quot; options=&quot;Por_agotarse&quot; source=&quot;Por_agotarse&quot;/&gt;
+  <span class="c">&lt;!--</span>
+<span class="c">  **************</span>
+<span class="c">  | Registrado |</span>
+<span class="c">  **************</span>
+<span class="c">  --&gt;</span>
+  <span class="nt">&lt;task</span> <span class="na">title=</span><span class="s">&quot;en inventario&quot;</span> <span class="na">id=</span><span class="s">&quot;Registrado&quot;</span><span class="nt">&gt;</span>
 
-   &lt;/port&gt;
+   <span class="nt">&lt;port</span> <span class="na">side=</span><span class="s">&quot;forward&quot;</span> <span class="na">type=</span><span class="s">&quot;split&quot;</span><span class="nt">&gt;</span>
+    <span class="nt">&lt;connection</span> <span class="na">query=</span><span class="s">&quot;true&quot;</span> <span class="na">options=</span><span class="s">&quot;&quot;</span> <span class="na">source=</span><span class="s">&quot;final&quot;</span><span class="nt">/&gt;</span>
+   <span class="nt">&lt;/port&gt;</span>
 
-   # Variable vDisponible donde nos aparecerá un mensaje el id , el status y fecha y hora de esa acción
-   &lt;variable config=&quot;1&quot; documentsource=&quot;select id,mensaje,status from productos&quot; type=&quot;sql&quot; tokenlink=&quot;&quot; id=&quot;vDisponible&quot;
-            rolfield=&quot;(select rol from&amp;#xa;productos_registro where productoid=productos.id and regstatus=&#39;Disponible&#39;)
-            as&amp;#xa;rol&quot; scope=&quot;task&quot; timestampfield=&quot;(select fecha from productos_registro where&amp;#xa;productoid=productos.id
-            and regstatus=&#39;Disponible&#39;) as fecha&quot;/&gt;
+   <span class="nt">&lt;variable</span> <span class="na">config=</span><span class="s">&quot;1&quot;</span> <span class="na">documentsource=</span><span class="s">&quot;select id,mensaje,status from productos&quot;</span> <span class="na">type=</span><span class="s">&quot;sql&quot;</span> <span class="na">tokenlink=</span><span class="s">&quot;&quot;</span>
+    <span class="na">id=</span><span class="s">&quot;vRegistrado&quot;</span> <span class="na">rolfield=</span><span class="s">&quot;(select rol from productos_registro where productoid=productos.id and</span>
+<span class="s">    regstatus=&#39;Registrado&#39;) as rol&quot;</span> <span class="na">scope=</span><span class="s">&quot;task&quot;</span> <span class="na">timestampfield=</span><span class="s">&quot;(select fecha from</span>
+<span class="s">    productos_registro where productoid=productos.id and regstatus=&#39;Registrado&#39;) as fecha&quot;</span><span class="nt">/&gt;</span>
 
-&lt;/task&gt;
+  <span class="nt">&lt;/task&gt;</span>
+
+<span class="c">&lt;!--</span>
+<span class="c">*******************</span>
+<span class="c">| Condición final |</span>
+<span class="c">*******************</span>
+<span class="c">--&gt;</span>
+  <span class="nt">&lt;condition</span> <span class="na">id=</span><span class="s">&quot;final&quot;</span><span class="nt">&gt;</span>
+   <span class="nt">&lt;port</span> <span class="na">side=</span><span class="s">&quot;forward&quot;</span> <span class="na">type=</span><span class="s">&quot;split&quot;</span><span class="nt">&gt;</span>
+    <span class="nt">&lt;connection</span> <span class="na">source=</span><span class="s">&quot;&quot;</span><span class="nt">/&gt;</span>
+   <span class="nt">&lt;/port&gt;</span>
+  <span class="nt">&lt;/condition&gt;</span>
+</pre></div>
+</div>
+<p><strong>Ahora ejecutaremos los siguiente pasos:</strong></p>
+<div class="admonition note">
+<p class="first admonition-title">Nota</p>
+<p class="last">En el <strong>4° paso</strong> anterior creamos la carpeta llamada <strong>tmp</strong> y el archivo llamado <strong>.py (Script_graficos.py)</strong> ,la cual se utilizaran en este paso a seguir.</p>
+</div>
+<ul class="simple">
+<li>Ejecutamos el mismo archivo <strong>.py (Script_graficos.py)</strong> con el mismo contenido, desde la consola de comando como usuario normal.</li>
+</ul>
+<blockquote>
+<div><div class="highlight-bash"><div class="highlight"><pre><span class="nv">$ </span>python <span class="nv">$HOME</span>/Script_graficos.py
+</pre></div>
+</div>
+<div class="admonition note">
+<p class="first admonition-title">Nota</p>
+<p>Al ejecutar el archivo <strong>.py (Script_graficos.py)</strong> nos mostrara un mensaje donde salen reflejadas las 2 <strong>Condiciones principales</strong> y la primera tarea <strong>(Registrado)</strong>:</p>
+<blockquote class="last">
+<div><div class="highlight-bash"><div class="highlight"><pre>QFSFileEngine::open: No file name specified
+QSqlDatabasePrivate::removeDatabase: connection <span class="s1">&#39;/home/cenditel/.safet/mydb.db&#39;</span>
+is still in use, all queries will cease to work.
+.............wheretokens: on
+.......newnode: |Registrado| <span class="c"># Tarea Registrado</span>
+.......newnode: |inicial|    <span class="c"># Condición inicial</span>
+.......newnode: |final|      <span class="c"># Condición final</span>
+qt_temp.XM6827.svg           <span class="c"># Obtenemos el nombre de la imagen donde esta el gráfico</span>
 </pre></div>
 </div>
 </div></blockquote>
-</li>
-<li><p class="first"><strong>Por_agotarse:</strong></p>
+</div>
+</div></blockquote>
+<ul class="simple">
+<li>Nos vamos al directorio <strong>$HOME/tmp</strong>,desde la consola de comando.</li>
+</ul>
 <blockquote>
-<div><div class="highlight-python"><div class="highlight"><pre># Producto Por_agotarse la cual puede pasar un caso
-&lt;task title=&quot;&quot; id=&quot;Por_agotarse&quot; textualinfo=&quot;&quot;&gt;
-
-  # Disponible apunta a una opción
-  &lt;port side=&quot;forward&quot; type=&quot;split&quot;&gt;
-
-       # Producto Por_agotarse apunta a Agotado
-       &lt;connection query=&quot;select status from productos&quot; options=&quot;Agotado&quot; source=&quot;Agotado&quot;/&gt;
-
-  &lt;/port&gt;
-
-  # Variable vPor_agotarse donde nos aparecerá un mensaje el id , el status y fecha y hora de esa acción
-  &lt;variable config=&quot;1&quot; documentsource=&quot;select id,mensaje,status from productos&quot; type=&quot;sql&quot; tokenlink=&quot;&quot; id=&quot;vPor_agotarse&quot;
-      rolfield=&quot;(select rol from&amp;#xa;productos_registro where productoid=productos.id and regstatus=&#39;Por_agotarse&#39;)
-      as&amp;#xa;rol&quot; scope=&quot;task&quot; timestampfield=&quot;(select fecha from productos_registro where&amp;#xa;productoid=productos.id
-      and     regstatus=&#39;Por_agotarse&#39;) as fecha&quot;/&gt;
-
- &lt;/task&gt;
+<div><div class="highlight-bash"><div class="highlight"><pre><span class="nv">$ </span><span class="nb">cd</span> <span class="nv">$HOME</span>/tmp
 </pre></div>
 </div>
 </div></blockquote>
-</li>
-<li><p class="first"><strong>Agotado:</strong></p>
+<ul class="simple">
+<li>Escribimos el comando <strong>ls</strong> para ver las 2 imágenes <strong>.svg</strong> que hemos obtenido ,desde la consola de comando.</li>
+</ul>
 <blockquote>
-<div><div class="highlight-python"><div class="highlight"><pre># Producto Agotado la cual puede pasar un caso
-&lt;task title=&quot;&quot; id=&quot;Agotado&quot; textualinfo=&quot;&quot;&gt;
-
- # Agotado apunta a dos opción
- &lt;port side=&quot;forward&quot; type=&quot;split&quot;&gt;
-
-      # Producto Agotado apunta a Pedido
-      &lt;connection query=&quot;select status from productos&quot; options=&quot;Pedido&quot; back=&quot;yes&quot; source=&quot;Pedido&quot;/&gt;
-
-      # Producto Agotado apunta a final
-      &lt;connection query=&quot;true&quot; options=&quot;&quot; source=&quot;final&quot;/&gt;
-
- &lt;/port&gt;
-
- # Variable vAgotado donde nos aparecerá un mensaje el id , el status y fecha y hora de esa acción
- &lt;variable config=&quot;1&quot; documentsource=&quot;select id,mensaje,status from productos&quot; type=&quot;sql&quot; tokenlink=&quot;&quot; id=&quot;vAgotado&quot;
-      rolfield=&quot;(select rol from productos_registro where productoid=productos.id and regstatus=&#39;Agotado&#39;)
-      as rol&quot; scope=&quot;task&quot; timestampfield=&quot;(select fecha from productos_registro where productoid=productos.id
-      and regstatus=&#39;Agotado&#39;) as     fecha&quot;/&gt;
-
- &lt;/task&gt;
+<div><div class="highlight-bash"><div class="highlight"><pre>tmp<span class="nv">$ </span>ls
+qt_temp.XM6827.svg ,qt_temp.XM6970.svg
 </pre></div>
 </div>
 </div></blockquote>
-</li>
-<li><p class="first"><strong>Condition Final:</strong></p>
+<ul class="simple">
+<li>Con el comando <strong>eog</strong> vemos la la segunda imagen <strong>.svg(qt_temp.XM6827.svg )</strong> ,desde la consola de comando.</li>
+</ul>
 <blockquote>
-<div><div class="highlight-python"><div class="highlight"><pre>  # Condición final
-  &lt;condition id=&quot;final&quot;&gt;
-
-    &lt;port side=&quot;forward&quot; type=&quot;split&quot;&gt;
-
-      &lt;connection source=&quot;&quot;/&gt;
-
-   &lt;/port&gt;
-
-   &lt;/condition&gt;
-
- # Cerramos la etiqueta del flujo workflow
-&lt;/workflow&gt;
-
- #
- &lt;configuration id=&quot;1&quot; connectstring=&quot;psql:seguridad.cenditel.gob.ve:ticket:vbravo:vbravo_&quot;/&gt;
-
-# Cerramos la principal etiqueta yawl
-&lt;/yawl&gt;
+<div><div class="highlight-bash"><div class="highlight"><pre>tmp<span class="nv">$ </span>eog qt_temp.XM6970.svg
 </pre></div>
 </div>
+<div class="admonition note">
+<p class="first admonition-title">Nota</p>
+<p>Si realizó los pasos correctos, se mostrara el grafo como en la imagen siguiente <a class="reference internal" href="#figura29"><em>Figura 29: Registrado</em></a>:</p>
+<blockquote>
+<div><div class="figure align-center" id="figura29">
+<a class="reference internal image-reference" href="../../_images/grafo_inflow1.png"><img alt="../../_images/grafo_inflow1.png" src="../../_images/grafo_inflow1.png" style="width: 170px; height: 300px;" /></a>
+<p class="caption"><strong>Figura 29: Registrado</strong></p>
+</div>
 </div></blockquote>
-</li>
-</ol>
+<p>Descripción de la <a class="reference internal" href="#figura29"><em>Figura 29: Registrado</em></a>:</p>
+<ul class="last simple">
+<li>La condición del circulo <strong>inicial</strong> apunta a la primera tarea de cuadro <strong>Registrado</strong>.</li>
+<li>La primera tarea <strong>Registrado</strong> apunta a la condición de circulo <strong>final</strong></li>
+<li>En esta imagen vemos como se conectan la condición  <strong>inicial</strong> con la primera tarea <strong>Registrado</strong>  y la tarea con la condición <strong>final</strong>.</li>
+</ul>
+</div>
 </div></blockquote>
+</div></blockquote>
+</div>
+<div class="section" id="segunda-tarea-pedido">
+<h3>5.2 - SEGUNDA TAREA (Pedido)<a class="headerlink" href="#segunda-tarea-pedido" title="Enlazar permanentemente con este título">¶</a></h3>
+</div>
+</div>
 </div>
 
 
@@ -283,6 +438,31 @@ Descripcion: Archivo generado por plantilla de la Libreria SAFET
       </div>
       <div class="sphinxsidebar">
         <div class="sphinxsidebarwrapper">
+  <h3><a href="../../index.html">Tabla de Contenidos</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">Crear el flujo de trabajo utilizando un archivo XML</a><ul>
+<li><a class="reference internal" href="#primer-paso">1° PRIMER PASO</a></li>
+<li><a class="reference internal" href="#segundo-paso">2° SEGUNDO PASO</a><ul>
+<li><a class="reference internal" href="#encabezado">Encabezado</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#tercer-paso">3° TERCER PASO</a><ul>
+<li><a class="reference internal" href="#etiquetas-principales">Etiquetas Principales</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#cuarto-paso">4° CUARTO PASO</a><ul>
+<li><a class="reference internal" href="#condiciones-principales-inicial-y-final">Condiciones Principales (INICIAL Y FINAL)</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#quinto-paso">5° QUINTO PASO</a><ul>
+<li><a class="reference internal" href="#primera-tarea-registrado">5.1 - PRIMERA TAREA (Registrado)</a></li>
+<li><a class="reference internal" href="#segunda-tarea-pedido">5.2 - SEGUNDA TAREA (Pedido)</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+
   <h4>Tema anterior</h4>
   <p class="topless"><a href="Parte2.html"
                         title="capítulo anterior">Operaciones CRUD+(flujo) utilizando PySafet</a></p>
