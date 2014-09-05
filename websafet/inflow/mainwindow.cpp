@@ -4033,6 +4033,7 @@ QString MainWindow::replaceMarks(const QString& s) {
     QString result = s;
 
     result.replace(Safet::COLONMARK,":");
+    result.replace(Safet::COLONMARK_,":");
     result.replace(Safet::COMMAMARK,",");
     result.replace("Safet::aacute","á");
     result.replace("Safet::eacute","é");

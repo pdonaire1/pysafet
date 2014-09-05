@@ -95,6 +95,7 @@ const QString GRAPHSFILENAME = "graphs";
 const QString PLANNEDGRAPHSFILENAME = "plannedgraphs";
 
 const QString COLONMARK = "##SAFETCOLON##";
+const QString COLONMARK_ = "__SAFETCOLON__";
 const QString COMMAMARK = "##SAFETCOMMA##";
 const QString BRACKETOPENMARK = "##SAFETBRACKETOPEN##";
 const QString BRACKETCLOSEMARK = "##SAFETBRACKETCLOSE##";
