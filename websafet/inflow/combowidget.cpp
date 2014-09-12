@@ -490,12 +490,18 @@ void ComboWidget::updateComboFlow(bool inwidget) {
 
      if ( conf().contains("path") ) {
 
-         QString mypath = conf()["path"].toString();
+         QString mypath = conf()["path"].toString().trimmed();
          SYD << tr("..............................--->updateComboFlow...mykeyvalue: |%1|")
                 .arg(mykeyvalue);
 
-         SYD << tr("..............................--->updateComboFlow...path: |%1|")
+         SYD << tr("..............................--->updateComboFlow...PATH_COMBOFLOW....path: |%1|")
                 .arg(mypath);
+
+
+
+
+
+
 
          QString myother;
          if (conf().contains("otherkey")) {
@@ -524,9 +530,47 @@ void ComboWidget::updateComboFlow(bool inwidget) {
 
          if (!QFile::exists(mypath)) {
 
-             SYE << tr("No es posible leer el archivo \"%1\", por favor consulte al administrador")
+             SYW << tr("No es posible leer el archivo \"%1\", por favor consulte al administrador")
+
                     .arg(mypath.section("/",-1));
-             return;
+
+             if (!mypath.startsWith("SELECT ",Qt::CaseInsensitive)) {
+                 return;
+              }
+             SYD << tr("..............................--->updateComboFlow...PATH_COMBOFLOW..*IN..path: |%1|")
+                    .arg(mypath);
+
+
+             QString newsql = mypath;
+
+             QSqlQuery query( SafetYAWL::currentDb );
+             query.prepare(  newsql );
+             bool executed = query.exec();
+             SYD << tr("..............................--->updateComboFlow...PATH_COMBOFLOW..*IN.(1).path: |%1|")
+                    .arg(mypath);
+
+             if (!executed ) {
+                 SYE
+                         <<
+                            tr("NO se ejecutó correctamente la sentencia de busqueda de Path SQL: \"%1\"")
+                            .arg(newsql);
+                 return;
+             }
+
+             if (!query.next()) {
+                 SYW
+                         <<
+                            tr("Advertencia:No existen registros para busqueda de Path de archivow workfloe: \"%1\"")
+                            .arg(newsql);
+                 return;
+             }
+             SYD << tr("..............................--->updateComboFlow...SETTING (1): |%1|")
+                    .arg(mypath);
+             mypath = query.value(0).toString();
+             SYD << tr("..............................--->updateComboFlow...SETTING (2): |%1|")
+                    .arg(mypath);
+
+
          }
 
 
