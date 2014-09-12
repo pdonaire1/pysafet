@@ -141,8 +141,8 @@ MainWindow::MainWindow(const QString& path)
      : streamText( &outputText )
 {
 
-    QCoreApplication::addLibraryPath ( "/home/victorrbravo/PySafet/plugins/sqldrivers" );
-    QCoreApplication::addLibraryPath ( "/home/victorrbravo/PySafet/plugins" );
+//    QCoreApplication::addLibraryPath ( "/home/victorrbravo/PySafet/plugins/sqldrivers" );
+//    QCoreApplication::addLibraryPath ( "/home/victorrbravo/PySafet/plugins" );
 //    QCoreApplication::addLibraryPath ( "/usr/lib/libsafet" );
 
 
@@ -4352,18 +4352,48 @@ bool  MainWindow::toInputConsole(const QString& action,bool withpermises) {
                 parser.operationName().startsWith("Generar_grafico_para_clave")
 ) {
 
+            SYD << tr("......**MainWindow::toInputConsole....Generar_gráfico_para_clave.....(1)...");
+
+
+            QString currflow = "";
+            QString currid = "";
+            // Flujo
+            if (data.map.contains("Cargar_archivo_flujo")) {
+                currflow = data.map["Cargar_archivo_flujo"];
+            }
+            else if (data.map.contains("flujo")) {
+                currflow = data.map["flujo"];
+
+            }
+            else {
+                SYE << tr("No existe la variable flujo para graficar");
+            }
+
+
+            if (data.map.contains("Clave")) {
+                currid = data.map["Clave"];
+            }
+            else if (data.map.contains("id")) {
+                currid = data.map["id"];
+
+            }
+            else {
+                SYE << tr("No existe la variable id para graficar el flujo");
+            }
+
 
             QString texto = QString("-f %1 -p graphviz -g -k %2 ")
-                    .arg(data.map["Cargar_archivo_flujo"])
-                    .arg(data.map["Clave"]);
+                    .arg(currflow)
+                    .arg(currid);
+
+                        SYD << tr("......**MainWindow::toInputConsole....Generar_gráfico_para_clave...TEXTO..(1)..texto:|%1|")
+                               .arg(texto);
             parseArgs( texto );
             if (! executeParsed() ) {
                 return false;
             }
 
             QString nameplannedgraph = MainWindow::replaceMarks(data.map["Planificado"]);
-            SYD << tr("......**MainWindow::toInputConsole....Generar_gráfico_para_clave...PLANNEDGRAPH...nameplannedgraph: |%1|")
-                   .arg(nameplannedgraph);
 
 
         }
