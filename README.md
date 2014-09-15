@@ -3,6 +3,10 @@ PySafet (Safet for python)
 
 PySafet : a workflow engine (library) with signature electronic features available for Python and C++
 
+Para ver una documentación completa puede dirigirse al siguiente enlace (link): 
+
+http://www.novoapps.info/pysafet/
+
 
 1. Instalación para Debian Wheezy 7.0 (64 bits)
 ===============================================
