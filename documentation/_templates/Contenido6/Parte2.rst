@@ -1,24 +1,32 @@
 
-=====================================================
+,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,
 :index:`Operaciones CRUD+(flujo) utilizando PySafet` 
-=====================================================
+,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,
 
- **Operación** `CRUD`_ .
+Las operaciones `CRUD`_, son acciones generales que representan un modelo basíco para la creación de sistema de información. Puede ser una descripción más detallada en el siguiente enlace `SOBRE CRUD`_.
 
- - las operaciones **CRUB** son acciones generales que representan un modelo basíco para la creación de sistema de información. Puede ser una descripción más detallada en el siguiente enlace `SOBRE CRUD`_.
+El simbolo **"+"** indica las adición de operaciones asociada a flujo de trabajo.
 
- - El simbolo **"+"** indica las adición de operaciones asociada a flujo de trabajo
-
-	
 .. _crud: http://es.wikipedia.org/wiki/CRUD
 .. _sobre crud: http://www.dotnettwitter.com/2012/04/curd-operations-on-xml-file.html
 
 
- Editamos el archivo **deftrac.xml** que se encuentra en el directorio **<HOME>.safet/input/**
 
- **1.- Escribimos el encabezado (información de Autor).**
+**A continuación comenzaremos a ver los pasos de las operaciones CRUB con un archivo que se llama deftrac.xml la cual va a estar en el directorio **<HOME>.safet/input/***
 
-  ::
+
+
+
++++++++++++++++++
+1° PRIMER PASO
++++++++++++++++++
+
+
+--------------------------------------------------------
+Escribimos el encabezado (información de Autor).
+--------------------------------------------------------
+
+  .. code-block:: html
 
 	<?xml version="1.0" encoding="UTF-8" ?>
 	<!--
@@ -31,9 +39,8 @@
 
  - **Escribimos la ruta al validador XML(formato DTD)**
 
-  ::
+  .. code-block:: html
 
-	
 	<!DOCTYPE operations SYSTEM "file:///home/cenditel/.safet/dtd/yawlinput.dtd">
 
 
@@ -46,10 +53,10 @@
   - +(Flujo de trabajo)
 
 
-  ::
+
+  .. code-block:: html
 
 	<operations suffix=":" commandname="operacion">
-
 
 	<operation  name="Productos"  desc="Agregar,Modificar,Eliminar,Listar" icon="firmadoc.png"> </operation>
 
@@ -73,112 +80,124 @@
 
 	
  A continuación se mostrara el archivo **deftrac.xml**:
-  ::
+
+  .. code-block:: html
 
 	<operation  name="agregar_producto"  desc="" icon="plus.png">
-		
-		<command id ="1" type="agregar" table="productos" >
 
-			<fields>
+	<command id ="1" type="agregar" table="productos" >
 
-				<field type="string" icon="resumen.png" mandatory="yes"	validation="" 
-											title="Nombre" desc="">
-				nombre
-				</field>
+	 <fields>
 
-				<field type="string" literal="Registrado" mandatory="yes" >
-				status
-				</field>
-	
-			</fields>
+	   <field type="string" icon="resumen.png" mandatory="yes"	validation="" 
+	                                   title="Nombre" desc="">
+	           nombre
+	   </field>
 
-		</command>
+	    <field type="string" literal="Registrado" mandatory="yes" >
+	        status
+	    </field>
 
-		<command id ="1" type="agregar" table="productos_registro" >
+	 </fields>
 
-	    	<fields>
+	</command>
 
-		  <field type="datetime" mandatory="yes"  
-					function="seq from sqlite_sequence where name='productos'"  input="no">
-		      productoid
-		      </field>
+	<command id ="1" type="agregar" table="productos_registro" >
 
-		      <field type="datetime" mandatory="yes"  function="datetime('now')" 
-									format="time_t" input="no">
-		       fecha
-		      </field>
+	<fields>
 
-		      <field type="string" literal="_USERNAME" mandatory="yes" >
-		      rol      
-		      </field>
-	  
-		      <field type="string" literal="Registrado" mandatory="yes" >
-		      regstatus
-		      </field>
+	  <field type="datetime" mandatory="yes"  
+	  function="seq from sqlite_sequence where name='productos'"  input="no">
+	  productoid
+	  </field>
 
-		   </fields>
-		
-		</command>
+	  <field type="datetime" mandatory="yes"  function="datetime('now')" 
+	                      format="time_t" input="no">
+	  fecha
+	  </field>
 
-	</operation>
+	  <field type="string" literal="_USERNAME" mandatory="yes" >
+	  rol      
+	  </field>
+
+	  <field type="string" literal="Registrado" mandatory="yes" >
+	  regstatus
+	  </field>
+
+	  </fields>
+
+	  </command>
+
+	  </operation>
 
 
  
 
  - **Ejecutamos el Script para Insertar un producto**
-	
+
 	Seguidamente vamos a utilizar esta operación **"agregar_producto"** en un Script de python como se muestra a continuación:
-	
+
   - **Operación:** agregar_producto 
   - **Nombre:** El nombre del Producto agregar
 
-	>>>     # Importación de la librería Safet y os
-	...  1) import Safet
-	...  2) import os
-	...  3)
-	...  4) # Aqui octengo mi home,media y url
-	...  5) myhome = os.getenv("HOME")
-	...  6) mymedia = myhome + "/tmp"
-	...  7) myurl = "http://localhost"
-	...  8)
-	...  9) # Constructor principal
-	... 10) myinflow = Safet.MainWindow(myhome)
-	... 11)
-	... 12) #
-	... 13) myinflow.setMediaPath(mymedia)
-	... 14) myinflow.setHostURL(myurl)
-	... 15)
-	... 16) # Si no es un usuario registrado el metodo "login" retorna False
-	... 17) result = myinflow.login("admin","admin")
-	... 18)
-	... 19) # Agregamos el poducto a ingresar por ejemplo "Champu Olorin",
-	... 20) #                    "ComplejoB","Aspirina","Acetaminofén","Ibuprofeno".
-	... 21) # 
-	... 22) myconsult = u"operacion:agregar_producto Nombre: Champu Olorin"  ----->> Operaciones
-	... 23) 
-	... 24) if result:	  
-	... 25)	  #
-	... 26) 	  result = myinflow.toInputForm(myconsult)
-	... 27) else:	  
-	... 28)	  print "\n ---Usuario autenticado---\n"
-	... 29)	  exit()
-	... 30)
-	... 31) if result:
-	... 32)	 #
-	... 33)	 print "\n  --Se inserto correctamente el producto---\n"
-	... 34) else:
-	... 35)	   #
-	... 36)	  print "\n No se inserto el producto....!!!\n"
-	... 37)
-	... 38)  #
-	... 39) if not result:
-	... 40)  	 print "\nConsulta de (failed error): %s\n" % (myinflow.currentError())
-	... 41)     exit()
-	... 42)  
-	... 43)
-	... 44) print u"  %s\n" % (myinflow.currentJSON())
-	... 45)
+  .. code-block:: python
 
+	# -*- coding: utf-8 -*-
+
+	# D(Borrar o eliminar)
+	# myconsult = u"operacion:borrar_producto id:5"
+
+	# U(Actualizar)
+	#myconsult = u"operacion:modificar_producto id:3 Nombre:Amoxicilina" 
+
+	# +(Flujo de trabajo)
+	# myconsult = u"operacion:Actualizar_producto id:3 Estado_producto:Pedido"
+
+
+	# Importación de la librería Safet y os
+	import Safet
+	import os
+
+
+	# Aqui obtengo mi home,media y url
+	myhome = os.getenv("HOME")
+	mymedia = myhome + "/tmp"
+	myurl = "http://localhost"
+
+	 # Constructor principal
+	myinflow = Safet.MainWindow(myhome)
+
+	myinflow.setMediaPath(mymedia)
+	myinflow.setHostURL(myurl)
+
+
+	 # Si no es un usuario registrado el metodo "login" retorna False
+	result = myinflow.login("admin","admin")
+
+	# C(Insertar)
+	# Agregamos el poducto a ingresar por ejemplo "Champu Olorin",
+	#                    "ComplejoB","Aspirina","Acetaminofén","Ibuprofeno".
+
+	myconsult = u"operacion:agregar_producto  Nombre: ComplejoB"
+
+	if result:
+		result = myinflow.toInputForm(myconsult)
+	else:
+		print "\n ---Usuario autenticado---\n"
+		exit()
+
+
+	if result:
+		print "\n --Se Actualizo correctamente el producto---\n"
+	else:
+		print "\n No se Actualizo el producto....!!!\n"
+
+
+	if not result:
+		print "\nConsulta failed error: %s\n" % (myinflow.currentError())
+		exit()
+
+	print u"  %s\n" % (myinflow.currentJSON())
 
 
 
@@ -265,56 +284,70 @@
   - **id:** Aqui colocaremos el valor de **id** del producto por ejemplo borraremos el producto **Ibuprofeno** y su **id** es **5**. Observe la :ref:`figura1` 
 
 
-	>>>     # Importación de la librería Safet y os
-	...  1) import Safet
-	...  2) import os
-	...  3)
-	...  4) # Aqui octengo mi home,media y url
-	...  5) myhome = os.getenv("HOME")
-	...  6) mymedia = myhome + "/tmp"
-	...  7) myurl = "http://localhost"
-	...  8)
-	...  9) # Constructor principal
-	... 10) myinflow = Safet.MainWindow(myhome)
-	... 11)
-	... 12) #
-	... 13) myinflow.setMediaPath(mymedia)
-	... 14) myinflow.setHostURL(myurl)
-	... 15)
-	... 16) # Si no es un usuario registrado el metodo "login" retorna False
-	... 17) result = myinflow.login("admin","admin")
-	... 18)
-	... 19) # Se cambio esta operación ahora es eliminar con el id del producto
-	... 20) myconsult = u"operacion:borrar_producto id:5" ----->> Operaciones
-	... 21)
-	... 22) #
-	... 23) if result:
-	... 24)	  #
-	... 25)	  result = myinflow.toInputForm(myconsult)
-	... 26) else:
-	... 27)	  #
-	... 28)	  print "\n ---Usuario autenticado---\n"
-	... 29)	  exit()
-	... 30)
-	... 31) if result:
-	... 32)	 #
-	... 33)	 print "\n  --Se borro correctamente el producto---\n"
-	... 34) else:
-	... 35)	   #
-	... 36)	  print "\n No se borro el producto....!!!\n"
-	... 37)
-	... 38)  #
-	... 39) if not result:
-	... 40)  	 print "\nConsulta de (failed error): %s\n" % (myinflow.currentError())
-	... 41)     exit()
-	... 42)  
-	... 43)
-	... 44) print u"  %s\n" % (myinflow.currentJSON())
-	... 45)
+  .. code-block:: python
+
+	# -*- coding: utf-8 -*-
+
+	# C(Insertar)
+	# Agregamos el poducto a ingresar por ejemplo "Champu Olorin",
+	#                    "ComplejoB","Aspirina","Acetaminofén","Ibuprofeno".
+	#myconsult = u"operacion:agregar_producto  Nombre: ComplejoB"
+
+	# U(Actualizar)
+	#myconsult = u"operacion:modificar_producto id:3 Nombre:Amoxicilina" 
+
+	# +(Flujo de trabajo)
+	# myconsult = u"operacion:Actualizar_producto id:3 Estado_producto:Pedido"
+
+
+	# Importación de la librería Safet y os
+	import Safet
+	import os
+
+
+	# Aqui obtengo mi home,media y url
+	myhome = os.getenv("HOME")
+	mymedia = myhome + "/tmp"
+	myurl = "http://localhost"
+
+	 # Constructor principal
+	myinflow = Safet.MainWindow(myhome)
+
+	myinflow.setMediaPath(mymedia)
+	myinflow.setHostURL(myurl)
+
+
+	 # Si no es un usuario registrado el metodo "login" retorna False
+	result = myinflow.login("admin","admin")
+
+	# D(Borrar o eliminar)
+	# Eliminamos el porducto numero 5
+	myconsult = u"operacion:borrar_producto id:5"
+
+	if result:
+		result = myinflow.toInputForm(myconsult)
+	else:
+		print "\n ---Usuario autenticado---\n"
+		exit()
+
+
+	if result:
+		print "\n --Se Actualizo correctamente el producto---\n"
+	else:
+		print "\n No se Actualizo el producto....!!!\n"
+
+
+	if not result:
+		print "\nConsulta failed error: %s\n" % (myinflow.currentError())
+		exit()
+
+	print u"  %s\n" % (myinflow.currentJSON())
 
 
 
-  ::
+
+
+  .. code-block:: bash
 
 	$ python Eliminar_producto.py
 	
@@ -392,53 +425,68 @@
   - **Nombre:** Aqui se coloca el nombre al que le vamos a modificar por ejemplo **Amoxacilina** por **Aspirina**.
  
 
+  .. code-block:: python
 
-	>>>     # Importación de la librería Safet y os
-	...  1) import Safet
-	...  2) import os
-	...  3)
-	...  4) # Aqui octengo mi home,media y url
-	...  5) myhome = os.getenv("HOME")
-	...  6) mymedia = myhome + "/tmp"
-	...  7) myurl = "http://localhost"
-	...  8)
-	...  9) # Constructor principal
-	... 10) myinflow = Safet.MainWindow(myhome)
-	... 11)
-	... 12) #
-	... 13) myinflow.setMediaPath(mymedia)
-	... 14) myinflow.setHostURL(myurl)
-	... 15)
-	... 16) # Si no es un usuario registrado el metodo "login" retorna False
-	... 17) result = myinflow.login("admin","admin")
-	... 18)
-	... 19) # Se cambio esta operación para actualizar el nombre del producto 
-	... 20) # 
-	... 21) myconsult = u"operacion:modificar_producto id:3 Nombre:Amoxicilina"  ----->> Operaciones
-	... 22) 
-	... 23) if result:
-	... 24)	  #
-	... 25)	  result = myinflow.toInputForm(myconsult)
-	... 26) else:
-	... 27)	  #
-	... 28)	  print "\n ---Usuario autenticado---\n"
-	... 29)	  exit()
-	... 30)
-	... 31) if result:
-	... 32)	 #
-	... 33)	 print "\n  --Se actualizo el nombre del prodcuto correctamente---\n"
-	... 34) else:
-	... 35)	   #
-	... 36)	  print "\n No actualizo el nombre del prodcuto....!!!\n"
-	... 37)
-	... 38)  #
-	... 39) if not result:
-	... 40)  	 print "\nConsulta de (failed error): %s\n" % (myinflow.currentError())
-	... 41)     exit()
-	... 42)  
-	... 43)
-	... 44) print u"  %s\n" % (myinflow.currentJSON())
-	... 45)
+	# -*- coding: utf-8 -*-
+
+	# C(Insertar)
+	# Agregamos el poducto a ingresar por ejemplo "Champu Olorin",
+	#                    "ComplejoB","Aspirina","Acetaminofén","Ibuprofeno".
+	#myconsult = u"operacion:agregar_producto  Nombre: ComplejoB"
+
+	# D(Borrar o eliminar)
+	# Eliminamos el porducto numero 5
+	#myconsult = u"operacion:borrar_producto id:5"
+
+
+	# +(Flujo de trabajo)
+	# myconsult = u"operacion:Actualizar_producto id:3 Estado_producto:Pedido"
+
+
+	# Importación de la librería Safet y os
+	import Safet
+	import os
+
+
+	# Aqui obtengo mi home,media y url
+	myhome = os.getenv("HOME")
+	mymedia = myhome + "/tmp"
+	myurl = "http://localhost"
+
+	 # Constructor principal
+	myinflow = Safet.MainWindow(myhome)
+
+	myinflow.setMediaPath(mymedia)
+	myinflow.setHostURL(myurl)
+
+
+	# Si no es un usuario registrado el metodo "login" retorna False
+	result = myinflow.login("admin","admin")
+
+	# U(Actualizar)
+	# Se actualizara el nombre del producto número 3
+	myconsult = u"operacion:modificar_producto id:3 Nombre:Amoxicilina" 
+
+	if result:
+		result = myinflow.toInputForm(myconsult)
+	else:
+		print "\n ---Usuario autenticado---\n"
+		exit()
+
+
+	if result:
+		print "\n --Se Actualizo correctamente el producto---\n"
+	else:
+		print "\n No se Actualizo el producto....!!!\n"
+
+
+	if not result:
+		print "\nConsulta failed error: %s\n" % (myinflow.currentError())
+		exit()
+
+	print u"  %s\n" % (myinflow.currentJSON())
+
+
 
 
 
@@ -466,7 +514,7 @@
      .. figure:: ../../_static/Modificar1.png
           :align: center
           :height: 480px
-	  :width: 850px
+          :width: 850px
 
           **Figura 26: Tabla productos**
 
@@ -533,59 +581,67 @@
   - **Estado_producto:** Aqui se coloca el estado del producto es decir si es por llegar,Agotarse,Pedido,En Espera. En este caso esta **Registrado** vamos a modificarlo a **pedido**.
  
 
+  .. code-block:: python
 
-	>>>     # Importación de la librería Safet y os
-	...  1) import Safet
-	...  2) import os
-	...  3)
-	...  4) # Aqui octengo mi home,media y url
-	...  5) myhome = os.getenv("HOME")
-	...  6) mymedia = myhome + "/tmp"
-	...  7) myurl = "http://localhost"
-	...  8)
-	...  9) # Constructor principal
-	... 10) myinflow = Safet.MainWindow(myhome)
-	... 11)
-	... 12) #
-	... 13) myinflow.setMediaPath(mymedia)
-	... 14) myinflow.setHostURL(myurl)
-	... 15)
-	... 16) # Si no es un usuario registrado el metodo "login" retorna False
-	... 17) result = myinflow.login("admin","admin")
-	... 18)
-	... 19) # Se cambio esta operación para actualizar producto 
-	... 20) # 
-	... 21) myconsult = u"operacion:Actualizar_producto id:3 Status_producto:Pedido"----->> Operaciones
-	... 22) 
-	... 23) if result:
-	... 24)	  #
-	... 25)	  result = myinflow.toInputForm(myconsult)
-	... 26) else:
-	... 27)	  #
-	... 28)	  print "\n ---Usuario autenticado---\n"
-	... 29)	  exit()
-	... 30)
-	... 31) if result:
-	... 32)	 #
-	... 33)	 print "\n  --Se Actualizo correctamente el Status del producto---\n"
-	... 34) else:
-	... 35)	   #
-	... 36)	  print "\n No Actualizo el Status del producto....!!!\n"
-	... 37)
-	... 38)  #
-	... 39) if not result:
-	... 40)  	 print "\nConsulta de (failed error): %s\n" % (myinflow.currentError())
-	... 41)     exit()
-	... 42)  
-	... 43)
-	... 44) print u"  %s\n" % (myinflow.currentJSON())
-	... 45)
-	... 46)  
-	... 47)
-	... 48)  
-	... 49)
-	... 50)  
+	# -*- coding: utf-8 -*-
 
+	# C(Insertar)
+	# Agregamos el poducto a ingresar por ejemplo "Champu Olorin",
+	#                    "ComplejoB","Aspirina","Acetaminofén","Ibuprofeno".
+	#myconsult = u"operacion:agregar_producto  Nombre: ComplejoB"
+
+	# D(Borrar o eliminar)
+	# Eliminamos el porducto numero 5
+	#myconsult = u"operacion:borrar_producto id:5"
+
+	# U(Actualizar)
+	# Se actualizara el nombre del producto número 3
+	#myconsult = u"operacion:modificar_producto id:3 Nombre:Amoxicilina" 
+
+	# Importación de la librería Safet y os
+	import Safet
+	import os
+
+
+	# Aqui obtengo mi home,media y url
+	myhome = os.getenv("HOME")
+	mymedia = myhome + "/tmp"
+	myurl = "http://localhost"
+
+	 # Constructor principal
+	myinflow = Safet.MainWindow(myhome)
+
+	myinflow.setMediaPath(mymedia)
+	myinflow.setHostURL(myurl)
+
+
+	# Si no es un usuario registrado el metodo "login" retorna False
+	result = myinflow.login("admin","admin")
+
+
+	# +(Flujo de trabajo)
+	# Se actualizara su estado
+	myconsult = u"operacion:Actualizar_producto id:3 Estado_producto:Pedido"
+
+
+	if result:
+		result = myinflow.toInputForm(myconsult)
+	else:
+		print "\n ---Usuario autenticado---\n"
+		exit()
+
+
+	if result:
+		print "\n --Se Actualizo correctamente el producto---\n"
+	else:
+		print "\n No se Actualizo el producto....!!!\n"
+
+
+	if not result:
+		print "\nConsulta failed error: %s\n" % (myinflow.currentError())
+		exit()
+
+	print u"  %s\n" % (myinflow.currentJSON())
 
 
   ::
@@ -652,8 +708,6 @@
 		  ../../_static/download.png
   		
     	:download:`Script.py <../Descargas/Script.py>`
-
-
 
 
 

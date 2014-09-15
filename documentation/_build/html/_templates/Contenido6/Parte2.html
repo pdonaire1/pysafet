@@ -52,24 +52,22 @@
             
   <div class="section" id="operaciones-crud-flujo-utilizando-pysafet">
 <h1><span class="target" id="index-0"></span>Operaciones CRUD+(flujo) utilizando PySafet<a class="headerlink" href="#operaciones-crud-flujo-utilizando-pysafet" title="Enlazar permanentemente con este título">¶</a></h1>
+<p>Las operaciones <a class="reference external" href="http://es.wikipedia.org/wiki/CRUD">CRUD</a>, son acciones generales que representan un modelo basíco para la creación de sistema de información. Puede ser una descripción más detallada en el siguiente enlace <a class="reference external" href="http://www.dotnettwitter.com/2012/04/curd-operations-on-xml-file.html">SOBRE CRUD</a>.</p>
+<p>El simbolo <strong>&#8220;+&#8221;</strong> indica las adición de operaciones asociada a flujo de trabajo.</p>
+<p><strong>A continuación comenzaremos a ver los pasos de las operaciones CRUB con un archivo que se llama deftrac.xml la cual va a estar en el directorio **&lt;HOME&gt;.safet/input/*</strong></p>
+<div class="section" id="primer-paso">
+<h2>1° PRIMER PASO<a class="headerlink" href="#primer-paso" title="Enlazar permanentemente con este título">¶</a></h2>
+<div class="section" id="escribimos-el-encabezado-informacion-de-autor">
+<h3>Escribimos el encabezado (información de Autor).<a class="headerlink" href="#escribimos-el-encabezado-informacion-de-autor" title="Enlazar permanentemente con este título">¶</a></h3>
 <blockquote>
-<div><p><strong>Operación</strong> <a class="reference external" href="http://es.wikipedia.org/wiki/CRUD">CRUD</a> .</p>
-<ul class="simple">
-<li>las operaciones <strong>CRUB</strong> son acciones generales que representan un modelo basíco para la creación de sistema de información. Puede ser una descripción más detallada en el siguiente enlace <a class="reference external" href="http://www.dotnettwitter.com/2012/04/curd-operations-on-xml-file.html">SOBRE CRUD</a>.</li>
-<li>El simbolo <strong>&#8220;+&#8221;</strong> indica las adición de operaciones asociada a flujo de trabajo</li>
-</ul>
-</div></blockquote>
-<blockquote>
-<div><p>Editamos el archivo <strong>deftrac.xml</strong> que se encuentra en el directorio <strong>&lt;HOME&gt;.safet/input/</strong></p>
-<p><strong>1.- Escribimos el encabezado (información de Autor).</strong></p>
-<blockquote>
-<div><div class="highlight-python"><div class="highlight"><pre>&lt;?xml version=&quot;1.0&quot; encoding=&quot;UTF-8&quot; ?&gt;
-&lt;!--
-Documento  : deftrac.xml
-Creado     : Fulano de tal
-Autor      : Fulano de tal
-Descripcion: Archivo de Entrada para SAFET - Inflow
---&gt;
+<div><blockquote>
+<div><div class="highlight-html"><div class="highlight"><pre><span class="cp">&lt;?xml version=&quot;1.0&quot; encoding=&quot;UTF-8&quot; ?&gt;</span>
+<span class="c">&lt;!--</span>
+<span class="c">Documento  : deftrac.xml</span>
+<span class="c">Creado     : Fulano de tal</span>
+<span class="c">Autor      : Fulano de tal</span>
+<span class="c">Descripcion: Archivo de Entrada para SAFET - Inflow</span>
+<span class="c">--&gt;</span>
 </pre></div>
 </div>
 </div></blockquote>
@@ -77,7 +75,7 @@ Descripcion: Archivo de Entrada para SAFET - Inflow
 <li><strong>Escribimos la ruta al validador XML(formato DTD)</strong></li>
 </ul>
 <blockquote>
-<div><div class="highlight-python"><div class="highlight"><pre>&lt;!DOCTYPE operations SYSTEM &quot;file:///home/cenditel/.safet/dtd/yawlinput.dtd&quot;&gt;
+<div><div class="highlight-html"><div class="highlight"><pre><span class="cp">&lt;!DOCTYPE operations SYSTEM &quot;file:///home/cenditel/.safet/dtd/yawlinput.dtd&quot;&gt;</span>
 </pre></div>
 </div>
 </div></blockquote>
@@ -92,10 +90,9 @@ Descripcion: Archivo de Entrada para SAFET - Inflow
 <li>D(Borrar o eliminar)</li>
 <li>+(Flujo de trabajo)</li>
 </ul>
-<div class="highlight-python"><div class="highlight"><pre>&lt;operations suffix=&quot;:&quot; commandname=&quot;operacion&quot;&gt;
+<div class="highlight-html"><div class="highlight"><pre><span class="nt">&lt;operations</span> <span class="na">suffix=</span><span class="s">&quot;:&quot;</span> <span class="na">commandname=</span><span class="s">&quot;operacion&quot;</span><span class="nt">&gt;</span>
 
-
-&lt;operation  name=&quot;Productos&quot;  desc=&quot;Agregar,Modificar,Eliminar,Listar&quot; icon=&quot;firmadoc.png&quot;&gt; &lt;/operation&gt;
+<span class="nt">&lt;operation</span>  <span class="na">name=</span><span class="s">&quot;Productos&quot;</span>  <span class="na">desc=</span><span class="s">&quot;Agregar,Modificar,Eliminar,Listar&quot;</span> <span class="na">icon=</span><span class="s">&quot;firmadoc.png&quot;</span><span class="nt">&gt;</span> <span class="nt">&lt;/operation&gt;</span>
 </pre></div>
 </div>
 </div></blockquote>
@@ -109,58 +106,57 @@ Descripcion: Archivo de Entrada para SAFET - Inflow
 <p><strong>4.-</strong> El segundo comando de la operación <strong>&#8220;Agregar_producto&#8221;</strong>  también es del tipo <strong>&#8220;Agregar&#8221;</strong> y ojo los campos que son necesarios para registrar el eventos <strong>&#8220;Agregar_producto&#8221;</strong> en la tabla <strong>&#8220;productos_registro&#8221;</strong>.</p>
 <p><strong>5.-</strong> La palabra de PySafet <strong>&#8220;_USERNAME&#8221;</strong> se utiliza para obtener el usuario actual</p>
 </div></blockquote>
-<dl class="docutils">
-<dt>A continuación se mostrara el archivo <strong>deftrac.xml</strong>:</dt>
-<dd><div class="first last highlight-python"><div class="highlight"><pre>&lt;operation  name=&quot;agregar_producto&quot;  desc=&quot;&quot; icon=&quot;plus.png&quot;&gt;
+<p>A continuación se mostrara el archivo <strong>deftrac.xml</strong>:</p>
+<blockquote>
+<div><div class="highlight-html"><div class="highlight"><pre><span class="nt">&lt;operation</span>  <span class="na">name=</span><span class="s">&quot;agregar_producto&quot;</span>  <span class="na">desc=</span><span class="s">&quot;&quot;</span> <span class="na">icon=</span><span class="s">&quot;plus.png&quot;</span><span class="nt">&gt;</span>
 
-        &lt;command id =&quot;1&quot; type=&quot;agregar&quot; table=&quot;productos&quot; &gt;
+<span class="nt">&lt;command</span> <span class="na">id =</span><span class="s">&quot;1&quot;</span> <span class="na">type=</span><span class="s">&quot;agregar&quot;</span> <span class="na">table=</span><span class="s">&quot;productos&quot;</span> <span class="nt">&gt;</span>
 
-                &lt;fields&gt;
+ <span class="nt">&lt;fields&gt;</span>
 
-                        &lt;field type=&quot;string&quot; icon=&quot;resumen.png&quot; mandatory=&quot;yes&quot; validation=&quot;&quot;
-                                                                                title=&quot;Nombre&quot; desc=&quot;&quot;&gt;
-                        nombre
-                        &lt;/field&gt;
+   <span class="nt">&lt;field</span> <span class="na">type=</span><span class="s">&quot;string&quot;</span> <span class="na">icon=</span><span class="s">&quot;resumen.png&quot;</span> <span class="na">mandatory=</span><span class="s">&quot;yes&quot;</span>      <span class="na">validation=</span><span class="s">&quot;&quot;</span>
+                                   <span class="na">title=</span><span class="s">&quot;Nombre&quot;</span> <span class="na">desc=</span><span class="s">&quot;&quot;</span><span class="nt">&gt;</span>
+           nombre
+   <span class="nt">&lt;/field&gt;</span>
 
-                        &lt;field type=&quot;string&quot; literal=&quot;Registrado&quot; mandatory=&quot;yes&quot; &gt;
-                        status
-                        &lt;/field&gt;
+    <span class="nt">&lt;field</span> <span class="na">type=</span><span class="s">&quot;string&quot;</span> <span class="na">literal=</span><span class="s">&quot;Registrado&quot;</span> <span class="na">mandatory=</span><span class="s">&quot;yes&quot;</span> <span class="nt">&gt;</span>
+        status
+    <span class="nt">&lt;/field&gt;</span>
 
-                &lt;/fields&gt;
+ <span class="nt">&lt;/fields&gt;</span>
 
-        &lt;/command&gt;
+<span class="nt">&lt;/command&gt;</span>
 
-        &lt;command id =&quot;1&quot; type=&quot;agregar&quot; table=&quot;productos_registro&quot; &gt;
+<span class="nt">&lt;command</span> <span class="na">id =</span><span class="s">&quot;1&quot;</span> <span class="na">type=</span><span class="s">&quot;agregar&quot;</span> <span class="na">table=</span><span class="s">&quot;productos_registro&quot;</span> <span class="nt">&gt;</span>
 
-        &lt;fields&gt;
+<span class="nt">&lt;fields&gt;</span>
 
-          &lt;field type=&quot;datetime&quot; mandatory=&quot;yes&quot;
-                                function=&quot;seq from sqlite_sequence where name=&#39;productos&#39;&quot;  input=&quot;no&quot;&gt;
-              productoid
-              &lt;/field&gt;
+  <span class="nt">&lt;field</span> <span class="na">type=</span><span class="s">&quot;datetime&quot;</span> <span class="na">mandatory=</span><span class="s">&quot;yes&quot;</span>
+  <span class="na">function=</span><span class="s">&quot;seq from sqlite_sequence where name=&#39;productos&#39;&quot;</span>  <span class="na">input=</span><span class="s">&quot;no&quot;</span><span class="nt">&gt;</span>
+  productoid
+  <span class="nt">&lt;/field&gt;</span>
 
-              &lt;field type=&quot;datetime&quot; mandatory=&quot;yes&quot;  function=&quot;datetime(&#39;now&#39;)&quot;
-                                                                format=&quot;time_t&quot; input=&quot;no&quot;&gt;
-               fecha
-              &lt;/field&gt;
+  <span class="nt">&lt;field</span> <span class="na">type=</span><span class="s">&quot;datetime&quot;</span> <span class="na">mandatory=</span><span class="s">&quot;yes&quot;</span>  <span class="na">function=</span><span class="s">&quot;datetime(&#39;now&#39;)&quot;</span>
+                      <span class="na">format=</span><span class="s">&quot;time_t&quot;</span> <span class="na">input=</span><span class="s">&quot;no&quot;</span><span class="nt">&gt;</span>
+  fecha
+  <span class="nt">&lt;/field&gt;</span>
 
-              &lt;field type=&quot;string&quot; literal=&quot;_USERNAME&quot; mandatory=&quot;yes&quot; &gt;
-              rol
-              &lt;/field&gt;
+  <span class="nt">&lt;field</span> <span class="na">type=</span><span class="s">&quot;string&quot;</span> <span class="na">literal=</span><span class="s">&quot;_USERNAME&quot;</span> <span class="na">mandatory=</span><span class="s">&quot;yes&quot;</span> <span class="nt">&gt;</span>
+  rol
+  <span class="nt">&lt;/field&gt;</span>
 
-              &lt;field type=&quot;string&quot; literal=&quot;Registrado&quot; mandatory=&quot;yes&quot; &gt;
-              regstatus
-              &lt;/field&gt;
+  <span class="nt">&lt;field</span> <span class="na">type=</span><span class="s">&quot;string&quot;</span> <span class="na">literal=</span><span class="s">&quot;Registrado&quot;</span> <span class="na">mandatory=</span><span class="s">&quot;yes&quot;</span> <span class="nt">&gt;</span>
+  regstatus
+  <span class="nt">&lt;/field&gt;</span>
 
-           &lt;/fields&gt;
+  <span class="nt">&lt;/fields&gt;</span>
 
-        &lt;/command&gt;
+  <span class="nt">&lt;/command&gt;</span>
 
-&lt;/operation&gt;
+  <span class="nt">&lt;/operation&gt;</span>
 </pre></div>
 </div>
-</dd>
-</dl>
+</div></blockquote>
 <ul>
 <li><p class="first"><strong>Ejecutamos el Script para Insertar un producto</strong></p>
 <blockquote>
@@ -169,60 +165,68 @@ Descripcion: Archivo de Entrada para SAFET - Inflow
 </li>
 </ul>
 <blockquote>
-<div><ul>
-<li><p class="first"><strong>Operación:</strong> agregar_producto</p>
-</li>
-<li><p class="first"><strong>Nombre:</strong> El nombre del Producto agregar</p>
-<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span>    <span class="c"># Importación de la librería Safet y os</span>
-<span class="gp">... </span> <span class="mi">1</span><span class="p">)</span> <span class="kn">import</span> <span class="nn">Safet</span>
-<span class="gp">... </span> <span class="mi">2</span><span class="p">)</span> <span class="kn">import</span> <span class="nn">os</span>
-<span class="gp">... </span> <span class="mi">3</span><span class="p">)</span>
-<span class="gp">... </span> <span class="mi">4</span><span class="p">)</span> <span class="c"># Aqui octengo mi home,media y url</span>
-<span class="gp">... </span> <span class="mi">5</span><span class="p">)</span> <span class="n">myhome</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">getenv</span><span class="p">(</span><span class="s">&quot;HOME&quot;</span><span class="p">)</span>
-<span class="gp">... </span> <span class="mi">6</span><span class="p">)</span> <span class="n">mymedia</span> <span class="o">=</span> <span class="n">myhome</span> <span class="o">+</span> <span class="s">&quot;/tmp&quot;</span>
-<span class="gp">... </span> <span class="mi">7</span><span class="p">)</span> <span class="n">myurl</span> <span class="o">=</span> <span class="s">&quot;http://localhost&quot;</span>
-<span class="gp">... </span> <span class="mi">8</span><span class="p">)</span>
-<span class="gp">... </span> <span class="mi">9</span><span class="p">)</span> <span class="c"># Constructor principal</span>
-<span class="gp">... </span><span class="mi">10</span><span class="p">)</span> <span class="n">myinflow</span> <span class="o">=</span> <span class="n">Safet</span><span class="o">.</span><span class="n">MainWindow</span><span class="p">(</span><span class="n">myhome</span><span class="p">)</span>
-<span class="gp">... </span><span class="mi">11</span><span class="p">)</span>
-<span class="gp">... </span><span class="mi">12</span><span class="p">)</span> <span class="c">#</span>
-<span class="gp">... </span><span class="mi">13</span><span class="p">)</span> <span class="n">myinflow</span><span class="o">.</span><span class="n">setMediaPath</span><span class="p">(</span><span class="n">mymedia</span><span class="p">)</span>
-<span class="gp">... </span><span class="mi">14</span><span class="p">)</span> <span class="n">myinflow</span><span class="o">.</span><span class="n">setHostURL</span><span class="p">(</span><span class="n">myurl</span><span class="p">)</span>
-<span class="gp">... </span><span class="mi">15</span><span class="p">)</span>
-<span class="gp">... </span><span class="mi">16</span><span class="p">)</span> <span class="c"># Si no es un usuario registrado el metodo &quot;login&quot; retorna False</span>
-<span class="gp">... </span><span class="mi">17</span><span class="p">)</span> <span class="n">result</span> <span class="o">=</span> <span class="n">myinflow</span><span class="o">.</span><span class="n">login</span><span class="p">(</span><span class="s">&quot;admin&quot;</span><span class="p">,</span><span class="s">&quot;admin&quot;</span><span class="p">)</span>
-<span class="gp">... </span><span class="mi">18</span><span class="p">)</span>
-<span class="gp">... </span><span class="mi">19</span><span class="p">)</span> <span class="c"># Agregamos el poducto a ingresar por ejemplo &quot;Champu Olorin&quot;,</span>
-<span class="gp">... </span><span class="mi">20</span><span class="p">)</span> <span class="c">#                    &quot;ComplejoB&quot;,&quot;Aspirina&quot;,&quot;Acetaminofén&quot;,&quot;Ibuprofeno&quot;.</span>
-<span class="gp">... </span><span class="mi">21</span><span class="p">)</span> <span class="c">#</span>
-<span class="gp">... </span><span class="mi">22</span><span class="p">)</span> <span class="n">myconsult</span> <span class="o">=</span> <span class="s">u&quot;operacion:agregar_producto Nombre: Champu Olorin&quot;</span>  <span class="o">-----&gt;&gt;</span> <span class="n">Operaciones</span>
-<span class="gp">... </span><span class="mi">23</span><span class="p">)</span>
-<span class="gp">... </span><span class="mi">24</span><span class="p">)</span> <span class="k">if</span> <span class="n">result</span><span class="p">:</span>
-<span class="gp">... </span><span class="mi">25</span><span class="p">)</span>   <span class="c">#</span>
-<span class="gp">... </span><span class="mi">26</span><span class="p">)</span>           <span class="n">result</span> <span class="o">=</span> <span class="n">myinflow</span><span class="o">.</span><span class="n">toInputForm</span><span class="p">(</span><span class="n">myconsult</span><span class="p">)</span>
-<span class="gp">... </span><span class="mi">27</span><span class="p">)</span> <span class="k">else</span><span class="p">:</span>
-<span class="gp">... </span><span class="mi">28</span><span class="p">)</span>   <span class="k">print</span> <span class="s">&quot;</span><span class="se">\n</span><span class="s"> ---Usuario autenticado---</span><span class="se">\n</span><span class="s">&quot;</span>
-<span class="gp">... </span><span class="mi">29</span><span class="p">)</span>   <span class="nb">exit</span><span class="p">()</span>
-<span class="gp">... </span><span class="mi">30</span><span class="p">)</span>
-<span class="gp">... </span><span class="mi">31</span><span class="p">)</span> <span class="k">if</span> <span class="n">result</span><span class="p">:</span>
-<span class="gp">... </span><span class="mi">32</span><span class="p">)</span>  <span class="c">#</span>
-<span class="gp">... </span><span class="mi">33</span><span class="p">)</span>  <span class="k">print</span> <span class="s">&quot;</span><span class="se">\n</span><span class="s">  --Se inserto correctamente el producto---</span><span class="se">\n</span><span class="s">&quot;</span>
-<span class="gp">... </span><span class="mi">34</span><span class="p">)</span> <span class="k">else</span><span class="p">:</span>
-<span class="gp">... </span><span class="mi">35</span><span class="p">)</span>    <span class="c">#</span>
-<span class="gp">... </span><span class="mi">36</span><span class="p">)</span>   <span class="k">print</span> <span class="s">&quot;</span><span class="se">\n</span><span class="s"> No se inserto el producto....!!!</span><span class="se">\n</span><span class="s">&quot;</span>
-<span class="gp">... </span><span class="mi">37</span><span class="p">)</span>
-<span class="gp">... </span><span class="mi">38</span><span class="p">)</span>  <span class="c">#</span>
-<span class="gp">... </span><span class="mi">39</span><span class="p">)</span> <span class="k">if</span> <span class="ow">not</span> <span class="n">result</span><span class="p">:</span>
-<span class="gp">... </span><span class="mi">40</span><span class="p">)</span>          <span class="k">print</span> <span class="s">&quot;</span><span class="se">\n</span><span class="s">Consulta de (failed error): </span><span class="si">%s</span><span class="se">\n</span><span class="s">&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="n">myinflow</span><span class="o">.</span><span class="n">currentError</span><span class="p">())</span>
-<span class="gp">... </span><span class="mi">41</span><span class="p">)</span>     <span class="nb">exit</span><span class="p">()</span>
-<span class="gp">... </span><span class="mi">42</span><span class="p">)</span>
-<span class="gp">... </span><span class="mi">43</span><span class="p">)</span>
-<span class="gp">... </span><span class="mi">44</span><span class="p">)</span> <span class="k">print</span> <span class="s">u&quot;  </span><span class="si">%s</span><span class="se">\n</span><span class="s">&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="n">myinflow</span><span class="o">.</span><span class="n">currentJSON</span><span class="p">())</span>
-<span class="gp">... </span><span class="mi">45</span><span class="p">)</span>
+<div><ul class="simple">
+<li><strong>Operación:</strong> agregar_producto</li>
+<li><strong>Nombre:</strong> El nombre del Producto agregar</li>
+</ul>
+<div class="highlight-python"><div class="highlight"><pre><span class="c"># -*- coding: utf-8 -*-</span>
+
+<span class="c"># D(Borrar o eliminar)</span>
+<span class="c"># myconsult = u&quot;operacion:borrar_producto id:5&quot;</span>
+
+<span class="c"># U(Actualizar)</span>
+<span class="c">#myconsult = u&quot;operacion:modificar_producto id:3 Nombre:Amoxicilina&quot;</span>
+
+<span class="c"># +(Flujo de trabajo)</span>
+<span class="c"># myconsult = u&quot;operacion:Actualizar_producto id:3 Estado_producto:Pedido&quot;</span>
+
+
+<span class="c"># Importación de la librería Safet y os</span>
+<span class="kn">import</span> <span class="nn">Safet</span>
+<span class="kn">import</span> <span class="nn">os</span>
+
+
+<span class="c"># Aqui obtengo mi home,media y url</span>
+<span class="n">myhome</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">getenv</span><span class="p">(</span><span class="s">&quot;HOME&quot;</span><span class="p">)</span>
+<span class="n">mymedia</span> <span class="o">=</span> <span class="n">myhome</span> <span class="o">+</span> <span class="s">&quot;/tmp&quot;</span>
+<span class="n">myurl</span> <span class="o">=</span> <span class="s">&quot;http://localhost&quot;</span>
+
+ <span class="c"># Constructor principal</span>
+<span class="n">myinflow</span> <span class="o">=</span> <span class="n">Safet</span><span class="o">.</span><span class="n">MainWindow</span><span class="p">(</span><span class="n">myhome</span><span class="p">)</span>
+
+<span class="n">myinflow</span><span class="o">.</span><span class="n">setMediaPath</span><span class="p">(</span><span class="n">mymedia</span><span class="p">)</span>
+<span class="n">myinflow</span><span class="o">.</span><span class="n">setHostURL</span><span class="p">(</span><span class="n">myurl</span><span class="p">)</span>
+
+
+ <span class="c"># Si no es un usuario registrado el metodo &quot;login&quot; retorna False</span>
+<span class="n">result</span> <span class="o">=</span> <span class="n">myinflow</span><span class="o">.</span><span class="n">login</span><span class="p">(</span><span class="s">&quot;admin&quot;</span><span class="p">,</span><span class="s">&quot;admin&quot;</span><span class="p">)</span>
+
+<span class="c"># C(Insertar)</span>
+<span class="c"># Agregamos el poducto a ingresar por ejemplo &quot;Champu Olorin&quot;,</span>
+<span class="c">#                    &quot;ComplejoB&quot;,&quot;Aspirina&quot;,&quot;Acetaminofén&quot;,&quot;Ibuprofeno&quot;.</span>
+
+<span class="n">myconsult</span> <span class="o">=</span> <span class="s">u&quot;operacion:agregar_producto  Nombre: ComplejoB&quot;</span>
+
+<span class="k">if</span> <span class="n">result</span><span class="p">:</span>
+        <span class="n">result</span> <span class="o">=</span> <span class="n">myinflow</span><span class="o">.</span><span class="n">toInputForm</span><span class="p">(</span><span class="n">myconsult</span><span class="p">)</span>
+<span class="k">else</span><span class="p">:</span>
+        <span class="k">print</span> <span class="s">&quot;</span><span class="se">\n</span><span class="s"> ---Usuario autenticado---</span><span class="se">\n</span><span class="s">&quot;</span>
+        <span class="nb">exit</span><span class="p">()</span>
+
+
+<span class="k">if</span> <span class="n">result</span><span class="p">:</span>
+        <span class="k">print</span> <span class="s">&quot;</span><span class="se">\n</span><span class="s"> --Se Actualizo correctamente el producto---</span><span class="se">\n</span><span class="s">&quot;</span>
+<span class="k">else</span><span class="p">:</span>
+        <span class="k">print</span> <span class="s">&quot;</span><span class="se">\n</span><span class="s"> No se Actualizo el producto....!!!</span><span class="se">\n</span><span class="s">&quot;</span>
+
+
+<span class="k">if</span> <span class="ow">not</span> <span class="n">result</span><span class="p">:</span>
+        <span class="k">print</span> <span class="s">&quot;</span><span class="se">\n</span><span class="s">Consulta failed error: </span><span class="si">%s</span><span class="se">\n</span><span class="s">&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="n">myinflow</span><span class="o">.</span><span class="n">currentError</span><span class="p">())</span>
+        <span class="nb">exit</span><span class="p">()</span>
+
+<span class="k">print</span> <span class="s">u&quot;  </span><span class="si">%s</span><span class="se">\n</span><span class="s">&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="n">myinflow</span><span class="o">.</span><span class="n">currentJSON</span><span class="p">())</span>
 </pre></div>
 </div>
-</li>
-</ul>
 </div></blockquote>
 <dl class="docutils">
 <dt>Crearemos un archivo <strong>&#8221;.py&#8221;</strong> con cualquier nombre y copiamos el <strong>Script</strong> y lo ejecutamos de la siguiente manera:</dt>
@@ -304,61 +308,69 @@ Descripcion: Archivo de Entrada para SAFET - Inflow
 </li>
 </ul>
 <blockquote>
-<div><ul>
-<li><p class="first"><strong>Operación:</strong> borrar_producto</p>
-</li>
-<li><p class="first"><strong>id:</strong> Aqui colocaremos el valor de <strong>id</strong> del producto por ejemplo borraremos el producto <strong>Ibuprofeno</strong> y su <strong>id</strong> es <strong>5</strong>. Observe la <a class="reference internal" href="#figura1"><em>Figura 26: Tabla productos</em></a></p>
-<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span>    <span class="c"># Importación de la librería Safet y os</span>
-<span class="gp">... </span> <span class="mi">1</span><span class="p">)</span> <span class="kn">import</span> <span class="nn">Safet</span>
-<span class="gp">... </span> <span class="mi">2</span><span class="p">)</span> <span class="kn">import</span> <span class="nn">os</span>
-<span class="gp">... </span> <span class="mi">3</span><span class="p">)</span>
-<span class="gp">... </span> <span class="mi">4</span><span class="p">)</span> <span class="c"># Aqui octengo mi home,media y url</span>
-<span class="gp">... </span> <span class="mi">5</span><span class="p">)</span> <span class="n">myhome</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">getenv</span><span class="p">(</span><span class="s">&quot;HOME&quot;</span><span class="p">)</span>
-<span class="gp">... </span> <span class="mi">6</span><span class="p">)</span> <span class="n">mymedia</span> <span class="o">=</span> <span class="n">myhome</span> <span class="o">+</span> <span class="s">&quot;/tmp&quot;</span>
-<span class="gp">... </span> <span class="mi">7</span><span class="p">)</span> <span class="n">myurl</span> <span class="o">=</span> <span class="s">&quot;http://localhost&quot;</span>
-<span class="gp">... </span> <span class="mi">8</span><span class="p">)</span>
-<span class="gp">... </span> <span class="mi">9</span><span class="p">)</span> <span class="c"># Constructor principal</span>
-<span class="gp">... </span><span class="mi">10</span><span class="p">)</span> <span class="n">myinflow</span> <span class="o">=</span> <span class="n">Safet</span><span class="o">.</span><span class="n">MainWindow</span><span class="p">(</span><span class="n">myhome</span><span class="p">)</span>
-<span class="gp">... </span><span class="mi">11</span><span class="p">)</span>
-<span class="gp">... </span><span class="mi">12</span><span class="p">)</span> <span class="c">#</span>
-<span class="gp">... </span><span class="mi">13</span><span class="p">)</span> <span class="n">myinflow</span><span class="o">.</span><span class="n">setMediaPath</span><span class="p">(</span><span class="n">mymedia</span><span class="p">)</span>
-<span class="gp">... </span><span class="mi">14</span><span class="p">)</span> <span class="n">myinflow</span><span class="o">.</span><span class="n">setHostURL</span><span class="p">(</span><span class="n">myurl</span><span class="p">)</span>
-<span class="gp">... </span><span class="mi">15</span><span class="p">)</span>
-<span class="gp">... </span><span class="mi">16</span><span class="p">)</span> <span class="c"># Si no es un usuario registrado el metodo &quot;login&quot; retorna False</span>
-<span class="gp">... </span><span class="mi">17</span><span class="p">)</span> <span class="n">result</span> <span class="o">=</span> <span class="n">myinflow</span><span class="o">.</span><span class="n">login</span><span class="p">(</span><span class="s">&quot;admin&quot;</span><span class="p">,</span><span class="s">&quot;admin&quot;</span><span class="p">)</span>
-<span class="gp">... </span><span class="mi">18</span><span class="p">)</span>
-<span class="gp">... </span><span class="mi">19</span><span class="p">)</span> <span class="c"># Se cambio esta operación ahora es eliminar con el id del producto</span>
-<span class="gp">... </span><span class="mi">20</span><span class="p">)</span> <span class="n">myconsult</span> <span class="o">=</span> <span class="s">u&quot;operacion:borrar_producto id:5&quot;</span> <span class="o">-----&gt;&gt;</span> <span class="n">Operaciones</span>
-<span class="gp">... </span><span class="mi">21</span><span class="p">)</span>
-<span class="gp">... </span><span class="mi">22</span><span class="p">)</span> <span class="c">#</span>
-<span class="gp">... </span><span class="mi">23</span><span class="p">)</span> <span class="k">if</span> <span class="n">result</span><span class="p">:</span>
-<span class="gp">... </span><span class="mi">24</span><span class="p">)</span>   <span class="c">#</span>
-<span class="gp">... </span><span class="mi">25</span><span class="p">)</span>   <span class="n">result</span> <span class="o">=</span> <span class="n">myinflow</span><span class="o">.</span><span class="n">toInputForm</span><span class="p">(</span><span class="n">myconsult</span><span class="p">)</span>
-<span class="gp">... </span><span class="mi">26</span><span class="p">)</span> <span class="k">else</span><span class="p">:</span>
-<span class="gp">... </span><span class="mi">27</span><span class="p">)</span>   <span class="c">#</span>
-<span class="gp">... </span><span class="mi">28</span><span class="p">)</span>   <span class="k">print</span> <span class="s">&quot;</span><span class="se">\n</span><span class="s"> ---Usuario autenticado---</span><span class="se">\n</span><span class="s">&quot;</span>
-<span class="gp">... </span><span class="mi">29</span><span class="p">)</span>   <span class="nb">exit</span><span class="p">()</span>
-<span class="gp">... </span><span class="mi">30</span><span class="p">)</span>
-<span class="gp">... </span><span class="mi">31</span><span class="p">)</span> <span class="k">if</span> <span class="n">result</span><span class="p">:</span>
-<span class="gp">... </span><span class="mi">32</span><span class="p">)</span>  <span class="c">#</span>
-<span class="gp">... </span><span class="mi">33</span><span class="p">)</span>  <span class="k">print</span> <span class="s">&quot;</span><span class="se">\n</span><span class="s">  --Se borro correctamente el producto---</span><span class="se">\n</span><span class="s">&quot;</span>
-<span class="gp">... </span><span class="mi">34</span><span class="p">)</span> <span class="k">else</span><span class="p">:</span>
-<span class="gp">... </span><span class="mi">35</span><span class="p">)</span>    <span class="c">#</span>
-<span class="gp">... </span><span class="mi">36</span><span class="p">)</span>   <span class="k">print</span> <span class="s">&quot;</span><span class="se">\n</span><span class="s"> No se borro el producto....!!!</span><span class="se">\n</span><span class="s">&quot;</span>
-<span class="gp">... </span><span class="mi">37</span><span class="p">)</span>
-<span class="gp">... </span><span class="mi">38</span><span class="p">)</span>  <span class="c">#</span>
-<span class="gp">... </span><span class="mi">39</span><span class="p">)</span> <span class="k">if</span> <span class="ow">not</span> <span class="n">result</span><span class="p">:</span>
-<span class="gp">... </span><span class="mi">40</span><span class="p">)</span>          <span class="k">print</span> <span class="s">&quot;</span><span class="se">\n</span><span class="s">Consulta de (failed error): </span><span class="si">%s</span><span class="se">\n</span><span class="s">&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="n">myinflow</span><span class="o">.</span><span class="n">currentError</span><span class="p">())</span>
-<span class="gp">... </span><span class="mi">41</span><span class="p">)</span>     <span class="nb">exit</span><span class="p">()</span>
-<span class="gp">... </span><span class="mi">42</span><span class="p">)</span>
-<span class="gp">... </span><span class="mi">43</span><span class="p">)</span>
-<span class="gp">... </span><span class="mi">44</span><span class="p">)</span> <span class="k">print</span> <span class="s">u&quot;  </span><span class="si">%s</span><span class="se">\n</span><span class="s">&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="n">myinflow</span><span class="o">.</span><span class="n">currentJSON</span><span class="p">())</span>
-<span class="gp">... </span><span class="mi">45</span><span class="p">)</span>
+<div><ul class="simple">
+<li><strong>Operación:</strong> borrar_producto</li>
+<li><strong>id:</strong> Aqui colocaremos el valor de <strong>id</strong> del producto por ejemplo borraremos el producto <strong>Ibuprofeno</strong> y su <strong>id</strong> es <strong>5</strong>. Observe la <a class="reference internal" href="#figura1"><em>Figura 26: Tabla productos</em></a></li>
+</ul>
+<div class="highlight-python"><div class="highlight"><pre><span class="c"># -*- coding: utf-8 -*-</span>
+
+<span class="c"># C(Insertar)</span>
+<span class="c"># Agregamos el poducto a ingresar por ejemplo &quot;Champu Olorin&quot;,</span>
+<span class="c">#                    &quot;ComplejoB&quot;,&quot;Aspirina&quot;,&quot;Acetaminofén&quot;,&quot;Ibuprofeno&quot;.</span>
+<span class="c">#myconsult = u&quot;operacion:agregar_producto  Nombre: ComplejoB&quot;</span>
+
+<span class="c"># U(Actualizar)</span>
+<span class="c">#myconsult = u&quot;operacion:modificar_producto id:3 Nombre:Amoxicilina&quot;</span>
+
+<span class="c"># +(Flujo de trabajo)</span>
+<span class="c"># myconsult = u&quot;operacion:Actualizar_producto id:3 Estado_producto:Pedido&quot;</span>
+
+
+<span class="c"># Importación de la librería Safet y os</span>
+<span class="kn">import</span> <span class="nn">Safet</span>
+<span class="kn">import</span> <span class="nn">os</span>
+
+
+<span class="c"># Aqui obtengo mi home,media y url</span>
+<span class="n">myhome</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">getenv</span><span class="p">(</span><span class="s">&quot;HOME&quot;</span><span class="p">)</span>
+<span class="n">mymedia</span> <span class="o">=</span> <span class="n">myhome</span> <span class="o">+</span> <span class="s">&quot;/tmp&quot;</span>
+<span class="n">myurl</span> <span class="o">=</span> <span class="s">&quot;http://localhost&quot;</span>
+
+ <span class="c"># Constructor principal</span>
+<span class="n">myinflow</span> <span class="o">=</span> <span class="n">Safet</span><span class="o">.</span><span class="n">MainWindow</span><span class="p">(</span><span class="n">myhome</span><span class="p">)</span>
+
+<span class="n">myinflow</span><span class="o">.</span><span class="n">setMediaPath</span><span class="p">(</span><span class="n">mymedia</span><span class="p">)</span>
+<span class="n">myinflow</span><span class="o">.</span><span class="n">setHostURL</span><span class="p">(</span><span class="n">myurl</span><span class="p">)</span>
+
+
+ <span class="c"># Si no es un usuario registrado el metodo &quot;login&quot; retorna False</span>
+<span class="n">result</span> <span class="o">=</span> <span class="n">myinflow</span><span class="o">.</span><span class="n">login</span><span class="p">(</span><span class="s">&quot;admin&quot;</span><span class="p">,</span><span class="s">&quot;admin&quot;</span><span class="p">)</span>
+
+<span class="c"># D(Borrar o eliminar)</span>
+<span class="c"># Eliminamos el porducto numero 5</span>
+<span class="n">myconsult</span> <span class="o">=</span> <span class="s">u&quot;operacion:borrar_producto id:5&quot;</span>
+
+<span class="k">if</span> <span class="n">result</span><span class="p">:</span>
+        <span class="n">result</span> <span class="o">=</span> <span class="n">myinflow</span><span class="o">.</span><span class="n">toInputForm</span><span class="p">(</span><span class="n">myconsult</span><span class="p">)</span>
+<span class="k">else</span><span class="p">:</span>
+        <span class="k">print</span> <span class="s">&quot;</span><span class="se">\n</span><span class="s"> ---Usuario autenticado---</span><span class="se">\n</span><span class="s">&quot;</span>
+        <span class="nb">exit</span><span class="p">()</span>
+
+
+<span class="k">if</span> <span class="n">result</span><span class="p">:</span>
+        <span class="k">print</span> <span class="s">&quot;</span><span class="se">\n</span><span class="s"> --Se Actualizo correctamente el producto---</span><span class="se">\n</span><span class="s">&quot;</span>
+<span class="k">else</span><span class="p">:</span>
+        <span class="k">print</span> <span class="s">&quot;</span><span class="se">\n</span><span class="s"> No se Actualizo el producto....!!!</span><span class="se">\n</span><span class="s">&quot;</span>
+
+
+<span class="k">if</span> <span class="ow">not</span> <span class="n">result</span><span class="p">:</span>
+        <span class="k">print</span> <span class="s">&quot;</span><span class="se">\n</span><span class="s">Consulta failed error: </span><span class="si">%s</span><span class="se">\n</span><span class="s">&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="n">myinflow</span><span class="o">.</span><span class="n">currentError</span><span class="p">())</span>
+        <span class="nb">exit</span><span class="p">()</span>
+
+<span class="k">print</span> <span class="s">u&quot;  </span><span class="si">%s</span><span class="se">\n</span><span class="s">&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="n">myinflow</span><span class="o">.</span><span class="n">currentJSON</span><span class="p">())</span>
 </pre></div>
 </div>
-</li>
-</ul>
-<div class="highlight-python"><div class="highlight"><pre>$ python Eliminar_producto.py
+<div class="highlight-bash"><div class="highlight"><pre><span class="nv">$ </span>python Eliminar_producto.py
 </pre></div>
 </div>
 </div></blockquote>
@@ -428,62 +440,71 @@ Descripcion: Archivo de Entrada para SAFET - Inflow
 </li>
 </ul>
 <blockquote>
-<div><ul>
-<li><p class="first"><strong>Operación:</strong> modificar_producto</p>
-</li>
-<li><p class="first"><strong>id:</strong> Aqui colocaremos el valor de <strong>id</strong> del producto por ejemplo vamos a actualizar el producto <strong>Aspirina</strong> y su <strong>id</strong> es <strong>3</strong>. Observe la <a class="reference internal" href="#figura1"><em>Figura 26: Tabla productos</em></a></p>
-</li>
-<li><p class="first"><strong>Nombre:</strong> Aqui se coloca el nombre al que le vamos a modificar por ejemplo <strong>Amoxacilina</strong> por <strong>Aspirina</strong>.</p>
-<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span>    <span class="c"># Importación de la librería Safet y os</span>
-<span class="gp">... </span> <span class="mi">1</span><span class="p">)</span> <span class="kn">import</span> <span class="nn">Safet</span>
-<span class="gp">... </span> <span class="mi">2</span><span class="p">)</span> <span class="kn">import</span> <span class="nn">os</span>
-<span class="gp">... </span> <span class="mi">3</span><span class="p">)</span>
-<span class="gp">... </span> <span class="mi">4</span><span class="p">)</span> <span class="c"># Aqui octengo mi home,media y url</span>
-<span class="gp">... </span> <span class="mi">5</span><span class="p">)</span> <span class="n">myhome</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">getenv</span><span class="p">(</span><span class="s">&quot;HOME&quot;</span><span class="p">)</span>
-<span class="gp">... </span> <span class="mi">6</span><span class="p">)</span> <span class="n">mymedia</span> <span class="o">=</span> <span class="n">myhome</span> <span class="o">+</span> <span class="s">&quot;/tmp&quot;</span>
-<span class="gp">... </span> <span class="mi">7</span><span class="p">)</span> <span class="n">myurl</span> <span class="o">=</span> <span class="s">&quot;http://localhost&quot;</span>
-<span class="gp">... </span> <span class="mi">8</span><span class="p">)</span>
-<span class="gp">... </span> <span class="mi">9</span><span class="p">)</span> <span class="c"># Constructor principal</span>
-<span class="gp">... </span><span class="mi">10</span><span class="p">)</span> <span class="n">myinflow</span> <span class="o">=</span> <span class="n">Safet</span><span class="o">.</span><span class="n">MainWindow</span><span class="p">(</span><span class="n">myhome</span><span class="p">)</span>
-<span class="gp">... </span><span class="mi">11</span><span class="p">)</span>
-<span class="gp">... </span><span class="mi">12</span><span class="p">)</span> <span class="c">#</span>
-<span class="gp">... </span><span class="mi">13</span><span class="p">)</span> <span class="n">myinflow</span><span class="o">.</span><span class="n">setMediaPath</span><span class="p">(</span><span class="n">mymedia</span><span class="p">)</span>
-<span class="gp">... </span><span class="mi">14</span><span class="p">)</span> <span class="n">myinflow</span><span class="o">.</span><span class="n">setHostURL</span><span class="p">(</span><span class="n">myurl</span><span class="p">)</span>
-<span class="gp">... </span><span class="mi">15</span><span class="p">)</span>
-<span class="gp">... </span><span class="mi">16</span><span class="p">)</span> <span class="c"># Si no es un usuario registrado el metodo &quot;login&quot; retorna False</span>
-<span class="gp">... </span><span class="mi">17</span><span class="p">)</span> <span class="n">result</span> <span class="o">=</span> <span class="n">myinflow</span><span class="o">.</span><span class="n">login</span><span class="p">(</span><span class="s">&quot;admin&quot;</span><span class="p">,</span><span class="s">&quot;admin&quot;</span><span class="p">)</span>
-<span class="gp">... </span><span class="mi">18</span><span class="p">)</span>
-<span class="gp">... </span><span class="mi">19</span><span class="p">)</span> <span class="c"># Se cambio esta operación para actualizar el nombre del producto</span>
-<span class="gp">... </span><span class="mi">20</span><span class="p">)</span> <span class="c">#</span>
-<span class="gp">... </span><span class="mi">21</span><span class="p">)</span> <span class="n">myconsult</span> <span class="o">=</span> <span class="s">u&quot;operacion:modificar_producto id:3 Nombre:Amoxicilina&quot;</span>  <span class="o">-----&gt;&gt;</span> <span class="n">Operaciones</span>
-<span class="gp">... </span><span class="mi">22</span><span class="p">)</span>
-<span class="gp">... </span><span class="mi">23</span><span class="p">)</span> <span class="k">if</span> <span class="n">result</span><span class="p">:</span>
-<span class="gp">... </span><span class="mi">24</span><span class="p">)</span>   <span class="c">#</span>
-<span class="gp">... </span><span class="mi">25</span><span class="p">)</span>   <span class="n">result</span> <span class="o">=</span> <span class="n">myinflow</span><span class="o">.</span><span class="n">toInputForm</span><span class="p">(</span><span class="n">myconsult</span><span class="p">)</span>
-<span class="gp">... </span><span class="mi">26</span><span class="p">)</span> <span class="k">else</span><span class="p">:</span>
-<span class="gp">... </span><span class="mi">27</span><span class="p">)</span>   <span class="c">#</span>
-<span class="gp">... </span><span class="mi">28</span><span class="p">)</span>   <span class="k">print</span> <span class="s">&quot;</span><span class="se">\n</span><span class="s"> ---Usuario autenticado---</span><span class="se">\n</span><span class="s">&quot;</span>
-<span class="gp">... </span><span class="mi">29</span><span class="p">)</span>   <span class="nb">exit</span><span class="p">()</span>
-<span class="gp">... </span><span class="mi">30</span><span class="p">)</span>
-<span class="gp">... </span><span class="mi">31</span><span class="p">)</span> <span class="k">if</span> <span class="n">result</span><span class="p">:</span>
-<span class="gp">... </span><span class="mi">32</span><span class="p">)</span>  <span class="c">#</span>
-<span class="gp">... </span><span class="mi">33</span><span class="p">)</span>  <span class="k">print</span> <span class="s">&quot;</span><span class="se">\n</span><span class="s">  --Se actualizo el nombre del prodcuto correctamente---</span><span class="se">\n</span><span class="s">&quot;</span>
-<span class="gp">... </span><span class="mi">34</span><span class="p">)</span> <span class="k">else</span><span class="p">:</span>
-<span class="gp">... </span><span class="mi">35</span><span class="p">)</span>    <span class="c">#</span>
-<span class="gp">... </span><span class="mi">36</span><span class="p">)</span>   <span class="k">print</span> <span class="s">&quot;</span><span class="se">\n</span><span class="s"> No actualizo el nombre del prodcuto....!!!</span><span class="se">\n</span><span class="s">&quot;</span>
-<span class="gp">... </span><span class="mi">37</span><span class="p">)</span>
-<span class="gp">... </span><span class="mi">38</span><span class="p">)</span>  <span class="c">#</span>
-<span class="gp">... </span><span class="mi">39</span><span class="p">)</span> <span class="k">if</span> <span class="ow">not</span> <span class="n">result</span><span class="p">:</span>
-<span class="gp">... </span><span class="mi">40</span><span class="p">)</span>          <span class="k">print</span> <span class="s">&quot;</span><span class="se">\n</span><span class="s">Consulta de (failed error): </span><span class="si">%s</span><span class="se">\n</span><span class="s">&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="n">myinflow</span><span class="o">.</span><span class="n">currentError</span><span class="p">())</span>
-<span class="gp">... </span><span class="mi">41</span><span class="p">)</span>     <span class="nb">exit</span><span class="p">()</span>
-<span class="gp">... </span><span class="mi">42</span><span class="p">)</span>
-<span class="gp">... </span><span class="mi">43</span><span class="p">)</span>
-<span class="gp">... </span><span class="mi">44</span><span class="p">)</span> <span class="k">print</span> <span class="s">u&quot;  </span><span class="si">%s</span><span class="se">\n</span><span class="s">&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="n">myinflow</span><span class="o">.</span><span class="n">currentJSON</span><span class="p">())</span>
-<span class="gp">... </span><span class="mi">45</span><span class="p">)</span>
+<div><ul class="simple">
+<li><strong>Operación:</strong> modificar_producto</li>
+<li><strong>id:</strong> Aqui colocaremos el valor de <strong>id</strong> del producto por ejemplo vamos a actualizar el producto <strong>Aspirina</strong> y su <strong>id</strong> es <strong>3</strong>. Observe la <a class="reference internal" href="#figura1"><em>Figura 26: Tabla productos</em></a></li>
+<li><strong>Nombre:</strong> Aqui se coloca el nombre al que le vamos a modificar por ejemplo <strong>Amoxacilina</strong> por <strong>Aspirina</strong>.</li>
+</ul>
+<div class="highlight-python"><div class="highlight"><pre><span class="c"># -*- coding: utf-8 -*-</span>
+
+<span class="c"># C(Insertar)</span>
+<span class="c"># Agregamos el poducto a ingresar por ejemplo &quot;Champu Olorin&quot;,</span>
+<span class="c">#                    &quot;ComplejoB&quot;,&quot;Aspirina&quot;,&quot;Acetaminofén&quot;,&quot;Ibuprofeno&quot;.</span>
+<span class="c">#myconsult = u&quot;operacion:agregar_producto  Nombre: ComplejoB&quot;</span>
+
+<span class="c"># D(Borrar o eliminar)</span>
+<span class="c"># Eliminamos el porducto numero 5</span>
+<span class="c">#myconsult = u&quot;operacion:borrar_producto id:5&quot;</span>
+
+
+<span class="c"># +(Flujo de trabajo)</span>
+<span class="c"># myconsult = u&quot;operacion:Actualizar_producto id:3 Estado_producto:Pedido&quot;</span>
+
+
+<span class="c"># Importación de la librería Safet y os</span>
+<span class="kn">import</span> <span class="nn">Safet</span>
+<span class="kn">import</span> <span class="nn">os</span>
+
+
+<span class="c"># Aqui obtengo mi home,media y url</span>
+<span class="n">myhome</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">getenv</span><span class="p">(</span><span class="s">&quot;HOME&quot;</span><span class="p">)</span>
+<span class="n">mymedia</span> <span class="o">=</span> <span class="n">myhome</span> <span class="o">+</span> <span class="s">&quot;/tmp&quot;</span>
+<span class="n">myurl</span> <span class="o">=</span> <span class="s">&quot;http://localhost&quot;</span>
+
+ <span class="c"># Constructor principal</span>
+<span class="n">myinflow</span> <span class="o">=</span> <span class="n">Safet</span><span class="o">.</span><span class="n">MainWindow</span><span class="p">(</span><span class="n">myhome</span><span class="p">)</span>
+
+<span class="n">myinflow</span><span class="o">.</span><span class="n">setMediaPath</span><span class="p">(</span><span class="n">mymedia</span><span class="p">)</span>
+<span class="n">myinflow</span><span class="o">.</span><span class="n">setHostURL</span><span class="p">(</span><span class="n">myurl</span><span class="p">)</span>
+
+
+<span class="c"># Si no es un usuario registrado el metodo &quot;login&quot; retorna False</span>
+<span class="n">result</span> <span class="o">=</span> <span class="n">myinflow</span><span class="o">.</span><span class="n">login</span><span class="p">(</span><span class="s">&quot;admin&quot;</span><span class="p">,</span><span class="s">&quot;admin&quot;</span><span class="p">)</span>
+
+<span class="c"># U(Actualizar)</span>
+<span class="c"># Se actualizara el nombre del producto número 3</span>
+<span class="n">myconsult</span> <span class="o">=</span> <span class="s">u&quot;operacion:modificar_producto id:3 Nombre:Amoxicilina&quot;</span>
+
+<span class="k">if</span> <span class="n">result</span><span class="p">:</span>
+        <span class="n">result</span> <span class="o">=</span> <span class="n">myinflow</span><span class="o">.</span><span class="n">toInputForm</span><span class="p">(</span><span class="n">myconsult</span><span class="p">)</span>
+<span class="k">else</span><span class="p">:</span>
+        <span class="k">print</span> <span class="s">&quot;</span><span class="se">\n</span><span class="s"> ---Usuario autenticado---</span><span class="se">\n</span><span class="s">&quot;</span>
+        <span class="nb">exit</span><span class="p">()</span>
+
+
+<span class="k">if</span> <span class="n">result</span><span class="p">:</span>
+        <span class="k">print</span> <span class="s">&quot;</span><span class="se">\n</span><span class="s"> --Se Actualizo correctamente el producto---</span><span class="se">\n</span><span class="s">&quot;</span>
+<span class="k">else</span><span class="p">:</span>
+        <span class="k">print</span> <span class="s">&quot;</span><span class="se">\n</span><span class="s"> No se Actualizo el producto....!!!</span><span class="se">\n</span><span class="s">&quot;</span>
+
+
+<span class="k">if</span> <span class="ow">not</span> <span class="n">result</span><span class="p">:</span>
+        <span class="k">print</span> <span class="s">&quot;</span><span class="se">\n</span><span class="s">Consulta failed error: </span><span class="si">%s</span><span class="se">\n</span><span class="s">&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="n">myinflow</span><span class="o">.</span><span class="n">currentError</span><span class="p">())</span>
+        <span class="nb">exit</span><span class="p">()</span>
+
+<span class="k">print</span> <span class="s">u&quot;  </span><span class="si">%s</span><span class="se">\n</span><span class="s">&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="n">myinflow</span><span class="o">.</span><span class="n">currentJSON</span><span class="p">())</span>
 </pre></div>
 </div>
-</li>
-</ul>
 <div class="highlight-python"><div class="highlight"><pre>$ python Modificar_producto.py
 </pre></div>
 </div>
@@ -569,67 +590,72 @@ Descripcion: Archivo de Entrada para SAFET - Inflow
 </li>
 </ul>
 <blockquote>
-<div><ul>
-<li><p class="first"><strong>Operación:</strong> Actualizar_producto</p>
-</li>
-<li><p class="first"><strong>id:</strong> Aqui colocaremos el valor de <strong>id</strong> del producto por ejemplo vamos a actualizar el producto <strong>Aspirina</strong> y su <strong>id</strong> es <strong>3</strong>. Observe la <a class="reference internal" href="#figura1"><em>Figura 26: Tabla productos</em></a></p>
-</li>
-<li><p class="first"><strong>Estado_producto:</strong> Aqui se coloca el estado del producto es decir si es por llegar,Agotarse,Pedido,En Espera. En este caso esta <strong>Registrado</strong> vamos a modificarlo a <strong>pedido</strong>.</p>
-<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span>    <span class="c"># Importación de la librería Safet y os</span>
-<span class="gp">... </span> <span class="mi">1</span><span class="p">)</span> <span class="kn">import</span> <span class="nn">Safet</span>
-<span class="gp">... </span> <span class="mi">2</span><span class="p">)</span> <span class="kn">import</span> <span class="nn">os</span>
-<span class="gp">... </span> <span class="mi">3</span><span class="p">)</span>
-<span class="gp">... </span> <span class="mi">4</span><span class="p">)</span> <span class="c"># Aqui octengo mi home,media y url</span>
-<span class="gp">... </span> <span class="mi">5</span><span class="p">)</span> <span class="n">myhome</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">getenv</span><span class="p">(</span><span class="s">&quot;HOME&quot;</span><span class="p">)</span>
-<span class="gp">... </span> <span class="mi">6</span><span class="p">)</span> <span class="n">mymedia</span> <span class="o">=</span> <span class="n">myhome</span> <span class="o">+</span> <span class="s">&quot;/tmp&quot;</span>
-<span class="gp">... </span> <span class="mi">7</span><span class="p">)</span> <span class="n">myurl</span> <span class="o">=</span> <span class="s">&quot;http://localhost&quot;</span>
-<span class="gp">... </span> <span class="mi">8</span><span class="p">)</span>
-<span class="gp">... </span> <span class="mi">9</span><span class="p">)</span> <span class="c"># Constructor principal</span>
-<span class="gp">... </span><span class="mi">10</span><span class="p">)</span> <span class="n">myinflow</span> <span class="o">=</span> <span class="n">Safet</span><span class="o">.</span><span class="n">MainWindow</span><span class="p">(</span><span class="n">myhome</span><span class="p">)</span>
-<span class="gp">... </span><span class="mi">11</span><span class="p">)</span>
-<span class="gp">... </span><span class="mi">12</span><span class="p">)</span> <span class="c">#</span>
-<span class="gp">... </span><span class="mi">13</span><span class="p">)</span> <span class="n">myinflow</span><span class="o">.</span><span class="n">setMediaPath</span><span class="p">(</span><span class="n">mymedia</span><span class="p">)</span>
-<span class="gp">... </span><span class="mi">14</span><span class="p">)</span> <span class="n">myinflow</span><span class="o">.</span><span class="n">setHostURL</span><span class="p">(</span><span class="n">myurl</span><span class="p">)</span>
-<span class="gp">... </span><span class="mi">15</span><span class="p">)</span>
-<span class="gp">... </span><span class="mi">16</span><span class="p">)</span> <span class="c"># Si no es un usuario registrado el metodo &quot;login&quot; retorna False</span>
-<span class="gp">... </span><span class="mi">17</span><span class="p">)</span> <span class="n">result</span> <span class="o">=</span> <span class="n">myinflow</span><span class="o">.</span><span class="n">login</span><span class="p">(</span><span class="s">&quot;admin&quot;</span><span class="p">,</span><span class="s">&quot;admin&quot;</span><span class="p">)</span>
-<span class="gp">... </span><span class="mi">18</span><span class="p">)</span>
-<span class="gp">... </span><span class="mi">19</span><span class="p">)</span> <span class="c"># Se cambio esta operación para actualizar producto</span>
-<span class="gp">... </span><span class="mi">20</span><span class="p">)</span> <span class="c">#</span>
-<span class="gp">... </span><span class="mi">21</span><span class="p">)</span> <span class="n">myconsult</span> <span class="o">=</span> <span class="s">u&quot;operacion:Actualizar_producto id:3 Status_producto:Pedido&quot;</span><span class="o">-----&gt;&gt;</span> <span class="n">Operaciones</span>
-<span class="gp">... </span><span class="mi">22</span><span class="p">)</span>
-<span class="gp">... </span><span class="mi">23</span><span class="p">)</span> <span class="k">if</span> <span class="n">result</span><span class="p">:</span>
-<span class="gp">... </span><span class="mi">24</span><span class="p">)</span>   <span class="c">#</span>
-<span class="gp">... </span><span class="mi">25</span><span class="p">)</span>   <span class="n">result</span> <span class="o">=</span> <span class="n">myinflow</span><span class="o">.</span><span class="n">toInputForm</span><span class="p">(</span><span class="n">myconsult</span><span class="p">)</span>
-<span class="gp">... </span><span class="mi">26</span><span class="p">)</span> <span class="k">else</span><span class="p">:</span>
-<span class="gp">... </span><span class="mi">27</span><span class="p">)</span>   <span class="c">#</span>
-<span class="gp">... </span><span class="mi">28</span><span class="p">)</span>   <span class="k">print</span> <span class="s">&quot;</span><span class="se">\n</span><span class="s"> ---Usuario autenticado---</span><span class="se">\n</span><span class="s">&quot;</span>
-<span class="gp">... </span><span class="mi">29</span><span class="p">)</span>   <span class="nb">exit</span><span class="p">()</span>
-<span class="gp">... </span><span class="mi">30</span><span class="p">)</span>
-<span class="gp">... </span><span class="mi">31</span><span class="p">)</span> <span class="k">if</span> <span class="n">result</span><span class="p">:</span>
-<span class="gp">... </span><span class="mi">32</span><span class="p">)</span>  <span class="c">#</span>
-<span class="gp">... </span><span class="mi">33</span><span class="p">)</span>  <span class="k">print</span> <span class="s">&quot;</span><span class="se">\n</span><span class="s">  --Se Actualizo correctamente el Status del producto---</span><span class="se">\n</span><span class="s">&quot;</span>
-<span class="gp">... </span><span class="mi">34</span><span class="p">)</span> <span class="k">else</span><span class="p">:</span>
-<span class="gp">... </span><span class="mi">35</span><span class="p">)</span>    <span class="c">#</span>
-<span class="gp">... </span><span class="mi">36</span><span class="p">)</span>   <span class="k">print</span> <span class="s">&quot;</span><span class="se">\n</span><span class="s"> No Actualizo el Status del producto....!!!</span><span class="se">\n</span><span class="s">&quot;</span>
-<span class="gp">... </span><span class="mi">37</span><span class="p">)</span>
-<span class="gp">... </span><span class="mi">38</span><span class="p">)</span>  <span class="c">#</span>
-<span class="gp">... </span><span class="mi">39</span><span class="p">)</span> <span class="k">if</span> <span class="ow">not</span> <span class="n">result</span><span class="p">:</span>
-<span class="gp">... </span><span class="mi">40</span><span class="p">)</span>          <span class="k">print</span> <span class="s">&quot;</span><span class="se">\n</span><span class="s">Consulta de (failed error): </span><span class="si">%s</span><span class="se">\n</span><span class="s">&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="n">myinflow</span><span class="o">.</span><span class="n">currentError</span><span class="p">())</span>
-<span class="gp">... </span><span class="mi">41</span><span class="p">)</span>     <span class="nb">exit</span><span class="p">()</span>
-<span class="gp">... </span><span class="mi">42</span><span class="p">)</span>
-<span class="gp">... </span><span class="mi">43</span><span class="p">)</span>
-<span class="gp">... </span><span class="mi">44</span><span class="p">)</span> <span class="k">print</span> <span class="s">u&quot;  </span><span class="si">%s</span><span class="se">\n</span><span class="s">&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="n">myinflow</span><span class="o">.</span><span class="n">currentJSON</span><span class="p">())</span>
-<span class="gp">... </span><span class="mi">45</span><span class="p">)</span>
-<span class="gp">... </span><span class="mi">46</span><span class="p">)</span>
-<span class="gp">... </span><span class="mi">47</span><span class="p">)</span>
-<span class="gp">... </span><span class="mi">48</span><span class="p">)</span>
-<span class="gp">... </span><span class="mi">49</span><span class="p">)</span>
-<span class="gp">... </span><span class="mi">50</span><span class="p">)</span>
+<div><ul class="simple">
+<li><strong>Operación:</strong> Actualizar_producto</li>
+<li><strong>id:</strong> Aqui colocaremos el valor de <strong>id</strong> del producto por ejemplo vamos a actualizar el producto <strong>Aspirina</strong> y su <strong>id</strong> es <strong>3</strong>. Observe la <a class="reference internal" href="#figura1"><em>Figura 26: Tabla productos</em></a></li>
+<li><strong>Estado_producto:</strong> Aqui se coloca el estado del producto es decir si es por llegar,Agotarse,Pedido,En Espera. En este caso esta <strong>Registrado</strong> vamos a modificarlo a <strong>pedido</strong>.</li>
+</ul>
+<div class="highlight-python"><div class="highlight"><pre><span class="c"># -*- coding: utf-8 -*-</span>
+
+<span class="c"># C(Insertar)</span>
+<span class="c"># Agregamos el poducto a ingresar por ejemplo &quot;Champu Olorin&quot;,</span>
+<span class="c">#                    &quot;ComplejoB&quot;,&quot;Aspirina&quot;,&quot;Acetaminofén&quot;,&quot;Ibuprofeno&quot;.</span>
+<span class="c">#myconsult = u&quot;operacion:agregar_producto  Nombre: ComplejoB&quot;</span>
+
+<span class="c"># D(Borrar o eliminar)</span>
+<span class="c"># Eliminamos el porducto numero 5</span>
+<span class="c">#myconsult = u&quot;operacion:borrar_producto id:5&quot;</span>
+
+<span class="c"># U(Actualizar)</span>
+<span class="c"># Se actualizara el nombre del producto número 3</span>
+<span class="c">#myconsult = u&quot;operacion:modificar_producto id:3 Nombre:Amoxicilina&quot;</span>
+
+<span class="c"># Importación de la librería Safet y os</span>
+<span class="kn">import</span> <span class="nn">Safet</span>
+<span class="kn">import</span> <span class="nn">os</span>
+
+
+<span class="c"># Aqui obtengo mi home,media y url</span>
+<span class="n">myhome</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">getenv</span><span class="p">(</span><span class="s">&quot;HOME&quot;</span><span class="p">)</span>
+<span class="n">mymedia</span> <span class="o">=</span> <span class="n">myhome</span> <span class="o">+</span> <span class="s">&quot;/tmp&quot;</span>
+<span class="n">myurl</span> <span class="o">=</span> <span class="s">&quot;http://localhost&quot;</span>
+
+ <span class="c"># Constructor principal</span>
+<span class="n">myinflow</span> <span class="o">=</span> <span class="n">Safet</span><span class="o">.</span><span class="n">MainWindow</span><span class="p">(</span><span class="n">myhome</span><span class="p">)</span>
+
+<span class="n">myinflow</span><span class="o">.</span><span class="n">setMediaPath</span><span class="p">(</span><span class="n">mymedia</span><span class="p">)</span>
+<span class="n">myinflow</span><span class="o">.</span><span class="n">setHostURL</span><span class="p">(</span><span class="n">myurl</span><span class="p">)</span>
+
+
+<span class="c"># Si no es un usuario registrado el metodo &quot;login&quot; retorna False</span>
+<span class="n">result</span> <span class="o">=</span> <span class="n">myinflow</span><span class="o">.</span><span class="n">login</span><span class="p">(</span><span class="s">&quot;admin&quot;</span><span class="p">,</span><span class="s">&quot;admin&quot;</span><span class="p">)</span>
+
+
+<span class="c"># +(Flujo de trabajo)</span>
+<span class="c"># Se actualizara su estado</span>
+<span class="n">myconsult</span> <span class="o">=</span> <span class="s">u&quot;operacion:Actualizar_producto id:3 Estado_producto:Pedido&quot;</span>
+
+
+<span class="k">if</span> <span class="n">result</span><span class="p">:</span>
+        <span class="n">result</span> <span class="o">=</span> <span class="n">myinflow</span><span class="o">.</span><span class="n">toInputForm</span><span class="p">(</span><span class="n">myconsult</span><span class="p">)</span>
+<span class="k">else</span><span class="p">:</span>
+        <span class="k">print</span> <span class="s">&quot;</span><span class="se">\n</span><span class="s"> ---Usuario autenticado---</span><span class="se">\n</span><span class="s">&quot;</span>
+        <span class="nb">exit</span><span class="p">()</span>
+
+
+<span class="k">if</span> <span class="n">result</span><span class="p">:</span>
+        <span class="k">print</span> <span class="s">&quot;</span><span class="se">\n</span><span class="s"> --Se Actualizo correctamente el producto---</span><span class="se">\n</span><span class="s">&quot;</span>
+<span class="k">else</span><span class="p">:</span>
+        <span class="k">print</span> <span class="s">&quot;</span><span class="se">\n</span><span class="s"> No se Actualizo el producto....!!!</span><span class="se">\n</span><span class="s">&quot;</span>
+
+
+<span class="k">if</span> <span class="ow">not</span> <span class="n">result</span><span class="p">:</span>
+        <span class="k">print</span> <span class="s">&quot;</span><span class="se">\n</span><span class="s">Consulta failed error: </span><span class="si">%s</span><span class="se">\n</span><span class="s">&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="n">myinflow</span><span class="o">.</span><span class="n">currentError</span><span class="p">())</span>
+        <span class="nb">exit</span><span class="p">()</span>
+
+<span class="k">print</span> <span class="s">u&quot;  </span><span class="si">%s</span><span class="se">\n</span><span class="s">&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="n">myinflow</span><span class="o">.</span><span class="n">currentJSON</span><span class="p">())</span>
 </pre></div>
 </div>
-</li>
-</ul>
 <div class="highlight-python"><div class="highlight"><pre>$ python Actualizar_Status_producto.py
 </pre></div>
 </div>
@@ -689,6 +715,8 @@ Descripcion: Archivo de Entrada para SAFET - Inflow
 </ul>
 </div></blockquote>
 </div>
+</div>
+</div>
 
 
           </div>
@@ -696,6 +724,17 @@ Descripcion: Archivo de Entrada para SAFET - Inflow
       </div>
       <div class="sphinxsidebar">
         <div class="sphinxsidebarwrapper">
+  <h3><a href="../../index.html">Tabla de Contenidos</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">Operaciones CRUD+(flujo) utilizando PySafet</a><ul>
+<li><a class="reference internal" href="#primer-paso">1° PRIMER PASO</a><ul>
+<li><a class="reference internal" href="#escribimos-el-encabezado-informacion-de-autor">Escribimos el encabezado (información de Autor).</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+
   <h4>Tema anterior</h4>
   <p class="topless"><a href="manual_Parte1.html"
                         title="capítulo anterior">Creación de las tablas en base de datos</a></p>

@@ -52,100 +52,94 @@
             
   <div class="section" id="paso-para-la-creacion-del-directorio-safet">
 <h1><span class="target" id="index-0"></span>Paso para la creación del directorio .safet/<a class="headerlink" href="#paso-para-la-creacion-del-directorio-safet" title="Enlazar permanentemente con este título">¶</a></h1>
-<p><strong class="command">1.- Paso:</strong></p>
+<div class="section" id="primer-paso">
+<h2>1° PRIMER PASO<a class="headerlink" href="#primer-paso" title="Enlazar permanentemente con este título">¶</a></h2>
 <blockquote>
-<div><div class="highlight-python"><div class="highlight"><pre>Descargamos nuestro MensajesVersionInicial con estención .tar
-</pre></div>
-</div>
-<p><strong>DOWNLOAD:</strong></p>
+<div><p>Descargamos nuestro MensajesVersionInicial con estención .tar</p>
+<blockquote>
+<div><p><strong>DOWNLOAD:</strong></p>
 <img alt="../../_images/download.png" src="../../_images/download.png" />
-<p><a class="reference download internal" href="../../_downloads/mensajesVersionInicial.tar"><tt class="xref download docutils literal"><span class="pre">MensajesVersionInicial.TAR</span></tt></a></p>
+<p><a class="reference download internal" href="../../_downloads/mensajesVersionInicial.tar"><tt class="xref download docutils literal"><span class="pre">ProductoVersionInicial.TAR</span></tt></a></p>
 </div></blockquote>
-<p><strong class="command">2.- Paso:</strong></p>
-<blockquote>
-<div><div class="highlight-python"><div class="highlight"><pre>//Creamos un carpeta Pysafet en nuestro HOME
-$ make Pysafet
-
-.........................................................
-//Copiamos nuestro archivo (.tar) que descargamos a nuestra carpeta Pysafet. En este caso se descargo en la carpeta &quot;Descargas&quot;.
-$ cp Descargas/mensajesVersionInicial.tar Pysafet/
-
-.........................................................
-// Acedemos a la carpeta Pysafet
-$ cd Pysafet/
-
-........................................................
-// Crearemos un archivo (.py) que lo llamares (MontarSafet.py)
-Pysafet$ touch MontarSafet.py
-</pre></div>
-</div>
 </div></blockquote>
-<p><strong class="command">3.- Paso:</strong></p>
-<ul>
-<li><table class="first docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name" colspan="2">Abrimos nuestro archivo (MontarSafet.py) y copiamos y guardamos el siguinte codigo:</th></tr>
-<tr class="field-odd field"><td>&nbsp;</td><td class="field-body"></td>
-</tr>
-</tbody>
-</table>
-<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">Safet</span>
-<span class="gp">... </span><span class="kn">import</span> <span class="nn">os</span>
-<span class="gp">...</span>
-<span class="gp">... </span><span class="n">myhome</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">getenv</span><span class="p">(</span><span class="s">&quot;HOME&quot;</span><span class="p">)</span>
-<span class="gp">... </span><span class="n">mymedia</span> <span class="o">=</span> <span class="n">myhome</span> <span class="o">+</span> <span class="s">&quot;/tmp&quot;</span>
-<span class="gp">... </span><span class="n">myurl</span> <span class="o">=</span> <span class="s">&quot;http://localhost&quot;</span>
-<span class="gp">...</span>
-<span class="gp">... </span><span class="n">myinflow</span> <span class="o">=</span> <span class="n">Safet</span><span class="o">.</span><span class="n">MainWindow</span><span class="p">(</span><span class="n">myhome</span><span class="p">)</span>
-<span class="gp">...</span>
-<span class="gp">... </span><span class="n">myinflow</span><span class="o">.</span><span class="n">setMediaPath</span><span class="p">(</span><span class="n">mymedia</span><span class="p">)</span>
-<span class="gp">... </span><span class="n">myinflow</span><span class="o">.</span><span class="n">setHostURL</span><span class="p">(</span><span class="n">myurl</span><span class="p">)</span>
-<span class="gp">...</span>
-<span class="gp">... </span><span class="n">myinflow</span><span class="o">.</span><span class="n">doLoadConfiguration</span><span class="p">(</span><span class="s">&quot;mensajesVersionInicial.tar&quot;</span><span class="p">)</span>
-</pre></div>
 </div>
-</li>
-<li><table class="first docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name" colspan="2">Explicación del código:</th></tr>
-<tr class="field-odd field"><td>&nbsp;</td><td class="field-body"></td>
-</tr>
-</tbody>
-</table>
-<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="c">#Importación la librería Safet y os</span>
-<span class="gp">... </span><span class="kn">import</span> <span class="nn">Safet</span>
-<span class="gp">... </span><span class="kn">import</span> <span class="nn">os</span>
-<span class="gp">...</span>
-<span class="gp">... </span><span class="n">myhome</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">getenv</span><span class="p">(</span><span class="s">&quot;HOME&quot;</span><span class="p">)</span> <span class="c">#</span>
-<span class="gp">... </span><span class="n">mymedia</span> <span class="o">=</span> <span class="n">myhome</span> <span class="o">+</span> <span class="s">&quot;/tmp&quot;</span>
-<span class="gp">... </span><span class="n">myurl</span> <span class="o">=</span> <span class="s">&quot;http://localhost&quot;</span>
-<span class="gp">...</span>
-<span class="gp">... </span><span class="n">myinflow</span> <span class="o">=</span> <span class="n">Safet</span><span class="o">.</span><span class="n">MainWindow</span><span class="p">(</span><span class="n">myhome</span><span class="p">)</span>
-<span class="gp">...</span>
-<span class="gp">... </span><span class="n">myinflow</span><span class="o">.</span><span class="n">setMediaPath</span><span class="p">(</span><span class="n">mymedia</span><span class="p">)</span>
-<span class="gp">... </span><span class="n">myinflow</span><span class="o">.</span><span class="n">setHostURL</span><span class="p">(</span><span class="n">myurl</span><span class="p">)</span>
-<span class="gp">...</span>
-<span class="gp">... </span><span class="n">myinflow</span><span class="o">.</span><span class="n">doLoadConfiguration</span><span class="p">(</span><span class="s">&quot;mensajesVersionInicial.tar&quot;</span><span class="p">)</span>
-</pre></div>
-</div>
-</li>
+<div class="section" id="segundo-paso">
+<h2>2° SEGUNDO PASO<a class="headerlink" href="#segundo-paso" title="Enlazar permanentemente con este título">¶</a></h2>
+<ul class="simple">
+<li>Creamos un directorio con cualquier nombre por ejemplo <strong>Pysafet</strong> en nuestro <strong>&lt;HOME&gt;</strong></li>
 </ul>
-<p><strong class="command">4.- Paso:</strong></p>
 <blockquote>
-<div><div class="highlight-python"><div class="highlight"><pre>// Se compila el archivo (Montar.py)
-Pysafe$ python Montar.py
-
-.........................................................
-
-// Nos vamos al &quot;HOME&quot;  a verificar si monto el (.safet/)
-Pysafet$ ls ../.safet/
+<div><div class="highlight-bash"><div class="highlight"><pre><span class="nv">$ </span>make <span class="nv">$HOME</span>/Pysafet
 </pre></div>
 </div>
 </div></blockquote>
+<ul class="simple">
+<li>Copiamos nuestro archivo <strong>(.tar)</strong> que descargamos a nuestra carpeta <strong>&lt;HOME&gt;Pysafet/</strong>. En este caso se descargo en la carpeta <strong>&#8220;Descargas&#8221;</strong>.</li>
+</ul>
+<blockquote>
+<div><div class="highlight-bash"><div class="highlight"><pre><span class="nv">$ </span>cp Descargas/ProductoVersionInicial.tar <span class="nv">$HOME</span>/Pysafet/
+</pre></div>
+</div>
+</div></blockquote>
+<ul class="simple">
+<li>Acedemos a la carpeta Pysafet</li>
+</ul>
+<blockquote>
+<div><div class="highlight-bash"><div class="highlight"><pre><span class="nv">$ </span><span class="nb">cd </span>Pysafet/
+</pre></div>
+</div>
+</div></blockquote>
+</div>
+<div class="section" id="tercer-paso">
+<h2>3° TERCER PASO<a class="headerlink" href="#tercer-paso" title="Enlazar permanentemente con este título">¶</a></h2>
+<ul class="simple">
+<li>Crearemos un archivo <strong>(.py)</strong> por ejemplo <strong>&#8220;MontarSafet.py&#8221;</strong> dentro del directorio <strong>&lt;HOME&gt;safe/</strong>:</li>
+</ul>
+<blockquote>
+<div><div class="highlight-bash"><div class="highlight"><pre>Pysafet<span class="nv">$ </span>touch MontarSafet.py
+</pre></div>
+</div>
+</div></blockquote>
+<ul class="simple">
+<li>Abrimos nuestro archivo <strong>(MontarSafet.py)</strong> y insertamos el siguiente Script de python:</li>
+</ul>
+<blockquote>
+<div><div class="highlight-python"><div class="highlight"><pre><span class="kn">import</span> <span class="nn">Safet</span>
+<span class="kn">import</span> <span class="nn">os</span>
+
+<span class="n">myhome</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">getenv</span><span class="p">(</span><span class="s">&quot;HOME&quot;</span><span class="p">)</span>
+<span class="n">mymedia</span> <span class="o">=</span> <span class="n">myhome</span> <span class="o">+</span> <span class="s">&quot;/tmp&quot;</span>
+<span class="n">myurl</span> <span class="o">=</span> <span class="s">&quot;http://localhost&quot;</span>
+
+<span class="n">myinflow</span> <span class="o">=</span> <span class="n">Safet</span><span class="o">.</span><span class="n">MainWindow</span><span class="p">(</span><span class="n">myhome</span><span class="p">)</span>
+
+<span class="n">myinflow</span><span class="o">.</span><span class="n">setMediaPath</span><span class="p">(</span><span class="n">mymedia</span><span class="p">)</span>
+<span class="n">myinflow</span><span class="o">.</span><span class="n">setHostURL</span><span class="p">(</span><span class="n">myurl</span><span class="p">)</span>
+
+<span class="n">myinflow</span><span class="o">.</span><span class="n">doLoadConfiguration</span><span class="p">(</span><span class="s">&quot;ProductoVersionInicial.tar&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div></blockquote>
+<ul class="simple">
+<li>Ejecutamos el archivo <strong>(MontarSafet.py)</strong> desde al consola comando como usuario normal:</li>
+</ul>
+<blockquote>
+<div><div class="highlight-bash"><div class="highlight"><pre>Pysafe<span class="nv">$ </span>python MontarSafet.py
+</pre></div>
+</div>
+</div></blockquote>
+<ul class="simple">
+<li>Nos vamos al <strong>&lt;HOME&gt;</strong>  a verificar si monto el (.safet/) con el comando <strong>ls</strong>:</li>
+</ul>
+<blockquote>
+<div><div class="highlight-bash"><div class="highlight"><pre>Pysafet<span class="nv">$ </span>ls <span class="nv">$HOME</span>/.safet/
+
+auth.conf digidoc.conf flowfiles images log     reports xmlrepository
+certs     dtd          graphs    input  mydb.db safet.conf
+</pre></div>
+</div>
+</div></blockquote>
+</div>
 </div>
 
 
@@ -154,6 +148,16 @@ Pysafet$ ls ../.safet/
       </div>
       <div class="sphinxsidebar">
         <div class="sphinxsidebarwrapper">
+  <h3><a href="../../index.html">Tabla de Contenidos</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">Paso para la creación del directorio .safet/</a><ul>
+<li><a class="reference internal" href="#primer-paso">1° PRIMER PASO</a></li>
+<li><a class="reference internal" href="#segundo-paso">2° SEGUNDO PASO</a></li>
+<li><a class="reference internal" href="#tercer-paso">3° TERCER PASO</a></li>
+</ul>
+</li>
+</ul>
+
   <h4>Tema anterior</h4>
   <p class="topless"><a href="Dependencias.html"
                         title="capítulo anterior">Archivos fuentes</a></p>

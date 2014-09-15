@@ -3,11 +3,11 @@
 ========================================================
 
 
-:command:`1.- Paso:`
+++++++++++++++++
+1° PRIMER PASO
+++++++++++++++++
 
-     	::
-	
-		Descargamos nuestro MensajesVersionInicial con estención .tar 
+ Descargamos nuestro MensajesVersionInicial con estención .tar 
 
         **DOWNLOAD:**
 
@@ -15,89 +15,86 @@
 		  ../../_static/download.png
 		  
   		
-    	:download:`MensajesVersionInicial.TAR <../Descargas/mensajesVersionInicial.tar>`
+    	:download:`ProductoVersionInicial.TAR <../Descargas/mensajesVersionInicial.tar>`
 
 
+++++++++++++++++
+2° SEGUNDO PASO
+++++++++++++++++
+
+- Creamos un directorio con cualquier nombre por ejemplo **Pysafet** en nuestro **<HOME>**
+
+ .. code-block:: bash
+
+	$ make $HOME/Pysafet
 
 
+- Copiamos nuestro archivo **(.tar)** que descargamos a nuestra carpeta **<HOME>Pysafet/**. En este caso se descargo en la carpeta **"Descargas"**.
 
-:command:`2.- Paso:`	    
+ .. code-block:: bash
 
- ::
+	$ cp Descargas/ProductoVersionInicial.tar $HOME/Pysafet/
 
-	//Creamos un carpeta Pysafet en nuestro HOME
-	$ make Pysafet
+- Acedemos a la carpeta Pysafet
 
-	.........................................................
-	//Copiamos nuestro archivo (.tar) que descargamos a nuestra carpeta Pysafet. En este caso se descargo en la carpeta "Descargas". 
-	$ cp Descargas/mensajesVersionInicial.tar Pysafet/
+ .. code-block:: bash
 
-	.........................................................
-	// Acedemos a la carpeta Pysafet
 	$ cd Pysafet/
 
-	........................................................
-	// Crearemos un archivo (.py) que lo llamares (MontarSafet.py)
+
+
+
+++++++++++++++++
+3° TERCER PASO
+++++++++++++++++
+
+
+- Crearemos un archivo **(.py)** por ejemplo **"MontarSafet.py"** dentro del directorio **<HOME>safe/**:
+
+ .. code-block:: bash
+
 	Pysafet$ touch MontarSafet.py
 
 
-:command:`3.- Paso:`
+- Abrimos nuestro archivo **(MontarSafet.py)** y insertamos el siguiente Script de python:
 
-- :Abrimos nuestro archivo (MontarSafet.py) y copiamos y guardamos el siguinte codigo:
-
-  >>> import Safet
-  ... import os
-  ...
-  ... myhome = os.getenv("HOME")
-  ... mymedia = myhome + "/tmp"
-  ... myurl = "http://localhost"
-  ...
-  ... myinflow = Safet.MainWindow(myhome)
-  ...
-  ... myinflow.setMediaPath(mymedia)
-  ... myinflow.setHostURL(myurl)
-  ...
-  ... myinflow.doLoadConfiguration("mensajesVersionInicial.tar")
+ .. code-block:: python
 
 
-- :Explicación del código:
+	import Safet
+	import os
 
-  >>> #Importación la librería Safet y os
-  ... import Safet
-  ... import os
-  ...
-  ... myhome = os.getenv("HOME") #
-  ... mymedia = myhome + "/tmp"
-  ... myurl = "http://localhost"
-  ...
-  ... myinflow = Safet.MainWindow(myhome)
-  ...
-  ... myinflow.setMediaPath(mymedia)
-  ... myinflow.setHostURL(myurl)
-  ...
-  ... myinflow.doLoadConfiguration("mensajesVersionInicial.tar")
+	myhome = os.getenv("HOME")
+	mymedia = myhome + "/tmp"
+	myurl = "http://localhost"
 
+	myinflow = Safet.MainWindow(myhome)
 
-:command:`4.- Paso:`
+	myinflow.setMediaPath(mymedia)
+	myinflow.setHostURL(myurl)
 
- ::
-
-	// Se compila el archivo (Montar.py)
-	Pysafe$ python Montar.py
-
-	.........................................................
-	
-	// Nos vamos al "HOME"  a verificar si monto el (.safet/)
-	Pysafet$ ls ../.safet/
-
-
-	
+	myinflow.doLoadConfiguration("ProductoVersionInicial.tar")
 
 
 
-	
+- Ejecutamos el archivo **(MontarSafet.py)** desde al consola comando como usuario normal:
+
+
+ .. code-block:: bash
+
+	Pysafe$ python MontarSafet.py
 
 
 
 
-	
+-  Nos vamos al **<HOME>**  a verificar si monto el (.safet/) con el comando **ls**:
+
+ .. code-block:: bash
+
+	Pysafet$ ls $HOME/.safet/
+
+	auth.conf digidoc.conf flowfiles images log     reports xmlrepository
+	certs     dtd          graphs    input  mydb.db safet.conf
+
+
+

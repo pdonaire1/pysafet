@@ -52,24 +52,13 @@
             
   <div class="section" id="archivos-fuentes">
 <h1><span class="target" id="index-0"></span>Archivos fuentes<a class="headerlink" href="#archivos-fuentes" title="Enlazar permanentemente con este título">¶</a></h1>
-<div class="section" id="instalacion-de-las-dependencias">
-<h2><span class="target" id="index-1"></span>Instalación de las dependencias<a class="headerlink" href="#instalacion-de-las-dependencias" title="Enlazar permanentemente con este título">¶</a></h2>
 <blockquote>
-<div>El código fuente de la librería Libsafet se encuentra alojada en una plataforma de desarrollo colaborativo de software (forja) llamada Github, esta plataforma utiliza como sistema de control de versión el software Git.</div></blockquote>
-<ul>
-<li><table class="first docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name" colspan="2">Para la compilación se requiere que se instale las siguientes dependencias:</th></tr>
-<tr class="field-odd field"><td>&nbsp;</td><td class="field-body"></td>
-</tr>
-</tbody>
-</table>
-</li>
+<div><p>El código fuente de la librería Libsafet se encuentra alojada en una plataforma de desarrollo colaborativo de software (forja) llamada Github, esta plataforma utiliza como sistema de control de versión el software Git.</p>
+<ul class="simple">
+<li>Para la compilación se requiere que se instale las siguientes dependencias:</li>
 </ul>
 <blockquote>
-<div><div class="highlight-python"><div class="highlight"><pre>libgraphviz-dev
+<div><div class="highlight-bash"><div class="highlight"><pre>libgraphviz-dev
 libtar-dev
 g++
 libglib2.0-dev
@@ -83,6 +72,7 @@ python-qt4-dev
 libqt4-sql-sqlite
 </pre></div>
 </div>
+</div></blockquote>
 </div></blockquote>
 <ul>
 <li><table class="first docutils field-list" frame="void" rules="none">
@@ -98,7 +88,7 @@ libqt4-sql-sqlite
 </ul>
 <blockquote>
 <div><div class="highlight-python"><div class="highlight"><pre># aptitude install libgraphviz-dev libtar-dev g++ libglib2.0-dev x11proto-xext-dev
-                   libqt4-dev libssl-dev make python-qt4-sql python-sip-dev python-qt4-dev libqt4-sql-sqlite
+          libqt4-dev libssl-dev make python-qt4-sql python-sip-dev python-qt4-dev libqt4-sql-sqlite
 </pre></div>
 </div>
 </div></blockquote>
@@ -134,14 +124,13 @@ libqt4-sql-sqlite
 <blockquote>
 <div><div class="highlight-python"><div class="highlight"><pre>$ git clone https://github.com/victorrbravo/pysafet.git pysafet
 
-
-Dentro del directorio de trabajo se crea el directorio pysafet donde se tiene el clone de la librería Libsafet
+ Dentro del directorio de trabajo se crea el directorio pysafet donde se tiene
+el clone de la librería Libsafet
 </pre></div>
 </div>
 </div></blockquote>
-</div>
 <div class="section" id="pasos-para-la-compilacion">
-<h2><span class="target" id="index-2"></span>Pasos para la compilación<a class="headerlink" href="#pasos-para-la-compilacion" title="Enlazar permanentemente con este título">¶</a></h2>
+<h2><span class="target" id="index-1"></span>Pasos para la compilación<a class="headerlink" href="#pasos-para-la-compilacion" title="Enlazar permanentemente con este título">¶</a></h2>
 <ul>
 <li><table class="first docutils field-list" frame="void" rules="none">
 <col class="field-name" />
@@ -170,7 +159,7 @@ $ sudo make install
 </div></blockquote>
 </div>
 <div class="section" id="verificacion-de-la-instalacion">
-<h2><span class="target" id="index-3"></span>Verificación de la instalación<a class="headerlink" href="#verificacion-de-la-instalacion" title="Enlazar permanentemente con este título">¶</a></h2>
+<h2><span class="target" id="index-2"></span>Verificación de la instalación<a class="headerlink" href="#verificacion-de-la-instalacion" title="Enlazar permanentemente con este título">¶</a></h2>
 <ul>
 <li><table class="first docutils field-list" frame="void" rules="none">
 <col class="field-name" />
@@ -211,7 +200,7 @@ Type &quot;help&quot;, &quot;copyright&quot;, &quot;credits&quot; or &quot;licen
 </ul>
 </div>
 <div class="section" id="funciones">
-<h2><span class="target" id="index-4"></span>Funciones<a class="headerlink" href="#funciones" title="Enlazar permanentemente con este título">¶</a></h2>
+<h2><span class="target" id="index-3"></span>Funciones<a class="headerlink" href="#funciones" title="Enlazar permanentemente con este título">¶</a></h2>
 <ul>
 <li><div class="first highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">Safet</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="nb">dir</span><span class="p">(</span><span class="n">Safet</span><span class="p">)</span>
@@ -233,7 +222,6 @@ Type &quot;help&quot;, &quot;copyright&quot;, &quot;credits&quot; or &quot;licen
   <h3><a href="../../index.html">Tabla de Contenidos</a></h3>
   <ul>
 <li><a class="reference internal" href="#">Archivos fuentes</a><ul>
-<li><a class="reference internal" href="#instalacion-de-las-dependencias">Instalación de las dependencias</a></li>
 <li><a class="reference internal" href="#pasos-para-la-compilacion">Pasos para la compilación</a></li>
 <li><a class="reference internal" href="#verificacion-de-la-instalacion">Verificación de la instalación</a></li>
 <li><a class="reference internal" href="#funciones">Funciones</a></li>

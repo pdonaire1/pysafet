@@ -1,21 +1,16 @@
 
-
-.. Safet_para_Ubuntu:
-
-==========================
+,,,,,,,,,,,,,,,,,,,,,,,,,,,,,
 :index:`Archivos fuentes`
-==========================
-	
-
-:index:`Instalación de las dependencias`
--------------------------------------------
-
-	El código fuente de la librería Libsafet se encuentra alojada en una plataforma de desarrollo colaborativo de software (forja) llamada Github, esta plataforma utiliza como sistema de control de versión el software Git. 
+,,,,,,,,,,,,,,,,,,,,,,,,,,,,,
 
 
-- :Para la compilación se requiere que se instale las siguientes dependencias:
+ El código fuente de la librería Libsafet se encuentra alojada en una plataforma de desarrollo colaborativo de software (forja) llamada Github, esta plataforma utiliza como sistema de control de versión el software Git. 
 
- ::
+
+ - Para la compilación se requiere que se instale las siguientes dependencias:
+
+ 
+  .. code-block:: bash
 
 	libgraphviz-dev
 	libtar-dev
@@ -37,7 +32,7 @@
  :: 
 
 	# aptitude install libgraphviz-dev libtar-dev g++ libglib2.0-dev x11proto-xext-dev 
-	                   libqt4-dev libssl-dev make python-qt4-sql python-sip-dev python-qt4-dev libqt4-sql-sqlite  
+                  libqt4-dev libssl-dev make python-qt4-sql python-sip-dev python-qt4-dev libqt4-sql-sqlite  
 
 
 - :Para clonar el repositorio de Libsafet debemos instalar el control de versiones git:
@@ -51,10 +46,10 @@
 
  ::
 
-	$ git clone https://github.com/victorrbravo/pysafet.git pysafet
+   $ git clone https://github.com/victorrbravo/pysafet.git pysafet
 
-
-	Dentro del directorio de trabajo se crea el directorio pysafet donde se tiene el clone de la librería Libsafet
+    Dentro del directorio de trabajo se crea el directorio pysafet donde se tiene
+   el clone de la librería Libsafet
 
 
 

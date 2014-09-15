@@ -2,26 +2,20 @@
 Documentación de PySafet
 ===========================================
 
-
 :command:`1.- Introducción`
-
 
 .. toctree::
 	:maxdepth: 1
 
-
-	_templates/Contenido1/Introduccion_safet.rst
-
+	_templates/Contenido1/Introduccion.rst
 
 
 :command:`2.- Instalación`
 
-
 .. toctree::
 	:maxdepth: 1
 
-
-	_templates/Contenido1/Safet_para_Debian.rst									
+	_templates/Contenido1/Safet_para_Debian.rst
 	_templates/Contenido1/Safet_para_Ubuntu.rst
 	_templates/Contenido1/Dependencias.rst
 
@@ -32,7 +26,6 @@ Documentación de PySafet
 
 .. toctree::
 	:maxdepth: 1
-
 
 	_templates/Contenido1/Pysafet_home.rst
 	_templates/Contenido1/Explicacion_safet.rst
@@ -74,6 +67,7 @@ Documentación de PySafet
 	_templates/Contenido6/Parte2.rst
 	_templates/Contenido6/Parte4.rst
 	_templates/Contenido6/Parte3.rst
+	_templates/Contenido6/Parte5.rst
 	_templates/Contenido6/Parte6.rst
 
 
@@ -86,5 +80,26 @@ Documentación de PySafet
 	_templates/Contenido7/visualizacion.rst
 
 
-.. centered:: LICENCIA	
+
+.. centered:: LICENCIA
+
+
+
+.. figure:: _static/88x31.png
+           :align: center
+
+           **Documentación PySafet by Cenditel Mérida - Venezuela** 
+           **is licensed under a**
+           `Creative Commons Reconocimiento-NoComercial-SinObraDerivada 4.0 Internacional License`_.
+           **Creado a partir de la obra en**
+           `http://seguridad.cenditel.gob.ve/safet/doc`_.
+           **Puede hallar permisos más allá de los concedidos con**
+           **esta licencia en** `http://seguridad.cenditel.gob.ve/safet/doc`_.
+
+.. _creative commons reconocimiento-noComercial-sinObraDerivada 4.0 internacional license: http://creativecommons.org/licenses/by-nc-nd/4.0/
+
+.. _http://seguridad.cenditel.gob.ve/safet/doc: http://seguridad.cenditel.gob.ve/safet/doc
+
+.. _http://seguridad.cenditel.gob.ve/safet/doc: http://seguridad.cenditel.gob.ve/safet/doc
+
 
