@@ -224,6 +224,15 @@ public:
           */
 
         static QString getJSONMiles(const QList<SafetWorkflow::Miles>& miles,QList<QSqlField>& myfields);
+        /**
+         * @brief calculateSQL
+         * @param currsql sentencia SQL
+         * @param df valor por defecto
+         * @return valor calculado del SQL
+         */
+
+
+        static QString calculateSQL(const QString& currsql, const QString &info);
 private:
 
         ExtraInfoSearchKey _searchkey;
@@ -898,6 +907,9 @@ private:
                                QMap<int,QString>& orders);
 
          void shrinkNodes(QMap<QString, QString> &nodes);
+
+
+
 };
 
 #endif /*SAFETWORKFLOW_H_*/

@@ -1480,7 +1480,7 @@ QString SafetWorkflow::printNodeInformation(SafetNode *node, const QString& next
                      + tr("Titulo:")+nodetitle+",";
      QString noderole;
      if (mytask != NULL && !mytask->role().isEmpty()) {
-         noderole = QString(",Rol:%1,").arg(mytask->role());
+         noderole = QString(",Rol:%1,").arg(calculateSQL(mytask->role(),info));
       }
 
      QString nodenote;
@@ -1492,7 +1492,7 @@ QString SafetWorkflow::printNodeInformation(SafetNode *node, const QString& next
      QString currvariable = "n/a";
      if (mytask != NULL && !mytask->textualinfo().isEmpty()) {
          QString postfix = SafetYAWL::getConf()["GeneralOptions/textualinfo.postfix"];
-         nodetextinfo = QString(",TextualInfo:%1%2,").arg(mytask->textualinfo()).arg(postfix);
+         nodetextinfo = QString(",TextualInfo:%1%2,").arg(calculateSQL(mytask->textualinfo(),info)).arg(postfix);
 
       }
 
@@ -1521,6 +1521,68 @@ QString SafetWorkflow::printNodeInformation(SafetNode *node, const QString& next
          delete _mystats;
      }
      return result;
+}
+
+QString SafetWorkflow::calculateSQL(const QString& currsql, const QString& info) {
+
+    QString result = "";
+    QString df = "";
+    QStringList mylist = currsql.split("::",QString::SkipEmptyParts);
+
+    df = mylist.at(0);
+
+    if (mylist.count() > 1 ) {
+        result = mylist.at(1);
+    }
+    else if (mylist.count() == 1) {
+        result = mylist.at(0);
+    }
+    else {
+        return result;
+    }
+
+
+    if (!result.startsWith("SELECT ",Qt::CaseInsensitive)) {
+        SYD << tr(".......SafetWorkflow::calculateSQL...returning df");
+        return result;
+     }
+
+    SYD << tr(".......SafetWorkflow::calculateSQL...CALCULATESQL.....currsql (1): |%1|")
+           .arg(result);
+
+    SYD << tr(".......SafetWorkflow::calculateSQL...CALCULATESQL.....info: |%1|")
+           .arg(info);
+
+    QString newsql = result;
+
+    newsql.replace("{#keyvalue0}",info);
+    QSqlQuery query( SafetYAWL::currentDb );
+    query.prepare(  newsql );
+    bool executed = query.exec();
+    SYD << tr(".......SafetWorkflow::calculateSQL...CALCULATESQL.....newsql(2): |%1|")
+           .arg(newsql);
+
+
+    if (!executed ) {
+        SYE
+                <<
+                   tr("NO se ejecutó correctamente la sentencia de cálculo SQL: \"%1\"")
+                   .arg(newsql);
+        return df;
+    }
+
+    if (!query.next()) {
+        SYA
+                <<
+                   tr("Advertencia: No existe el registro: \"%1\"")
+                   .arg(result);
+        return df;
+    }
+    result = query.value(0).toString();
+    SYD << tr(".......SafetWorkflow::calculateSQL...CALCULATESQL.....result: |%1|").arg(result);
+
+    return result;
+
 }
 
 void SafetWorkflow::saveStates(const QString &currstate, const QStringList& nextstates) {
