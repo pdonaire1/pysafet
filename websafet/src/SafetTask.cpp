@@ -54,7 +54,7 @@ void SafetTask::addChild(SafetXmlObject* o) {
         SafetAutofilter *myaf;
         SafetRecursivefilter *myrf;
         SafetPort* myport;
-        QString sourceaf;
+
         bool contain = false;
         int i = 0; // Contador
 	switch(SafetYAWL::getClassReference(SafetYAWL::translateNS(o->metaObject()->className()))) {
@@ -93,31 +93,15 @@ void SafetTask::addChild(SafetXmlObject* o) {
 		break;
         case 10: // Autofiltros
                 myaf = qobject_cast<SafetAutofilter*>(o);
-                mywf = qobject_cast<SafetWorkflow*>(parent());                
-                Q_CHECK_PTR( mywf );
-                myyawl = qobject_cast<SafetYAWL*>(mywf->parent());
-                Q_CHECK_PTR( myyawl );
-                Q_CHECK_PTR( myaf );                
-                SYD << tr("SafetTask::addChild AUTOFILTER..query() (1):|%1|")
-                       .arg(myaf->query());
-                myaf->setQuery(SafetYAWL::replaceArgsflow(myaf->query()));
-                SYD << tr("SafetTask::addChild AUTOFILTER..query() (2):|%1|\n")
-                       .arg(myaf->query());
-
-//                qDebug("...myaf->id(): |%s| ...: mywf->isActiveFilter( myaf->id() ):%d",
-//                       qPrintable(myaf->id()), myyawl->isActiveFilter( myaf->id() ) );
-                if ( myyawl->isActiveFilter( myaf->id() ) ) {
-//                     sourceaf = myaf->source();
-//                     qDebug("... SafetTask::addChild...sourceaf...: %s", qPrintable(sourceaf));
-//                     if ( mywf->searchTask( sourceaf ) == NULL && mywf->searchCondition( sourceaf) == NULL ) {
-//                          SafetYAWL::streamlog  << SafetLog::Error
-//                             << tr("El autofiltro \"%1\" no se puede crear porque el destino no existe: \"%2\"").arg(myaf->id()).arg(sourceaf);
-//                          break;
-//                     }
-                      myaf->setFiltertask( this );
-                //     qDebug("...aflist = myaf->createTasks();....");
-                     aflist = myaf->createTasks(id().left(2).toLower());
-                }
+                SYD << tr("agregando AUTOFILTER_AUTO_REPLACE");
+                autofilterlist.append(myaf);
+                 mywf = qobject_cast<SafetWorkflow*>(parent());
+//                myyawl = qobject_cast<SafetYAWL*>(mywf->parent());
+//                if ( myyawl->isActiveFilter( myaf->id() ) ) {
+//                      myaf->setFiltertask( this );
+//                     aflist = myaf->createTasks(id().left(2).toLower());
+//
+//                }
                 mywf->autofiltersId().insert(myaf->id());
                 break;
         case 11: // filtros Recursivos

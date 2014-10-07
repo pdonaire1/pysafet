@@ -149,6 +149,29 @@ QMap<QString,QString> SafetWorkflow::changeHumanizeParameters(const QMap<QString
     return result;
 }
 
+void SafetWorkflow::evalAutofilters() {
+    SafetYAWL   *myyawl = qobject_cast<SafetYAWL*>(parent());
+
+    SYD << tr(".....SafetWorkflow::evalAutofilters()...(1)..");
+    Q_CHECK_PTR(myyawl);
+
+    SYD << tr(".....SafetWorkflow::evalAutofilters()...(2)..");
+    foreach(SafetTask* task, getTasklist()) {
+        QList<SafetAutofilter*> mylistaf = task->getAutofilters();
+        foreach(SafetAutofilter* myfilter, mylistaf) {
+          if ( myyawl->isActiveFilter( myfilter->id() ) ) {
+                myfilter->setFiltertask( task );
+                QList<SafetTask*> aflist = myfilter->createTasks(task->id().left(2).toLower());
+
+            }
+        }
+
+
+    }
+    SYD << tr(".....SafetWorkflow::evalAutofilters()...(3)..");
+
+}
+
 bool SafetWorkflow::putParameters(const QMap<QString,QString>& p) {
     bool result = false;
 
@@ -199,6 +222,19 @@ bool SafetWorkflow::putParameters(const QMap<QString,QString>& p) {
                 task->setTitle("::safethide::");
             }
         }
+        SYD << tr(".........SafetWorkflow::putParameters AUTOFILTERCOUNT:|%1|")
+               .arg(task->getAutofilters().count());
+        foreach(SafetAutofilter *filter, task->getAutofilters()) {
+            strin = filter->query();
+            strout = replaceArg(strin,list);
+            SYD << tr("......SafetWorkflow::putParameters...AUTO_REPLACE....AUTOFILTERCOUNT...strout:|%1|")
+                   .arg(strout);
+            if (strin != strout ) {
+                filter->setQuery(strout);
+            }
+
+        }
+
         foreach(SafetPort *port, task->getPorts()) {
             if (port->type() == "split" ) {
 
@@ -263,6 +299,13 @@ QString SafetWorkflow::replaceArg(const QString& strin, const QMap<QString,QStri
    QRegExp rx;
    rx.setPattern(pattern);
    int pos = 0;
+   SYD << tr("--------------");
+   foreach (QString k, l.keys()) {
+       SYD << tr("key:|%1|").arg(k);
+       SYD << tr("value:|%1|").arg(l[k]);
+       SYD << tr("...");
+   }
+   SYD << tr("--------------");
    while(true) {
        pos  = strin.indexOf(rx,pos);
        if (pos == -1) break;
@@ -308,7 +351,7 @@ void SafetWorkflow::addChild(SafetXmlObject* o) {
                .arg(ptask->title());
          ptask->setTitle(SafetYAWL::replaceArgsflow(ptask->title()));
 		tasklist.push_back(ptask);
-        SYD << tr(".....SafetWorkflow::addChild..ADDCHILD.(2)..ptask->title():|%1|")
+        SYD << tr(".....***SafetWorkflow::addChild..ADDCHILD.(2)..ptask->title():|%1|")
                .arg(ptask->title());
 
 		nodemap.insert(ptask->id(),qobject_cast<SafetNode*>(o));
@@ -1523,7 +1566,7 @@ QString SafetWorkflow::printNodeInformation(SafetNode *node, const QString& next
      return result;
 }
 
-QString SafetWorkflow::calculateSQL(const QString& currsql, const QString& info) {
+QString SafetWorkflow::calculateSQL(const QString& currsql, const QString& info, const QString& otherinfo) {
 
     QString result = "";
     QString df = "";
@@ -1556,6 +1599,7 @@ QString SafetWorkflow::calculateSQL(const QString& currsql, const QString& info)
     QString newsql = result;
 
     newsql.replace("{#keyvalue0}",info);
+    newsql.replace("{#keyvalue1}",otherinfo);
     QSqlQuery query( SafetYAWL::currentDb );
     query.prepare(  newsql );
     bool executed = query.exec();
@@ -1564,9 +1608,9 @@ QString SafetWorkflow::calculateSQL(const QString& currsql, const QString& info)
 
 
     if (!executed ) {
-        SYE
+        SYA
                 <<
-                   tr("NO se ejecutó correctamente la sentencia de cálculo SQL: \"%1\"")
+                   tr("NO se ejecutó correctamente la sentencia de calculo SQL: \"%1\"")
                    .arg(newsql);
         return df;
     }
@@ -1705,7 +1749,7 @@ QList<double> SafetWorkflow::numericInfos(const QString& id) {
 
 }
 
-QStringList SafetWorkflow::textualInfos(const QString& id, int fieldtype) {
+QStringList SafetWorkflow::textualInfos(const QString& id, int fieldtype, const QString& otherid) {
     QStringList result;
     bool includeall = id.trimmed().isEmpty();
     QList<SafetTask*> mytasks = getTasks();
@@ -1717,13 +1761,16 @@ QStringList SafetWorkflow::textualInfos(const QString& id, int fieldtype) {
                 QString myvalue;
                 switch( fieldtype) {
                 case 0:
-                    myvalue = mytask->textualinfo();
+                    SYD << tr("..............SafetWorkflow::textualInfos....TEXTUALVALUE ID(1):|%1|").arg(id);
+                    SYD << tr("..............SafetWorkflow::textualInfos....TEXTUALVALUE OTHERID(1):|%1|").arg(otherid);
+                    myvalue = calculateSQL(mytask->textualinfo(),id,otherid);
+                    SYD << tr("..............SafetWorkflow::textualInfos....TEXTUALVALUE (2):|%1|").arg(myvalue);
                     break;
                 case 1:
-                    myvalue = mytask->role();
+                    myvalue = calculateSQL(mytask->role(),id);
                     break;
                 case 2:
-                    myvalue = mytask->note();
+                    myvalue = calculateSQL(mytask->note(),id);
                     break;
                 }
                 result.append(myvalue);
@@ -1735,6 +1782,7 @@ QStringList SafetWorkflow::textualInfos(const QString& id, int fieldtype) {
         }
 
     }
+
     return result;
 
 }

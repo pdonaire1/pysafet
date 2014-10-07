@@ -56,6 +56,7 @@ class SafetTask : public SafetNode  {
 
 	
     QList<SafetVariable*> variablelist;
+    QList<SafetAutofilter*> autofilterlist;
         QString _id, _title, _multiplicity, _type;
         QList<SafetTask*> aflist; // Tareas para el autofiltro
         QList<SafetTask*> rflist; // Tareas para el filtro Recursivo
@@ -83,6 +84,8 @@ public:
         void addVariable(SafetVariable* v );
 
         QList<SafetVariable*>& getVariables();
+
+        QList<SafetAutofilter*>& getAutofilters()  { return autofilterlist; }
         /*
           * \brief Sincronización del puerto de "control" con el puerto a añadir en la tarea
           * \param p Puerto a ser sincronizado con el puerto "control"

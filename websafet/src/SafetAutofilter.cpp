@@ -407,8 +407,9 @@ QStringList SafetAutofilter::generateFilterOptions() {
      newsql += firstfield;
      newsql += ";";
 
-     SYD << tr(".........SafetAutofilter::generateFilterOptions NEWSQL:|%1|")
+     SYD << tr(".........SafetAutofilter::generateFilterOptions AUTO_REPLACE...*NEWSQL:|%1|")
             .arg(newsql);
+
 
      QSqlQuery query(SafetYAWL::currentDb);
      query.prepare(  newsql );

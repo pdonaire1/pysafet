@@ -1439,6 +1439,7 @@ QString MainWindow::generateModifyHTML(const QString& operation, const QString& 
     }
     else if ( operation.startsWith(tr("Agregar_nodo"))
               || operation.startsWith(tr("Borrar_nodo"))
+               || operation.startsWith(tr("Inicializar_"))
 //              || operation.startsWith(tr("Cambiar_"))
               || operation.startsWith(tr("Cambiar_conexión")) ) {
         QString pathflow = key;
@@ -4357,7 +4358,7 @@ bool  MainWindow::toInputConsole(const QString& action,bool withpermises) {
 
             QString currflow = "";
             QString currid = "";
-            // Flujo
+            // ****         Flujo
             if (data.map.contains("Cargar_archivo_flujo")) {
                 currflow = data.map["Cargar_archivo_flujo"];
             }
@@ -4380,6 +4381,7 @@ bool  MainWindow::toInputConsole(const QString& action,bool withpermises) {
             else {
                 SYE << tr("No existe la variable id para graficar el flujo");
             }
+
 
 
             QString texto = QString("-f %1 -p graphviz -g -k %2 ")
@@ -7862,6 +7864,7 @@ void MainWindow::setParsValues(const QMap<QString,QString>& values) {
     _currparsvalues = values;
 }
 
+
 void MainWindow::evalParsValues(SafetWorkflow *wf) {
 
                SYD << tr("MainWindow::evalParsValues()..._currparsvalues.keys().count():%1")
@@ -7880,6 +7883,8 @@ void MainWindow::evalParsValues(SafetWorkflow *wf) {
 
 
     wf->putParameters(_currparsvalues);
+    SYD << tr("....evalParsValues...AUTO_REPLACE*");
+    wf->evalAutofilters();
 }
 
 void MainWindow::setConffileValues(const QMap<QString,QString>& values) {

@@ -210,7 +210,7 @@ QString SafetSQLParser::dropWhereClauses(bool drop) {
 QString SafetSQLParser::getWhereClause() {
         QString str = sql();
                 QRegExp rx;
-        rx.setPattern("\\s*WHERE\\s+([a-zA-Z0-9\\s_\\{\\}\\.\\=<>'\"\\(\\)\\!]+)\\s*");
+        rx.setPattern("\\s*WHERE\\s+([a-zA-Z0-9\\s_\\{\\}#\\%\\.\\=<>'\"\\(\\)\\!]+)\\s*");
         rx.setCaseSensitivity( Qt::CaseInsensitive );
         int pos = str.indexOf(rx);
         if ( pos >= 0 ) {

@@ -232,7 +232,7 @@ public:
          */
 
 
-        static QString calculateSQL(const QString& currsql, const QString &info);
+        static QString calculateSQL(const QString& currsql, const QString &info, const QString& otherinfo = QString(""));
 private:
 
         ExtraInfoSearchKey _searchkey;
@@ -864,7 +864,7 @@ public:
       \param id  Identificador de la tarea, si se coloca vacío retorna todos los "textualinfo" encontrados
       \param fieldtype 0 textualinfo 1 roleinfo
       */
-    QStringList textualInfos(const QString& id = QString(""), int fieldtype = 0);
+    QStringList textualInfos(const QString& id = QString(""), int fieldtype = 0, const QString& otherid = QString(""));
 
     /**
       \brief Calcula los operadores JOIN cambiando los operadores tipo SPLIT por los correspondientes
@@ -888,6 +888,7 @@ public:
     bool doSubFlow(const QString& flowname, const QString& passname);
     bool isBackNode(SafetNode *node, const QString &nodename);
     QString currentGraphJSON(const QString& codegraph);
+    void evalAutofilters();
 private:
    QMap<QString,QStringList> _nexts;
    QMap<QString,QStringList> _previouses;
