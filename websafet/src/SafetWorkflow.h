@@ -178,7 +178,7 @@ public:
           \param Lista de valores para reemplazar
           \return Cadena reemplazada con el valor del argumento
           */
-        static QString replaceArg(const QString& strin, const QMap<QString,QString>& l);
+        QString replaceArg(const QString& strin, const QMap<QString,QString>& l, bool& doit);
         /**
           \brief Cambia los valores "cualquiera". "todos", por expresiones SQL como "like..:"
           \param l lista de Parametros

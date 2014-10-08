@@ -212,7 +212,7 @@ void ComboWidget::updateComboGraphsSafet(bool inwidget) {
 
 bool ComboWidget::isValid(QString& value) {
 
-    SYD << tr("...........ComboWidget::isValid........value:|%1|")
+    SYD << tr("...........ComboWidget::isValid.....COMBOVALIDATION...value:|%1|")
            .arg(value);
     if (value.isEmpty() ) {
         return true;
@@ -550,7 +550,7 @@ void ComboWidget::updateComboFlow(bool inwidget) {
                     .arg(mypath);
 
              if (!executed ) {
-                 SYE
+                 SYW
                          <<
                             tr("NO se ejecutó correctamente la sentencia de busqueda de Path SQL: \"%1\"")
                             .arg(newsql);
@@ -600,7 +600,7 @@ void ComboWidget::updateComboFlow(bool inwidget) {
 
                     SYD << tr("...ComboWidget::updateComboFlow...fieldtype:%1")
                            .arg(fieldtype);
-                    infos = mywf->textualInfos(mykeyvalue,fieldtype);
+                    infos = mywf->textualInfos(mykeyvalue,fieldtype,myother);
                     SYD << tr("...ComboWidget::updateComboFlow...(textualinfo)..infos.count():%1")
                            .arg(infos.count());
                     if ( infos.count() > 0 ){
@@ -938,9 +938,14 @@ void ComboWidget::updateComboListTable(bool inwidget) {
              mykey = mylist.at(1);
          }
          QMap<QString,QString>  l;
+         SafetWorkflow* mywf = MainWindow::configurator->getWorkflows().at(0);
+         if (mywf == NULL) {
+             SYD << tr("COMBO mywf NULL...**");
+         }
          l["1"]= mykey;
          if (!where.isEmpty()) {
-            where = SafetWorkflow::replaceArg(where,l);
+             bool doit = false;
+            where = mywf->replaceArg(where,l,doit);
             SYD << tr("....ComboWidget::updateComboListTable...reemplazando where:|%1|")
                    .arg(where);
          }
@@ -1078,11 +1083,17 @@ void ComboWidget::updateComboListBinaryRepo(bool inwidget) {
                 .arg(where);
      }
 
+     SafetWorkflow* mywf = MainWindow::configurator->getWorkflows().at(0);
+     if (mywf == NULL) {
+         SYD << tr("COMBO mywf NULL...**(2)");
+     }
+
      if (conf().contains("keyvalue")) {
          QMap<QString,QString> l;
          l["1"] = conf()["keyvalue"].toString();
          if (!where.isEmpty()) {
-            where = SafetWorkflow::replaceArg(where,l);
+             bool doit = false;
+            where = mywf->replaceArg(where,l,doit);
             SYD << tr("....ComboWidget::updateComboListTable...reemplazando where:|%1|")
                    .arg(where);
          }

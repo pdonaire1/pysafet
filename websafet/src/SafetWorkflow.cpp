@@ -183,11 +183,23 @@ bool SafetWorkflow::putParameters(const QMap<QString,QString>& p) {
         strin = task->title();
         SYD << tr("....SafetWorkflow::putParameters...strin:|%1|")
                .arg(strin);
-        strout = replaceArg(strin,p);
+        bool dodefaultvalue = false;
+        strout = replaceArg(strin,p, dodefaultvalue);
         SYD << tr("....SafetWorkflow::putParameters...strout:|%1|")
                .arg(strout);
 
-        if (strin != strout ) {
+        SYD << tr("...***.SafetWorkflow::putParameters..dodefaultvalue.....DOIT:|%1|")
+               .arg(dodefaultvalue);
+
+        if ( strin != strout && dodefaultvalue ) {
+            SYD << tr("...doit***.SafetWorkflow::putParameters..dodefaultvalue.....STRIN:|%1|")
+                   .arg(strin);
+            SYD << tr("...***.SafetWorkflow::putParameters..dodefaultvalue.....STROUT:|%1|")
+                   .arg(strout);
+
+            task->setTitle("::safethide::");
+        }
+        else if (strin != strout ) {
             SYD << tr("....SafetWorkflow::putParameters..(1)...");
             if ( strout.indexOf(QRegExp("\\s+NULL\\s*"),Qt::CaseInsensitive) == -1 ) {
                 QString normtl = strout;
@@ -219,6 +231,7 @@ bool SafetWorkflow::putParameters(const QMap<QString,QString>& p) {
             else {
                 SYD << tr("....SafetWorkflow::putParameters..(2)...");
                 //task->setTitle(Safet::AnyOneObject);
+
                 task->setTitle("::safethide::");
             }
         }
@@ -226,7 +239,9 @@ bool SafetWorkflow::putParameters(const QMap<QString,QString>& p) {
                .arg(task->getAutofilters().count());
         foreach(SafetAutofilter *filter, task->getAutofilters()) {
             strin = filter->query();
-            strout = replaceArg(strin,list);
+            bool doit = false;
+            strout = replaceArg(strin,list,doit);
+            strout.replace("_USERNAME", SafetYAWL::currentAuthUser());
             SYD << tr("......SafetWorkflow::putParameters...AUTO_REPLACE....AUTOFILTERCOUNT...strout:|%1|")
                    .arg(strout);
             if (strin != strout ) {
@@ -244,7 +259,8 @@ bool SafetWorkflow::putParameters(const QMap<QString,QString>& p) {
                            .arg(strin);
                     SYD << tr("......SafetWorkflow::putParameters....list.count():|%1|")
                            .arg(list.count());
-                    strout = replaceArg(strin,list);
+                    bool doit = false;
+                    strout = replaceArg(strin,list, doit);
                     SYD << tr("......SafetWorkflow::putParameters....strout:|%1|")
                            .arg(strout);
 
@@ -261,7 +277,8 @@ bool SafetWorkflow::putParameters(const QMap<QString,QString>& p) {
     }
     foreach(SafetCondition* cond, getConditionlist()) {
         strin = cond->title();
-        strout = replaceArg(strin,p);
+        bool doit = false;
+        strout = replaceArg(strin,p,doit);
         if (strin != strout ) {
             cond->setTitle(strout);
         }
@@ -270,9 +287,10 @@ bool SafetWorkflow::putParameters(const QMap<QString,QString>& p) {
 
                 foreach (SafetConnection* conn, port->getConnectionlist()) {
                     strin = conn->options();
+                    bool doit = false;
                     SYD << tr("...SafetWorkflow::putParameters....condition...strin:|%1|")
                            .arg(strin);
-                    strout = replaceArg(strin,list);
+                    strout = replaceArg(strin,list,doit);
                     SYD << tr("...SafetWorkflow::putParameters....condition...strout:|%1|")
                            .arg(strout);
                     SYD << tr("...SafetWorkflow::putParameters....condition...list.count():|%1|")
@@ -293,8 +311,9 @@ bool SafetWorkflow::putParameters(const QMap<QString,QString>& p) {
     return result;
 }
 
-QString SafetWorkflow::replaceArg(const QString& strin, const QMap<QString,QString>& l) {
+QString SafetWorkflow::replaceArg(const QString& strin, const QMap<QString,QString>& l, bool &doit) {
     QString result = strin;
+    doit = false; // es defaultvalue
    QString pattern = QString("(\\=|>|<|<\\=|>\\=|IS|IN|LIKE)?\\s*\\{\\#([a-zA-Z0-9_]+)\\}");
    QRegExp rx;
    rx.setPattern(pattern);
@@ -326,11 +345,58 @@ QString SafetWorkflow::replaceArg(const QString& strin, const QMap<QString,QStri
    }
    pos = 0;   
    QString newresult = result;
+   QList<SafetParameter*> mypars = getParameterlist();
+
+
    while(true) {
           pos  = newresult.indexOf(rx,pos);
           if (pos == -1) break;
-           result.replace(rx.cap(0)," "+Safet::SqlAllValues);
+
+          SYD << tr(".......SafetWorkflow::replaceArg REPLACESQL....rx.cap(0):|%1|")
+                 .arg(rx.cap(0));
+
+          QString myparameter = rx.cap(0);
+          QRegExp rxtitle("\\{\\#([a-zA-Z0-9_]+)\\}");
+
+          int postitle = rxtitle.indexIn(myparameter);
+          SYD << tr(".......SafetWorkflow::replaceArg REPLACESQL....postitle:|%1|")
+                 .arg(postitle);
+
+          if (postitle >= 0 ) {
+              QString mytitle = rxtitle.cap(1);
+              SYD << tr(".......SafetWorkflow::replaceArg REPLACESQL....mytitle:|%1|")
+                     .arg(mytitle);
+
+              foreach(SafetParameter* par, mypars) {
+                  if (par->configurekey().isEmpty()) {
+                        SYD << tr("..(parameter)...par title:|%1|").arg(par->title());
+                        if (par->title().compare(mytitle,Qt::CaseSensitive) == 0 ) {
+                            QString defaultvalue = par->defaultvalue();
+                            SYD << tr("..(parameter)...par->defaultvalue():|%1|").arg(defaultvalue);
+                            if (!defaultvalue.isEmpty()) {
+                                result.replace(rx.cap(0),par->defaultvalue());
+                                doit = true;
+                            }
+                            else {
+                                result.replace(rx.cap(0)," "+Safet::SqlAllValues);
+                            }
+                            break;
+
+                        }
+
+                  }
+              }
+
+
+
+
+          }
+          else {
+            result.replace(rx.cap(0)," "+Safet::SqlAllValues);
+
+          }
           pos += rx.cap(0).length()==0?5:rx.cap(0).length();
+
    }
 
     return result.trimmed();
