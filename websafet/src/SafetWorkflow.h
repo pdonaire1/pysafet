@@ -193,6 +193,8 @@ public:
         static QString removeOutParenthesis(const QString &s);
 
 
+        static QString replaceArg(const QString &strin, const QMap<QString, QString> &l);
+
         /**
           \brief (Estatica) Colorea los estados con informacion extra (extrainfo)
           \param codigo del grafo en líneas Nodo:...
@@ -889,6 +891,7 @@ public:
     bool isBackNode(SafetNode *node, const QString &nodename);
     QString currentGraphJSON(const QString& codegraph);
     void evalAutofilters();
+
 private:
    QMap<QString,QStringList> _nexts;
    QMap<QString,QStringList> _previouses;

@@ -403,6 +403,44 @@ QString SafetWorkflow::replaceArg(const QString& strin, const QMap<QString,QStri
 
 }
 
+QString SafetWorkflow::replaceArg(const QString& strin, const QMap<QString,QString>& l) {
+    QString result = strin;
+   QString pattern = QString("(\\=|>|<|<\\=|>\\=|IS|IN|LIKE)?\\s*\\{\\#([a-zA-Z0-9_]+)\\}");
+   QRegExp rx;
+   rx.setPattern(pattern);
+   int pos = 0;
+   while(true) {
+       pos  = strin.indexOf(rx,pos);
+       if (pos == -1) break;
+
+           bool ok;
+           QString numpar = rx.cap(2);
+           QString stringfinded;
+           if (l.contains(numpar)) {
+               QString mynumpar = l[numpar].trimmed();
+               stringfinded = QString("{#%1}").arg(numpar);
+               if (!mynumpar.isEmpty()) {
+                    result.replace(stringfinded,mynumpar);
+               }
+
+           }
+           pos += stringfinded.length()==0?5:stringfinded.length();
+
+   }
+   pos = 0;
+   QString newresult = result;
+   while(true) {
+          pos  = newresult.indexOf(rx,pos);
+          if (pos == -1) break;
+           result.replace(rx.cap(0)," "+Safet::SqlAllValues);
+          pos += rx.cap(0).length()==0?5:rx.cap(0).length();
+   }
+
+    return result.trimmed();
+
+}
+
+
 void SafetWorkflow::addChild(SafetXmlObject* o) {
 	Q_CHECK_PTR(o);
 	SafetXmlObject::addChild(o);

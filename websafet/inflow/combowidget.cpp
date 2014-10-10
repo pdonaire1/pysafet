@@ -938,14 +938,10 @@ void ComboWidget::updateComboListTable(bool inwidget) {
              mykey = mylist.at(1);
          }
          QMap<QString,QString>  l;
-         SafetWorkflow* mywf = MainWindow::configurator->getWorkflows().at(0);
-         if (mywf == NULL) {
-             SYD << tr("COMBO mywf NULL...**");
-         }
          l["1"]= mykey;
          if (!where.isEmpty()) {
              bool doit = false;
-            where = mywf->replaceArg(where,l,doit);
+            where = SafetWorkflow::replaceArg(where,l);
             SYD << tr("....ComboWidget::updateComboListTable...reemplazando where:|%1|")
                    .arg(where);
          }
@@ -1093,7 +1089,7 @@ void ComboWidget::updateComboListBinaryRepo(bool inwidget) {
          l["1"] = conf()["keyvalue"].toString();
          if (!where.isEmpty()) {
              bool doit = false;
-            where = mywf->replaceArg(where,l,doit);
+            where = SafetWorkflow::replaceArg(where,l);
             SYD << tr("....ComboWidget::updateComboListTable...reemplazando where:|%1|")
                    .arg(where);
          }
