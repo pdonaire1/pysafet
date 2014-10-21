@@ -4350,6 +4350,7 @@ bool  MainWindow::toInputConsole(const QString& action,bool withpermises) {
 
         }
         else if (parser.operationName().startsWith("Generar_gráfico_para_clave") ||
+                 parser.operationName().startsWith("Generar_gráfico_de_seguimiento") ||
                 parser.operationName().startsWith("Generar_grafico_para_clave")
 ) {
 
