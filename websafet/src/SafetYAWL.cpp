@@ -896,7 +896,14 @@ bool SafetYAWL::canTypeConvert(const QString& s, QVariant::Type t) {
 	switch ( t ) {
 		case QVariant::Int:
             rx.setPattern("[\\d]+[\\d\\.]*");
+            SYD << tr("...SafetYAWL::canTypeConvert...t:%1").arg(t);
+            SYD << tr("...SafetYAWL::canTypeConvert...news:%1").arg(news);
+            if (QDateTime::fromString(news,"yyyyMMdd").isValid()) {
+                SYD << tr("...SafetYAWL::canTypeConvert....return false");
+                return false;
+            }
             result = rx.exactMatch(news.trimmed());
+            SYD << tr("...SafetYAWL::canTypeConvert....return:%1").arg(result);
 			break;
 		case QVariant::String:
 			rx.setPattern("^(\\s*(([1|2|3]\\d{3}-\\d{1,2}-\\d{1,2})|(\\d{1,2}-\\d{1,2}-[1|2|3]\\d{3})|(\\d{1,2}/\\d{1,2}/[1|2|3]\\d{3}))\\s*)$");
@@ -2274,6 +2281,7 @@ QString SafetYAWL::replaceArgsflow(const QString & s) {
     QString pattern = QString("{#%1}");
 
 
+//    SYD << tr("..........SafetYAWL::replaceArgsflow count:|%1|").arg(SafetYAWL::argsflow.count());
     for(int i = 0; i < SafetYAWL::argsflow.count(); i++ ) {
         if (argsflow.at(i).isEmpty()) {
             continue;
