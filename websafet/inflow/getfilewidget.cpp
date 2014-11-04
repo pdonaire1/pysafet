@@ -124,6 +124,7 @@ bool GetFileWidget::isValid(QString& value) {
     }
      SYD << tr("..GetFileWidget::isValid...setting...SafetYAWL::combovarglobal0");
      SafetYAWL::combovarglobal0 = value;
+     SYD << tr("..GetFileWidget::isValid...setting..value:|%1|").arg(SafetYAWL::combovarglobal0);
 
     return true;
 }

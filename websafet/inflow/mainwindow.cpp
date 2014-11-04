@@ -4035,6 +4035,7 @@ QString MainWindow::replaceMarks(const QString& s) {
 
     result.replace(Safet::COLONMARK,":");
     result.replace(Safet::COLONMARK_,":");
+    result.replace(Safet::AMPMARK_,"&amp;");
     result.replace(Safet::COMMAMARK,",");
     result.replace("Safet::aacute","á");
     result.replace("Safet::eacute","é");
@@ -4216,6 +4217,27 @@ bool  MainWindow::toInputConsole(const QString& action,bool withpermises) {
 
 
         }
+        else if (parser.operationName().compare("Listar_datos_con_autofiltro",Qt::CaseSensitive) == 0 ) {
+            showString = QString("<a href=\"operacion:::%1\" title=\"%1\">%1</a>&nbsp;&nbsp;&nbsp;").arg("Ver reporte");
+            QString texto = QString("-f %1 -d -v %2 -a %3")
+                    .arg(data.map["Cargar_archivo_flujo"])
+                    .arg(data.map["Variable"])
+                    .arg(data.map["Autofiltro"]);
+
+
+            SYD << tr("MainWindow::toInputConsole...***AUTOFILTER_TEXT:|%s|")
+                   .arg(texto);
+
+            parseArgs( texto );
+
+            //                loadReportTemplate();
+            if (! executeParsed() ) {
+                return false;
+            }
+
+
+
+        }
 
         else if ( parser.operationName().startsWith("Listar_",Qt::CaseSensitive)
                 && parser.operationName().indexOf("_autofiltro") == -1
@@ -4232,25 +4254,6 @@ bool  MainWindow::toInputConsole(const QString& action,bool withpermises) {
             if (! executeParsed() ) {
                 return false;
             }
-
-
-        }
-        else if (parser.operationName().compare("Listar_datos_con_autofiltro",Qt::CaseSensitive) == 0 ) {
-            showString = QString("<a href=\"operacion:::%1\" title=\"%1\">%1</a>&nbsp;&nbsp;&nbsp;").arg("Ver reporte");
-            QString texto = QString("-f %1 -d -v %2 -a %3")
-                    .arg(data.map["Cargar_archivo_flujo"])
-                    .arg(data.map["Variable"])
-                    .arg(data.map["Autofiltro"]);
-
-
-            parseArgs( texto );
-
-            //                loadReportTemplate();
-            if (! executeParsed() ) {
-                return false;
-            }
-
-
 
         }
         else if (parser.operationName().compare("Listar_datos_con_filtrorecursivo",Qt::CaseSensitive) == 0 ) {

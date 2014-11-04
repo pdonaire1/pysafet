@@ -81,7 +81,8 @@ void ComboWidget::updateCombo() {
             setInput(myinput);
         }
     }
-    SYD << tr("....ComboWidget::updateCombo()....");
+    SYD << tr("....ComboWidget::updateCombo()....type:|%1|...|%2|....|%3|").arg((int)type())
+           .arg(VariableSafet).arg(AutofilterSafet);
      switch (type() ) {
 
           case VariableSafet:
@@ -92,6 +93,7 @@ void ComboWidget::updateCombo() {
                break;
           case AutofilterSafet:
 
+              SYD << tr("........AutofilterSafet.....1");
               updateComboAutofilterSafet();
               break;
          case RecursivefilterSafet:
@@ -288,6 +290,10 @@ bool ComboWidget::isValid(QString& value) {
     default:;
     }
 
+    if ( type() == AutofilterSafet || type()==VariableSafet) {
+        SYD << tr("ComboUpdate  QUITAR...QUITAR*** HACER VALIDACION CON AUTOFILTER Y VARIABLE");
+        return true;
+    }
     if ( type() == ListLiteral) {
 
         SYD << tr("ComboWidget...isValid...value:|%1|").arg(value);
@@ -1471,6 +1477,7 @@ void ComboWidget::updateComboTaskSafet(bool inwidget) {
 
 
 void ComboWidget::updateComboVariableSafet(bool inwidget) {
+    SYD << tr("combovariable");
     if (MainWindow::configurator == NULL ) {
         SYW << tr(".....ComboWidget::updateComboVariableSafet....MainWindow::configurator es NULO");
         return;
@@ -1494,14 +1501,17 @@ void ComboWidget::updateComboVariableSafet(bool inwidget) {
 
 
 
+
+
+
     QStringList mylistglobal = SafetYAWL::combovarglobal0.split(SafetYAWL::LISTSEPARATORCHARACTER);
     if (mykeyvalue.isEmpty() ) {
-        SYW << tr("ComboWidget::updateComboVariableSafet........mykeyvalue (isEmpty)....");
-        SYW << tr("ComboWidget::updateComboVariableSafet........reemplazando con (Variable) SafetYAWL::combovarglobal0: |%1|")
-               .arg(mylistglobal.at(0));
         mykeyvalue = mylistglobal.at(0);
+        SYD << tr("ComboWidget::updateComboVariableSafet  Empty:|%1|").arg(mykeyvalue);
+
     }
 
+    SYD << tr("ComboWidget::updateComboVariableSafet........mykeyvalue:|%1|").arg(mykeyvalue);
     QString myautofilter;
     QString myrecursivefilter;
     
@@ -1580,33 +1590,44 @@ void ComboWidget::updateComboRecursivefilterSafet(bool inwidget) {
 void ComboWidget::updateComboAutofilterSafet(bool inwidget) {
      if (MainWindow::configurator == NULL ) return;
 
+     SYD << tr("...ComboWidget::updateComboAutofilterSafet...(1)...");
      if ( !conf().contains("keyvalue") ) {
          SYW << tr("Se necesita una clave para actualizar el widget de Variables de Flujo de Trabajos");
          return;
      }
+          SYD << tr("...ComboWidget::updateComboAutofilterSafet...(2)...");
      QString mykeyvalue = findkeyvalue(conf()["keyvalue"].toString());
 
-          delete  MainWindow::configurator;
-          MainWindow::configurator = new SafetYAWL();
-          Q_CHECK_PTR( MainWindow::configurator );
-          SYD << tr(".........ComboWidget::updateComboAutofilterSafet..........mykeyvalue:|%1|")
-                 .arg(mykeyvalue);
+     SYD << tr("...ComboWidget::updateComboAutofilterSafet...(3)...mykeyvalue:|%1|").arg(mykeyvalue);
+
+     SYD << tr("...ComboWidget::updateComboAutofilterSafet...(4)...SafetYAWL::combovarglobal0:|%1|").arg(SafetYAWL::combovarglobal0);
+     if (mykeyvalue.isEmpty()) {
+          mykeyvalue = SafetYAWL::combovarglobal0;
+     }
+
+     SYD << tr("...ComboWidget::updateComboAutofilterSafet...(5)...mykeyvalue:|%1|").arg(mykeyvalue);
+
+     delete  MainWindow::configurator;
+     MainWindow::configurator = new SafetYAWL();
+     Q_CHECK_PTR( MainWindow::configurator );
+     SYD << tr(".........ComboWidget::updateComboAutofilterSafet..........mykeyvalue:|%1|")
+            .arg(mykeyvalue);
 
 
-          mykeyvalue = "/home/panelapp/.safet/flowfiles/carteleratodos.xml";
-          MainWindow::configurator->openXML(mykeyvalue);
-          SYD << tr("ComboWidget::updateComboAutofilterSafet...mykeyvalue: |%1|").arg(mykeyvalue);
-          MainWindow::configurator->convertXMLtoObjects();
-          MainWindow::configurator->openDataSources();
+     // mykeyvalue = "/home/vbravo/.safet/flowfiles/tilesbyday.xml";
+     MainWindow::configurator->openXML(mykeyvalue);
+     SYD << tr("ComboWidget::updateComboAutofilterSafet...mykeyvalue: |%1|").arg(mykeyvalue);
+     MainWindow::configurator->convertXMLtoObjects();
+     MainWindow::configurator->openDataSources();
 
-          if ( MainWindow::configurator->getWorkflows().count() > 0 ) {
-               _itemvaluelist = MainWindow::configurator->getWorkflow()->autofiltersId().toList();
-          }
+     if ( MainWindow::configurator->getWorkflows().count() > 0 ) {
+         _itemvaluelist = MainWindow::configurator->getWorkflow()->autofiltersId().toList();
+     }
 
 
-          if ( inwidget ) {
-//            varbox->addItems( _itemvaluelist );
-        }
+     if ( inwidget ) {
+         //            varbox->addItems( _itemvaluelist );
+     }
 
      _options = _itemvaluelist;
      SYD << tr(".........ComboWidget::updateComboAutofilterSafet.........._itemvaluelist.count():|%1|")
