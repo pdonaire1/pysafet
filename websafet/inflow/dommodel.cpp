@@ -374,16 +374,19 @@ QString DomModel::doUpdateSqlString(const QString& sql, const QString& titles, c
                            .arg(dtw.at(0));
         }
       QSqlQuery query( SafetYAWL::currentDb );
-       query.prepare(  sql );
+
+      QString command = sql;
+      command.replace("id='coloured'","id>=0");
+       query.prepare(  command );
          bool executed = query.exec();
          if (!executed ) {
-              SafetYAWL::streamlog << SafetLog::Error << tr("no se ejecutó correctamente la sentencia SQL: \"%1\"").arg(sql);
+              SafetYAWL::streamlog << SafetLog::Error << tr("no se ejecutó correctamente la sentencia SQL: \"%1\"").arg(command);
               return QString("");
           }
 
          bool isnext = query.next();
          if ( !isnext ) {
-          SYE << tr("No hay registros para ejecutar la sentencia SQL: \"%1\"").arg(sql);
+          SYE << tr("No hay registros para ejecutar la sentencia SQL: \"%1\"").arg(command);
           return QString("");
          }
          for (int i = 0; i < query.record().count(); i++) {
@@ -908,7 +911,11 @@ CmdWidget* DomModel::selWidgetFromField(const QString& command, const QString& f
                         continue;
                     }
 
-                    switch ( typeFieldFromString( attribute.nodeValue().simplified() ) ) {
+
+                    DomModel::TypeField currtype = typeFieldFromString( attribute.nodeValue().simplified() );
+
+                    SYD << tr("currtype:%1").arg((int)currtype);
+                    switch ( currtype ) {
                     case FileName:
                          SYD << tr("FileName...(1)");
                          mywidget = new GetFileWidget(field, parent);
@@ -970,6 +977,10 @@ CmdWidget* DomModel::selWidgetFromField(const QString& command, const QString& f
                      //    mywidget->setValidator( validator);
                          return mywidget;
                     case ComboAutofilter:
+
+                        SYD << tr("............****DomModel::selWidgetFromField.................**ComboAutofilter....keyvalue:|%1|")
+                                .arg(keyvalue);
+
                          mywidget = new ComboWidget(field,ComboWidget::AutofilterSafet, parent);
                          Q_CHECK_PTR( mywidget );
                          myconf.insert("keyvalue", keyvalue);
@@ -1003,6 +1014,7 @@ CmdWidget* DomModel::selWidgetFromField(const QString& command, const QString& f
                          return mywidget;
                         break;
                     case ComboTask:
+                         SYD << tr(".........Combotask...keyvalue:|%1|").arg(keyvalue);
                           mywidget = new ComboWidget(field,ComboWidget::TaskSafet, parent);
                          Q_CHECK_PTR( mywidget );
                          myconf.insert("keyvalue", keyvalue);

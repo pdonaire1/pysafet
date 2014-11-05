@@ -4176,7 +4176,6 @@ bool  MainWindow::toInputConsole(const QString& action,bool withpermises) {
         }
     }
 
-
     ParsedSqlToData data;
     showString = QString("<a href=\"operacion:::%1\" title=\"%1\">%1</a>&nbsp;&nbsp;&nbsp;").arg("Ver gráfico de flujo de trabajo");
     if ( results.count() > 0) {

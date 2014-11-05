@@ -2882,13 +2882,16 @@ void SafetWorkflow::proccessExtraInfo( QMap<QString,QString>& codes,const QStrin
                                             || SafetYAWL::canTypeConvert(info, QVariant::Int));
                         newsql += (addquotes?"'":"")+info+(addquotes?"'":"");
                         QSqlQuery query( SafetYAWL::currentDb );
+                        newsql= newsql.replace("WHERE id='coloured'","WHERE id>=0");
+                        SYD << tr("newsql:|%1|").arg(newsql);
+
                         query.prepare(  newsql );
                         bool executed = query.exec();
 
                         if (!executed ) {
                             SYE
                                     <<
-                                    tr("NO se ejecutó correctamente la sentencia SQL: \"%1\"")
+                                    tr("NO se ejecuto correctamente la sentencia SQL: \"%1\"")
                                     .arg(newsql);
                             break;
                         }

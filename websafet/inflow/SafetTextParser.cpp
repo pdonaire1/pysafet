@@ -145,8 +145,8 @@ QString SafetTextParser::toXml(const QString& s) {
 QPair<QString,QString> SafetTextParser::nextXmlWord() {
     QPair<QString,QString> result;
     QString first, second;
-    QRegExp rx(tr("([a-zA-Z_0-9·ÈÌÛ˙Ò—ø\\?'\\*=\\.\\-\\(\\),;%#\\x3c\\x3e\\x2f\\[\\]/@\\|\\{\\}]+"
-                  "|[/a-zA-Z_0-9·ÈÌÛ˙Ò—'ø\\?=\\.\\-\\(\\),;%#\\x3c\\x3e\\x2f\\[\\]/@\\|\\{\\}]+:)").toLatin1());
+    QRegExp rx(tr("([a-zA-Z_0-9·ÈÌÛ˙Ò—ø\\?'\\*=\\.\\-\\(\\),;%#\\x3c\\x3e\\x2f\\[\\]/@\\|\\{\\}&]+"
+                  "|[/a-zA-Z_0-9·ÈÌÛ˙Ò—'ø\\?=\\.\\-\\(\\),;%#\\x3c\\x3e\\x2f\\[\\]/@\\|\\{\\}&]+:)").toLatin1());
 
     int pos = countxml;
 
@@ -594,7 +594,7 @@ QList<QPair<QString,QString> > SafetTextParser::getFieldsValues(const QDomElemen
                    .arg(namefield);
             if (!einput.isNull() ) {
                 QString key = einput.firstChild().nodeValue().trimmed();
-                QString newfield = infieldname+";"+key;
+                QString newfield = infieldname+":"+key;
                 if (!fieldkeysvalues.isEmpty()) {
                     fieldkeysvalues += ",";
                 }
@@ -1148,8 +1148,15 @@ QPair<QString,QString> SafetTextParser::buildFields(const QDomElement& ecommand,
                         fieldkeysvalues += ",";
                     }
                     fieldkeysvalues += newfield;
-                    SYD << tr("SafetTextParser::buildFields....fieldkeysvalues:|%1|")
+                    SYD << tr("SafetTextParser::buildFields....**(CURR**)fieldkeysvalues:|%1|")
                            .arg(fieldkeysvalues);
+
+//                    if (fieldkeysvalues.startsWith("Cargar_archivo_flujo;")) {
+//                        fieldkeysvalues = fieldkeysvalues.mid(QString("Cargar_archivo_flujo;").length());
+//                    }
+//                    SYD << tr("SafetTextParser::buildFields....**(CURR**) (2)fieldkeysvalues:|%1|")
+//                           .arg(fieldkeysvalues);
+
                 }
 
 
@@ -1659,6 +1666,11 @@ bool SafetTextParser::doFieldValidation(const QString& nameoperation,
 
 
     if ( mywidget == NULL ) {
+        if (keyvalue.isEmpty()) {
+            SYW << tr("KeyValue esta vacia");
+            return true;
+        }
+
        SYW
                 << tr("El widget para el campo "
                       "con nombre \"%1\" no se pudo crear para efectos de validaciÛn")
@@ -1849,6 +1861,7 @@ QString SafetTextParser::getValueForFunction(const QString& v, const QString &fo
      QSqlQuery query(SafetYAWL::currentDb ); // <-- puntero a db actual
      SYD << tr("SafetTextParser::getValueForFunction...Sentencia SQL PARA EVALUAR LA FUNCION \"%2\" a ejecutarse: \n \"%1\"")
             .arg( command ).arg(v);
+     command.replace("id='coloured'","id>=0");
      query.prepare(  command );
      bool executed = query.exec();
      if ( !executed ) {
@@ -2143,13 +2156,13 @@ ParsedSqlToData SafetTextParser::parseSql(const QString& s, bool parsetomap ) {
      newsql.replace("'","");
      QString updatePattern = "UPDATE\\s+([a-zA-Z0-9_\\.\\(\\)][a-zA-Z0-9_,'\\.\\(\\)\\-]*)\\s+"
                              "SET\\s+"
-                             "([a-zA-Z0-9_\\.\\(\\)\\[\\]'·ÈÌÛ˙Ò—\\|][@a-zA-Z0-9_,;\\s'\\=\\.\\(\\)\\-\\[\\]·ÈÌÛ˙Ò—\\|\\*:#\\{\\}\\?/]*\\s+)?WHERE\\s+"
+                             "([a-zA-Z0-9_\\.\\(\\)\\[\\]'·ÈÌÛ˙Ò—\\|&][@a-zA-Z0-9_,;\\s'\\=\\.\\(\\)\\-\\[\\]·ÈÌÛ˙Ò—\\|\\*:#\\{\\}\\?/&]*\\s+)?WHERE\\s+"
                              "([a-zA-Z0-9_\\.\\(\\)][@a-zA-Z0-9_,;'\\=\\.\\(\\)\\-\\[\\]\\*]*)";
 
      QString insertPattern = "INSERT INTO\\s+([a-zA-Z0-9_][a-zA-Z0-9_\\.\\-]*)\\s+"
                              "\\(([a-zA-Z0-9_\\.\\(\\)\\[\\]][@a-zA-Z0-9_,'\\=\\.\\(\\)"
                              "\\-\\[\\]]*)\\)\\s+"
-                             "VALUES\\s+\\(([a-zA-Z0-9_'\\./\\[\\]#\\|][@a-zA-Z0-9_,'\\=\\.\\-/\\[\\]\\s#\\|\\*:#\\{\\}\\?\\(\\)]*)"
+                             "VALUES\\s+\\(([a-zA-Z0-9_'\\./\\[\\]#\\|&][@a-zA-Z0-9_,'\\=\\.\\-/\\[\\]\\s#\\|\\*:#\\{\\}\\?\\(\\)&]*)"
                              "\\)\\s*";
 
      QString table = rx.cap(1);
