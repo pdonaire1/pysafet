@@ -4858,7 +4858,6 @@ bool  MainWindow::toInputConsole(const QString& action,bool withpermises) {
             QString datetag = graphs()[namegraph].second;
 
             // Para Gráfico Planificado ********
-
             doRestoreGraph(Safet::PLANNEDGRAPHSFILENAME);
             if ( !graphs().contains(nameplannedgraph)) {
                 SYE << tr("No se encuentra el nombre de grafo seleccionado (Planificado) : \"%1\"")

@@ -249,6 +249,31 @@ bool SafetWorkflow::putParameters(const QMap<QString,QString>& p) {
             }
 
         }
+        SYD << tr(".........SafetWorkflow::putParameters VARIABLECOUNT:|%1|")
+               .arg(task->getVariables().count());
+        foreach(SafetVariable *var, task->getVariables()) {
+            strin = var->rolfield();
+            bool doit = false;
+            strout = replaceArg(strin,list,doit);
+            strout.replace("_USERNAME", SafetYAWL::currentAuthUser());
+            SYD << tr("......SafetWorkflow::putParameters...AUTO_REPLACE....ROLFIELD...strout:|%1|")
+                   .arg(strout);
+            if (strin != strout ) {
+                var->setRolfield(strout);
+            }
+            strin = var->timestampfield();
+            doit = false;
+            strout = replaceArg(strin,list,doit);
+            strout.replace("_USERNAME", SafetYAWL::currentAuthUser());
+            SYD << tr("......SafetWorkflow::putParameters...AUTO_REPLACE....TSFIELD...strout:|%1|")
+                   .arg(strout);
+            if (strin != strout ) {
+                var->setTimestampfield(strout);
+            }
+
+
+        }
+
 
         foreach(SafetPort *port, task->getPorts()) {
             if (port->type() == "split" ) {
