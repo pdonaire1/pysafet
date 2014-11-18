@@ -185,6 +185,8 @@ bool SafetWorkflow::putParameters(const QMap<QString,QString>& p) {
                .arg(strin);
         bool dodefaultvalue = false;
         strout = replaceArg(strin,p, dodefaultvalue);
+
+
         SYD << tr("....SafetWorkflow::putParameters...strout:|%1|")
                .arg(strout);
 
@@ -200,6 +202,27 @@ bool SafetWorkflow::putParameters(const QMap<QString,QString>& p) {
             task->setTitle("::safethide::");
         }
         else if (strin != strout ) {
+             if (strout.startsWith("select ",Qt::CaseInsensitive)) {
+                SYD  << tr("TITLE STARTSWITH SELECT..1");
+                QSqlQuery query( SafetYAWL::currentDb );
+                QString command = strout;
+
+                query.prepare(  command );
+               bool executed = query.exec();
+               if (!executed ) {
+                    SYW << tr("Titulo No correcta SQL: \"%1\"").arg(command);
+
+                }
+               SYD  << tr("TITLE STARTSWITH SELECT..2");
+
+                bool isnext = query.next();
+
+                if (isnext) {
+                    strout = query.value(0).toString();
+                    SYD  << tr("TITLE STARTSWITH SELECT..3..strout:|%1|").arg(strout);
+                }
+            }
+
             SYD << tr("....SafetWorkflow::putParameters..(1)...");
             if ( strout.indexOf(QRegExp("\\s+NULL\\s*"),Qt::CaseInsensitive) == -1 ) {
                 QString normtl = strout;

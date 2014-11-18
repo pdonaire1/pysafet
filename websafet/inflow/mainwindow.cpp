@@ -4822,8 +4822,7 @@ bool  MainWindow::toInputConsole(const QString& action,bool withpermises) {
         }
         else if (parser.operationName().startsWith(tr("Comparar_gráfico_de_flujo"))) {
 
-
-            // Colocando configuración de comparación por defecto
+           // Colocando configuración de comparación por defecto
             SafetYAWL::getConf().getMap()["Plugins.Graphviz/plugins.graphviz.extrainfo.show"]
                     = "InfoText,InfoDate";
             // Colocando configuración de comparación por defecto
@@ -4853,7 +4852,6 @@ bool  MainWindow::toInputConsole(const QString& action,bool withpermises) {
             code = graphs()[namegraph].first;
             SYD << tr("MainWindow::toInputConsole....Comparar_grafico...code: |%1|")
                    .arg(code);
-
 
             QString datetag = graphs()[namegraph].second;
 
