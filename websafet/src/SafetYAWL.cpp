@@ -875,6 +875,7 @@ QString SafetYAWL::getDocumentID(const QSqlQuery& query, bool withext) {
 QString SafetYAWL::addQuotes(const QString& value) {
     QString result;
 
+
     bool addquotes =  !(SafetYAWL::canTypeConvert(value, QVariant::Bool)
                         && !SafetYAWL::canTypeConvert(value, QVariant::Int));
     if ( addquotes ) {
@@ -893,8 +894,12 @@ bool SafetYAWL::canTypeConvert(const QString& s, QVariant::Type t) {
 	rx.setCaseSensitivity( Qt::CaseInsensitive );
     QString news = s;
 
+
 	switch ( t ) {
 		case QVariant::Int:
+        if (news.startsWith("(SELECT ",Qt::CaseInsensitive) || news.startsWith("SELECT ",Qt::CaseInsensitive)) {
+            return true;
+        }
             rx.setPattern("[\\d]+[\\d\\.]*");
             SYD << tr("...SafetYAWL::canTypeConvert...t:%1").arg(t);
             SYD << tr("...SafetYAWL::canTypeConvert...news:%1").arg(news);
@@ -913,6 +918,10 @@ bool SafetYAWL::canTypeConvert(const QString& s, QVariant::Type t) {
 			result = rx.indexIn( s ) >= 0;
 			break;
 		case QVariant::Bool:
+        if (news.startsWith("(SELECT ",Qt::CaseInsensitive) || news.startsWith("SELECT ",Qt::CaseInsensitive)) {
+            return true;
+        }
+
 			result = rx.indexIn( s ) >= 0;
 			break;
 		case QVariant::Date:
