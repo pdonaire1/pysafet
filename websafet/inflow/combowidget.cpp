@@ -1364,9 +1364,19 @@ QString ComboWidget::proccessWhereOption(const QString& w) {
 
 void ComboWidget::updateComboTaskSafet(bool inwidget) {
 
+    QString exclude;
+
     if (MainWindow::configurator == NULL ) {
         return;
     }
+    if (conf().contains("exclude")) {
+        exclude = conf()["exclude"].toString();
+
+        SYD << tr("....updateComboTaskSafet....exclude:|%1|")
+               .arg(exclude);
+
+    }
+
     if ( !conf().contains("keyvalue") ) {
         SYW << tr("Se necesita una clave para actualizar el widget de Variables de Flujo de Trabajos");
         return;
@@ -1468,6 +1478,26 @@ void ComboWidget::updateComboTaskSafet(bool inwidget) {
         }
     }
 
+    if (!exclude.isEmpty()) {
+
+        QString myother;
+        if (conf().contains("otherkey")) {
+            myother = conf()["otherkey"].toString();
+        }
+        SYD << tr("");
+        SYD << tr("..........updateComboTask...exclude...:|%1|").arg(exclude);
+        SYD << tr("..........updateComboTask...mykeyvalue:|%1|").arg(mykeyvalue);
+        SYD << tr("..........updateComboTask.......**info:|%1|").arg(myother);
+        SYD << tr("");
+
+        QStringList myexcludes = SafetWorkflow::calculateListSQL(exclude,mykeyvalue,myother);
+        foreach(QString e,myexcludes) {
+            if(_options.contains(e)) {
+                _options.removeAll(e);
+            }
+        }
+    }
+
     if ( inwidget ) {
 
     }
@@ -1555,13 +1585,22 @@ void ComboWidget::updateComboVariableSafet(bool inwidget) {
 
 
 void ComboWidget::updateComboRecursivefilterSafet(bool inwidget) {
-    if (MainWindow::configurator == NULL ) return;
+    if (MainWindow::configurator == NULL ) {
+        SYW << tr("Configurator is NULL");
+        return;
+    }
     if ( !conf().contains("keyvalue") ) {
         SYW << tr("Se necesita una clave para actualizar el widget de Variables de Flujo de Trabajos");
         return;
     }
-    QString mykeyvalue = findkeyvalue(conf()["keyvalue"].toString());
 
+    QString mykeyvalue = findkeyvalue(conf()["keyvalue"].toString());
+    SYD << tr("........updateComboRecursivefilterSafet....mykeyvalue...(1)...:|%1|").arg(mykeyvalue);
+    if (mykeyvalue.isEmpty()) {
+         mykeyvalue = SafetYAWL::combovarglobal0;
+    }
+
+    SYD << tr("........updateComboRecursivefilterSafet....mykeyvalue...(2)...:|%1|").arg(mykeyvalue);
 
     delete  MainWindow::configurator;
     MainWindow::configurator = new SafetYAWL();

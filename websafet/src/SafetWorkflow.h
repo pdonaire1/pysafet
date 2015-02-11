@@ -78,6 +78,7 @@ class SafetWorkflow : public SafetXmlObject {
         QStringList _extrainfotss;
 
 
+    QMap<QString,QSqlQuery> _cache;
 
 
 
@@ -235,6 +236,7 @@ public:
 
 
         static QString calculateSQL(const QString& currsql, const QString &info, const QString& otherinfo = QString(""));
+        static QStringList calculateListSQL(const QString& currsql, const QString &info, const QString& otherinfo = QString(""));
 private:
 
         ExtraInfoSearchKey _searchkey;
@@ -681,7 +683,7 @@ public:
     /*
       * \brief Genera en forma textual (texto) la entrada para renderizar el grafico de flujo de trabajo
       */
-    QString generateCodeGraph(char* filetype= "png", const QString& info = "", bool norender = false);
+    QString generateCodeGraph(char* filetype= "png", const QString& info = "", bool norender = false, bool inccache = true);
     
     /*
       * \brief Genera un archivo gráfico del flujo de trabajo (propio)

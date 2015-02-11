@@ -248,6 +248,15 @@ bool SafetWorkflow::putParameters(const QMap<QString,QString>& p) {
                 filter->setQuery(strout);
             }
 
+            doit = false;
+            strin = filter->period();
+            strout = replaceArg(strin,list,doit);
+            strout.replace("_USERNAME", SafetYAWL::currentAuthUser());
+            if (strin != strout ) {
+                filter->setPeriod(strout);
+            }
+
+
         }
 
         foreach(SafetPort *port, task->getPorts()) {
@@ -874,6 +883,12 @@ QString SafetWorkflow::removeOutParenthesis(const QString& s) {
 
 QSqlQuery SafetWorkflow::getSQLDocuments(const SafetVariable& v) {
 	resetContainers();	
+   QString idvariable =   v.id();
+    if (_cache.contains(idvariable) ) {
+        return _cache[idvariable];
+    }
+
+
 	QString sql = v.documentsource();
     QStack<QString> splitresults;
     sql  =getStackExpression(v, splitresults);  // Obtener la pila de resultado desde la variable
@@ -920,6 +935,12 @@ QSqlQuery SafetWorkflow::getSQLDocuments(const SafetVariable& v) {
 
                     //SYD <<tr("El resultado de la Sentencia SQL:\n\"%1\" no presenta registros").arg(splitoperation);
         }
+
+
+      if (!idvariable.isEmpty()) {
+          SYD << tr("...SafetWorkflow::getSQLDocuments...adding variable:|%1|").arg(idvariable);
+        _cache[idvariable]  = query;
+      }
 
 
 //            SYA << tr(">>> Sentencia SQL:\n\"%1\"\n ejecutada correctamente...OK!").arg(splitoperation);
@@ -1733,6 +1754,71 @@ QString SafetWorkflow::calculateSQL(const QString& currsql, const QString& info,
 
 }
 
+
+QStringList SafetWorkflow::calculateListSQL(const QString& currsql, const QString& info, const QString& otherinfo) {
+
+    QStringList resultlist ;
+    QString result ;
+    QString df = "";
+    QStringList mylist = currsql.split("::",QString::SkipEmptyParts);
+
+    df = mylist.at(0);
+
+    if (mylist.count() > 1 ) {
+        result = mylist.at(1);
+    }
+    else if (mylist.count() == 1) {
+        result = mylist.at(0);
+    }
+    else {
+        return resultlist;
+    }
+
+
+    if (!result.startsWith("SELECT ",Qt::CaseInsensitive)) {
+        SYD << tr(".......SafetWorkflow::calculateSQL...returning df");
+        resultlist.append(df);
+        return resultlist;
+     }
+
+    SYD << tr(".......SafetWorkflow::calculateSQL...CALCULATESQL.....currsql (1): |%1|")
+           .arg(result);
+
+    SYD << tr(".......SafetWorkflow::calculateSQL...CALCULATESQL.....info: |%1|")
+           .arg(info);
+
+    QString newsql = result;
+
+    newsql.replace("{#keyvalue0}",info);
+    newsql.replace("{#keyvalue1}",otherinfo);
+    QSqlQuery query( SafetYAWL::currentDb );
+    query.prepare(  newsql );
+    bool executed = query.exec();
+    SYD << tr(".......SafetWorkflow::calculateSQL...CALCULATESQL.....newsql(2): |%1|")
+           .arg(newsql);
+
+
+    if (!executed ) {
+        SYA
+                <<
+                   tr("NO se ejecutó correctamente la sentencia de calculo SQL: \"%1\"")
+                   .arg(newsql);
+        resultlist.append(df);
+        return resultlist;
+    }
+
+    while (query.next()) {
+        resultlist.append(query.value(0).toString());
+
+    }
+    SYD << tr(".......SafetWorkflow::calculateSQL...QStringList CALCULATESQL.....result count: |%1|")
+           .arg(resultlist.count());
+
+    return resultlist;
+
+}
+
+
 void SafetWorkflow::saveStates(const QString &currstate, const QStringList& nextstates) {
     QStringList myemptylist;
     if (!_nexts.contains(currstate)) {
@@ -1891,21 +1977,23 @@ QStringList SafetWorkflow::textualInfos(const QString& id, int fieldtype, const 
 
 }
 
+
 QStringList SafetWorkflow::listNextStates(const QString& id, SafetWorkflow::NextStates st,  bool incback) {
 
 
      QStringList result;
      if ( id.isEmpty()) {
-         SYW << tr("En la función de próximos etados el id está vacío:|%1|")
+         SYW << tr("En la funcion de proximos etados el id est\E1 vac\EDo:|%1|")
                 .arg(id);
 
          return result;
      }
      SafetYAWL::_isstatstokenfound = false; // Inicializando por si es un unico token
-     QString code = generateCodeGraph("png",id,true);
+     QString code = generateCodeGraph("png",id,true,false);
+
      SYD << tr("....SafetWorkflow::listNextStates...id:|%1|")
             .arg(id);
-     SYA << tr("...SafetWorkflow::listNextStates GENERATECODEGRAPH:\n|%1|")
+     SYA << tr("...SafetWorkflow::listNextStates FIXING_2....GENERATECODEGRAPH:\n|%1|")
             .arg(code);
 
      SafetYAWL::_isstatstokenfound = false;
@@ -1973,21 +2061,21 @@ QStringList SafetWorkflow::listNextStates(const QString& id, SafetWorkflow::Next
              QString sec = mylist.at(i);
              QRegExp rx("Nodo:\\s*([a-zA-Z0-9\\+_\\.]+)\\s*,");
              int pos = rx.indexIn( sec );
-	    
+
              QString newnode = rx.cap(1);
 
 
-	     rx.setPattern("Reporte:\\s*([a-zA-Z0-9\\+_\\.]+)\\s*");
-	
-	     pos = rx.indexIn( sec );
+         rx.setPattern("Reporte:\\s*([a-zA-Z0-9\\+_\\.]+)\\s*");
 
-	     if ( pos >= 0  ) {
-		  if ( rx.cap(1) == "no" ) {
-			continue;			
-		 }
+         pos = rx.indexIn( sec );
 
-	     }	
-	    
+         if ( pos >= 0  ) {
+          if ( rx.cap(1) == "no" ) {
+            continue;
+         }
+
+         }
+
              QString myinfos = sec.section(",",-1);
 
              QStringList mylist =  myinfos.split("...", QString::SkipEmptyParts);
@@ -2023,7 +2111,7 @@ QStringList SafetWorkflow::listNextStates(const QString& id, SafetWorkflow::Next
          SYD << tr("......**SafetWorkflow::listNextStates.........SIGN: ...mylist.count():|%1|")
                 .arg(mylist.count());
 
-         // -------------> Cuales nodos están activos
+         // -------------> Cuales nodos est\E1n activos
          QStringList marked;
 
          QStringList nextnodes;
@@ -2063,7 +2151,7 @@ QStringList SafetWorkflow::listNextStates(const QString& id, SafetWorkflow::Next
          }
 
 
-         // -------------> Cuales nodos están activos
+         // -------------> Cuales nodos est\E1n activos
 
          for(int  i=mylist.count()-1; i >=0; i--) {
              QString sec = mylist.at(i);
@@ -2119,12 +2207,12 @@ QStringList SafetWorkflow::listNextStates(const QString& id, SafetWorkflow::Next
                      if ( st == SafetWorkflow::OnlyNext )  {
                          SafetNode* mycurr = nodemap[ newnode ];
                          if (mycurr == NULL ) {
-                             SYE << tr("Ocurrió un error al buscar el nodo actual \"%1\"").arg(newnode);
+                             SYE << tr("Ocurri\F3 un error al buscar el nodo actual \"%1\"").arg(newnode);
                              return result;
                          }
                          SafetPort* myport = mycurr->outport();
                          if (myport == NULL ) {
-                             SYE << tr("Ocurrió un error al buscar el puerto del nodo actual \"%1\"").arg(newnode);
+                             SYE << tr("Ocurri\F3 un error al buscar el puerto del nodo actual \"%1\"").arg(newnode);
                              return result;
                          }
                          QList<SafetConnection* > clist  =  incback ?myport->getConnBackList() :myport->getConnectionlist();
@@ -2302,7 +2390,8 @@ QStringList SafetWorkflow::listNextStates(const QString& id, SafetWorkflow::Next
 }
 
 
-QString SafetWorkflow::generateCodeGraph(char* filetype, const QString& info, bool norender) {
+
+QString SafetWorkflow::generateCodeGraph(char* filetype, const QString& info, bool norender, bool inccache) {
      SYD << tr(".................SafetWorkflow::generateCodeGraph......(entrando)");
      QMap<QString,QString> newresults;
 
@@ -2317,6 +2406,9 @@ QString SafetWorkflow::generateCodeGraph(char* filetype, const QString& info, bo
      int newcountresults = 0;
      QMap<int,QString> neworderresults;
 
+     if (inccache == false ) {
+        _cache.clear();
+     }
      for(int i = 0; i < getConditionlist().count();i++) {
          SafetCondition *mycond = getConditionlist().at(i);
 
@@ -2345,6 +2437,9 @@ QString SafetWorkflow::generateCodeGraph(char* filetype, const QString& info, bo
 
      QList<QPair<QString,QString> >  hides;
 
+     if (inccache == false ) {
+           _cache.clear();
+     }
      for(int i = 0; i < getTasklist().count();i++) {
          SafetTask *mytask = getTasklist().at(i);
          if (mytask != NULL ) {
@@ -2377,6 +2472,10 @@ QString SafetWorkflow::generateCodeGraph(char* filetype, const QString& info, bo
          }
      }
 
+
+     if (inccache == false ) {
+        _cache.clear();
+     }
 
      for(int i = 0; i < getConditionlist().count();i++) {
          SafetCondition *mycond = getConditionlist().at(i);
@@ -3201,7 +3300,7 @@ QString SafetWorkflow::currentGraphJSON(const QString& codegraph) {
             infonode += QString(" \"pattern\": \"%1\",").arg(rx.cap(1));
         }
 
-        rx.setPattern("Titulo:\\s*([a-zA-Z0-9\\+_\\.][a-zA-Z0-9\\+_\\.\\s]+),");
+        rx.setPattern("Titulo:\\s*([a-zA-Z0-9/\\+_\\.][a-zA-Z0-9/\\+_\\.\\s]+),");
         pos = mynode.indexOf(rx);
         if ( pos != -1 ) {
             infonode += QString(" \"title\": \"%1\",").arg(rx.cap(1));

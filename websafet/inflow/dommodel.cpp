@@ -888,6 +888,12 @@ CmdWidget* DomModel::selWidgetFromField(const QString& command, const QString& f
                     myconf.insert("input", attribute.nodeValue().simplified());
                }
 
+               attribute = attributeMap.namedItem("exclude");
+               if ( !attribute.isNull() ) {
+                    myconf.insert("exclude", attribute.nodeValue().simplified());
+               }
+
+
                attribute = attributeMap.namedItem("changefor");
                if ( !attribute.isNull() ) {
                     myconf.insert("changefor", attribute.nodeValue().simplified());

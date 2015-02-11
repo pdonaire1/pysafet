@@ -485,6 +485,13 @@ public:
 
 
     /**
+     * @brief normalize Cambia los acentos
+     * @param text cadena de texto con acentos
+     * @return cadena de texto sin acentos
+     */
+    static QString normalize(const QString &text);
+
+    /**
       * \brief Retorna el mapa de los grafos visibles (nombre, codigo para ser generado)
       */
     static QMap<QString,QPair<QString,QString> >& graphs() { return _graphs; }
@@ -555,7 +562,7 @@ public:
        \param multiplefields Admite sustituciones de campo multiples terminados en ".*"
        \param numberreg Número de registro a cambiar
        */
-    void proccessConfFile(const QString& sql, const QString& filename = "", bool multiplefields = false);
+    void proccessConfFile(const QString& sql, const QString& filename = QString("auth.conf"), bool multiplefields = false);
     void setCommands(const QMap<int,QString>& cmds) { commands = cmds; }
     void setModelCompleter(int opt);
     bool loadWidgetPlugins(const QString& f, bool add = false);
@@ -908,6 +915,8 @@ public:
       QString genTicket(const QString& user);
 
 
+      QStringList generateTips(const QString &cs, const QString& parcialscript);
+
 public Q_SLOTS: // Slots para el manejo de los servicios de Escritorio (QDesktopServices)
 
         void browse( const QUrl &url );
@@ -964,7 +973,7 @@ private slots:
     void toLoadWeb();
 
     void toInputSign();
-    void toInputConfigure();
+    void toInputConfigure(const QString& mytexto = QString("") );
     void toDelAllWorkflow();
     void toDelOneWorkflow();
     void toClearTextEdit();
@@ -1117,6 +1126,7 @@ private:
     void executeWithoutJSON();
     void executeWithJSON();
     QString doListUsers(const QString &selectrol);
+    QString searchScript(const QString &namevar);
 private slots:
     void executeJSCodeAfterLoad( /*bool ok */ );
 

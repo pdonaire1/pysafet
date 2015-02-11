@@ -591,6 +591,15 @@ QString MainWindow::loadReportTemplate(const QString& json,const QString &filena
     QStringList mylist = nameoperation.split(":",QString::SkipEmptyParts);
 
 
+    QStringList listjson = json.split("</SAFETHTMLHEADSEPARATOR>",QString::SkipEmptyParts);
+
+
+    QString newjson = listjson.at(0);
+
+    QString newhead = "";
+    if (listjson.count() > 1 ) {
+	    newhead = listjson.at(1);
+    }
 
     QStringList mydatas = json.split(SafetYAWL::LISTSEPARATORCHARACTER,QString::SkipEmptyParts);
 
@@ -623,8 +632,12 @@ QString MainWindow::loadReportTemplate(const QString& json,const QString &filena
        while(!in.atEnd()) {
            QString line = in.readLine();
            if (line.indexOf("<SAFET/>") != -1 && !isreplacing) {
-                line.replace("<SAFET/>",json);
+                line.replace("<SAFET/>",newjson);
            }
+           else if (line.indexOf("<SAFETHEAD/>") != -1 && !isreplacing) {
+                line.replace("<SAFETHEAD/>",newhead);
+           }
+
 
            if (mydatas.count()>1 && line.indexOf("<SAFETFILENAME/>") != -1 && !isreplacing) {
                 line.replace("<SAFETFILENAME/>",mydatas.at(1));
@@ -1128,25 +1141,34 @@ QString MainWindow::generateFormHead(const QString& o) {
     SYD << tr("generateFormHead: operacion: %1")
            .arg(o);
 
-    QString result;
+    QString result = "";
 
-
-    result = QString("<html><head>"
-            "<script src=\"%1/jquery-latest.js\"></script>\n"
-            "<link type=\"text/css\" href=\"%1/css/ui-lightness/jquery-ui-1.8.8.custom.css\" rel=\"Stylesheet\" />\n"
+    result += QString("\n"
+	     "<script src=\"%1/jquery-latest.js\"></script>\n"
+  //          "<link type=\"text/css\" href=\"%1/css/ui-lightness/jquery-ui-1.8.8.custom.css\" rel=\"Stylesheet\" />\n"
             "<script src=\"%1/js/jquery.ui.custom.js\"></script>\n"
             "<script src=\"%1/jquery.jec-1.3.1.js\"></script>\n"
             "<script src=\"%1/development-bundle/ui/i18n/jquery.ui.datepicker-es.js\"></script>\n"
-           "<script type=\"text/javascript\" language=\"javascript\" src=\"../media/js/DataTables/media/js/jquery.dataTables.js\"></script>"
+           "<script type=\"text/javascript\" language=\"javascript\" src=\"../media/js/DataTables/media/js/jquery.dataTables.js\"></script>\n"
 
                      //*** Con Jqwidgets
 
-            "  <link rel=\"stylesheet\" href=\"../media/jqwidgets/jqwidgets/styles/jqx.base.css\" type=\"text/css\" />\n"
+//            "    <link rel=\"stylesheet\" href=\"../media/jqwidgets/jqwidgets/styles/jqx.base.css\" type=\"text/css\" />\n"
             "    <script type=\"text/javascript\" src=\"../media/jqwidgets/scripts/gettheme.js\"></script>\n"
-//            "    <script type=\"text/javascript\" src=\"../media/jqwidgets/scripts/jquery-1.10.2.min.js\"></script>\n"
             "    <script type=\"text/javascript\" src=\"../media/jqwidgets/jqwidgets/jqxcore.js\"></script>\n"
             "    <script type=\"text/javascript\" src=\"../media/jqwidgets/jqwidgets/jqxnumberinput.js\"></script>\n"
             "    <script type=\"text/javascript\" src=\"../media/jqwidgets/jqwidgets/jqxbuttons.js\"></script>\n"
+)
+
+//            .arg(hostMediaPath());
+            .arg("../media");
+
+
+    if (keymodifyfields.count() > 0 ) {
+    result += QString(
+//		"<html><head>"
+            ""		
+	    "\n" 	
             "<script>\n"
             "\n\n function genFormString(f) {\n"
                      "var result= \"\";\n"
@@ -1155,12 +1177,14 @@ QString MainWindow::generateFormHead(const QString& o) {
                      "   }\n"
                      "return result;\n"
            " }\n"
-            )
-            .arg(hostMediaPath());
+            );
+}
 
    QString firstkeymodifyfield;
-    result += QString("var safetCurrentCombos = new Array();\n");
-    result += QString("$(document).ready(function(){\n");
+    if (keymodifyfields.count() > 0 ) {
+	    result += QString("var safetCurrentCombos = new Array();\n");
+	    result += QString("$(document).ready(function(){\n");
+    }
 
     foreach(QString keymodifyfield, keymodifyfields) {
         if ( firstkeymodifyfield.isEmpty()) {
@@ -1243,21 +1267,7 @@ QString MainWindow::generateFormHead(const QString& o) {
                           "               lastpos = lastpos -1;\n"
                           "       }\n"
                           "       myvalue = myvalue.substr(0,lastpos);\n"
-  //                        "       alert(\"myname:\" + myname);\n"
                           "       if (myname == \"Mostrar_tabla\") {\n"
-//                                      "myConfigs = {\n"
-//                                      "paginator: new YAHOO.widget.Paginator({"
-//                                      "rowsPerPage: 25,"
-//                                      "template: YAHOO.widget.Paginator.TEMPLATE_ROWS_PER_PAGE,\n"
-//                                      "rowsPerPageOptions: [5,10,25,50,100],\n"
-//                                      "pageLinks: 5\n"
-//                                      "}),\n"
-//                                      "       draggableColumns:true\n"
-//                                      "};\n"
-//                          //"                alert(\"****myvalue:\" + myvalue);\n"
-//                          "                myDataTable = new YAHOO.widget.DataTable(\"complex\", safetcolumns, "
-//                          "                  new YAHOO.util.DataSource(eval(myvalue)), myConfigs);\n"
-//                          "                myDataTable.render();\n"
                                       "safetjson.tasks = eval(myvalue);\n"
                                       "  oTable.fnDestroy();\n"
                                       "safetproccessData();\n"
@@ -1341,9 +1351,14 @@ QString MainWindow::generateFormHead(const QString& o) {
                 .arg(modname);
     }
 
-    result += "});\n\n"
+    if (keymodifyfields.count() > 0 ) {
+    	result += "});\n\n";
+	
+
+
+	result += "\n"
             "</script>\n"
-            "<style>\n"
+/*            "<style>\n"
             "body { font-size: 80%; }\n"
             "label, input { display:block; }\n"
             "input.text { margin-bottom:12px; width:95%; padding: .4em; }\n"
@@ -1355,11 +1370,20 @@ QString MainWindow::generateFormHead(const QString& o) {
             ".ui-dialog .ui-state-error { padding: .3em; }\n"
             ".validateTips { border: 1px solid transparent; padding: 0.3em; }\n"
             "</style>\n"
-
-            "</head>\n"
-            "<body>\n"
+	     "\n" */
+//            "</head>\n"
+//            "<body>\n"
             "";
-
+	}
+	else {
+		result += "\n"
+			"<script>\n"
+		"$(document).ready(function(){\n"
+		"$( \"#safetsubmit\" ).button().click(function() {});\n"
+		"$( \"#safetcancel\" ).button().click(function() {});\n"
+		"});\n"
+		"</script>\n";
+	}
     return result;
 }
 
@@ -1511,8 +1535,9 @@ QString MainWindow::generateFormFooter(const QString& o) {
         return QLatin1String("");
     }
 
-    QString result = "</body>\n"
-    "</html>";
+      QString result = "";
+//    QString result = "</body>\n"
+//    "</html>";
     return result;
 }
 
@@ -1772,7 +1797,7 @@ QString MainWindow::menuForm(const QString& o, bool forwidget, const QString& fi
 
     result += QString("<span id=\"safetspan\" name=\"safetspan\"></span> \n");
 
-    result += QString("<table><tr><td></td><td><button  id=\"safetsubmit\" "
+    result += QString("<table><tr><td></td><td><button type=\"submit\"   id=\"safetsubmit\" "
                       "name=\"safetsubmit\""
                        " >Enviar</button>"
                       "<button id=\"safetcancel\" name=\"safetcancel\" type=\"reset\">Limpiar</button>"
@@ -2201,6 +2226,7 @@ QMap<QString,bool> MainWindow::doPermiseExecOperationAction(const QString& op) {
 
 QMap<QString,QString> MainWindow::loadPermisesHierarchy() {
     int i = 1;
+    SYD << tr("MainWindow::loadPermisesHierarchy()...");
     QMap<QString,QString> result;
     while(true) {
         QString mykeyconf = QString("Hierarchy/path.%1").arg(i);
@@ -2473,6 +2499,61 @@ void MainWindow::executeWithoutJSON() {
 
 }
 
+QStringList MainWindow::generateTips(const QString& cs, const QString& parcialscript) {
+
+    QStringList result;
+    int nargs;
+        char** argv =NULL;
+        QCoreApplication myapp(nargs,argv);
+        QScriptEngine myEngine;
+
+        QString newcs = cs;
+        newcs.replace("\n","");
+
+        QString mycs = QString("(function(fname) { mydata =  %1; try { \n"
+                               "\n"
+                               "%2"
+                               "\n"
+
+
+                               "} catch(err) { return \"::safeterror::\" }})")
+                .arg(newcs)
+                .arg(parcialscript);
+
+
+        SYD << tr("mycs:\n%1\n")
+               .arg(mycs);
+
+        QScriptValue myfun;
+        QScriptValue myvalue;
+        QScriptValueList args;
+        QString currvalue;
+        args.append("datos");
+        try  {
+
+            myfun = myEngine.evaluate(mycs);
+            myvalue = myfun.call(QScriptValue(),args);
+            currvalue = myvalue.toString();
+            if ( currvalue == "undefined") {
+                SYD << tr(".....EVALTIPS....undefined");
+            }
+
+            if (myEngine.hasUncaughtException()) {
+                int line = myEngine.uncaughtExceptionLineNumber();
+                SYD  << tr("uncaught exception at line: %1 - value:|%2|").arg(line).arg(currvalue);
+            }
+        }
+        catch(...) {
+            SYE << tr("IMPORTANTE:Ocurrió un error (excepcion) al evaluar el script (two)");
+        }
+        SYD << tr("........EVALTIPS....cs tips...currvalue->:|%1|").arg(currvalue);
+
+        result = currvalue.split(SafetYAWL::LISTSEPARATORCHARACTER, QString::SkipEmptyParts);
+        return result;
+
+
+}
+
 void MainWindow::executeWithJSON( ) {
 
 
@@ -2500,6 +2581,41 @@ void MainWindow::executeWithJSON( ) {
     jsondata += "],\n";
 
 
+    QString tipsdata;
+    tipsdata += " { \"safetlist\": [";
+    tipsdata += currentDocuments;
+    tipsdata += "] }";
+    QStringList mytips;
+
+    SYD << tr("....MainWindow::executeWithJSON....SCRIPTENGINE...myscript...searchScript:|%1|")
+           .arg(_listprincipalvariable);
+    QString myscript = searchScript(_listprincipalvariable);
+
+    if (  !myscript.isEmpty() ) {
+            SYD << tr("...EVALTIPS.......mydir....(1) exist");
+            SYD << tr("...EVALTIPS.......mydir....(1) myscript:\n|%1|")
+                   .arg(myscript);
+
+            mytips = generateTips(tipsdata,myscript);
+            SYD << tr("...EVALTIPS.......mydir....(1) mytips.count():\n|%1|")
+                   .arg(mytips.count());
+            if (mytips.count() > 0) {
+                QString tipsresult;
+                tipsresult += "  \"safettips\": [";
+                foreach(QString t, mytips) {
+                    tipsresult += "{ \"tip\": \"" + t +"\"},";
+                }
+                tipsresult.chop(1);
+                tipsresult += "],\n";
+
+                data += " ";
+                data += tipsresult;
+                data += "";
+
+
+            }
+
+    }
 
 
     jscriptcolumns = "\"safetcolumns\"  : [";
@@ -2534,11 +2650,75 @@ void MainWindow::executeWithJSON( ) {
     code += jscriptcolumns;
     code += "";
 
-    SYD << tr(".........MainWindow::executeJSCodeAfterLoad().......code:|%1|")
+    SYD << tr(".........EVALTIPS...MainWindow::executeJSCodeAfterLoad().......code:|%1|")
            .arg(code);
+
+
+
 
 }
 
+QString MainWindow::searchScript(const QString& namevar) {
+
+    QString result = "";
+
+    QString confpath = _currconfpath + "/" + Safet::datadir + "/" + "scripts";
+
+    SYD << tr("MainWindow::searchScript.....confpath:|%1|").arg(confpath);
+    SYD << tr("MainWindow::searchScript.....namevar:|%1|").arg(namevar);
+
+    QDir dirconf(confpath);
+    dirconf.setFilter(QDir::Files | QDir::NoSymLinks);
+    if (!dirconf.exists()) {
+        SYA                << tr("No existe el directorio de scripts: \"%1\"")
+                .arg(confpath);
+        return QString("");
+    }
+
+
+    SYD << tr("MainWindow::searchScript.....(1)");
+
+    QFileInfoList mylist = dirconf.entryInfoList();
+
+    QString currfile;
+
+    for (int i=0; i<mylist.size(); i++) {
+        QFileInfo fileInfo = mylist.at(i);
+        QString myfile = fileInfo.filePath();
+        SYD << tr("MainWindow::searchScript.....myfile:|%1|").arg(myfile);
+        if (myfile.section("/",-1) == namevar) {
+            SYD << tr("MainWindow::searchScript.....yes:|%1|").arg(myfile);
+            currfile = myfile;
+        }
+
+    }
+
+    SYD << tr("MainWindow::searchScript.....currfile:|%1|").arg(currfile);
+
+    if (currfile.isEmpty()) {
+        return QString("");
+    }
+
+    QFile myfile(currfile);
+    bool open = myfile.open(QIODevice::ReadOnly | QIODevice::Text);
+    if (!open) {
+        SYW << tr("No se pudo abrir el archivo :\"%1\"")
+               .arg(currfile);
+        return QString("");
+    }
+
+    QTextStream in(&myfile);
+
+
+    result = in.readAll();
+
+
+    myfile.close();
+
+    return result;
+
+
+}
 
 
 void MainWindow::generateJScriptreports(const QString& documents,
@@ -2563,7 +2743,6 @@ void MainWindow::toSend(bool sign) {
 
     
 }
-
 
 bool MainWindow::toInputUsers(const QString& action) {
 
@@ -2700,7 +2879,7 @@ bool MainWindow::toInputUsers(const QString& action) {
 
         QString fileconf = SafetYAWL::pathconf+ "/" + "auth.conf";
 
-        SYD << tr(".......MainWindow::toInputUsers....fileconf........:|%1|").arg(fileconf);
+        SYD << tr(".......MainWindow::toInputUsers....WITHOUTREPLACE...fileconf........:|%1|").arg(fileconf);
         if (QFile::exists(fileconf)) {
              foreach(QString s, results) {
                  SYD << tr("........MainWindow::toInputUsers....s:|%1|").arg(s);
@@ -2732,7 +2911,6 @@ bool MainWindow::toInputUsers(const QString& action) {
 
 
     }
-
 
 QString MainWindow::genTicket(const QString& user) {
     QString result;
@@ -2878,6 +3056,9 @@ QString  MainWindow::toInputForm(const QString& action,bool withpermises) {
      bool issignaction = false;
      SYD << tr("MainWindow::toInputForm:...... (before prove signer |%1|")
                        .arg(newaction);
+
+
+
 
      QRegExp rx(tr("\\*FIRMAR\\s+Documento\\s+\\((.+)\\)\\s+por\\s+/(.+)/\\s+en\\s+(.+)\\s+usando\\s+/(.+)/"));
 
@@ -3138,6 +3319,53 @@ QString  MainWindow::toInputForm(const QString& action,bool withpermises) {
                 .arg(data.map.keys().count());
 
             buildEmail(data.map, mycurrent,data.map["id"]);
+
+
+
+     }
+     else if (xml.indexOf("cargar_flujo_de_trabajo") > 0) {
+
+         SYD << tr("Cargar flujo de trabajo...1...");
+         results = parser.processXml(false,withpermises);
+         if ( results.count() == 0) {
+             SYE << tr("No se produjo el resultado esperado de la operación.");
+             return QString("");
+
+         }
+
+         SYD  << tr("..............MainWindow::cargar_flujo_de_trabajo....results.at(0):|%1|")
+                 .arg(results.at(0));
+
+
+         ParsedSqlToData  data = SafetTextParser::parseSql(results.at(0),true);
+
+         SYD  << tr("..............MainWindow::cargar_flujo_de_trabajo....operationName():|%1|")
+                 .arg(parser.operationName());
+         SYD  << tr("..............MainWindow::cargar_flujo_de_trabajo....data.map.keys():|%1|")
+                 .arg(data.map.keys().count());
+
+         if (data.map.contains("nombre")) {             QString oname = data.map["nombre"].section("/",-1);
+             QString myname = mediaPath() + "/" + oname;
+
+             QString mynewname = SafetYAWL::pathconf + "/" + "flowfiles" + "/" + oname;
+             SYD << tr("...........MainWindow::cargar_flujo_de_trabajo....myname:|%1|").arg(myname);
+             SYD << tr("...........MainWindow::cargar_flujo_de_trabajo....mynewname:|%1|").arg(mynewname);
+
+             bool resultcopy = QFile::copy(myname,mynewname);
+
+             if (resultcopy) {
+                 SYD << tr("...........MainWindow::cargar_flujo_de_trabajo...copiado..(1)...");
+                 QString myconsult = QString("operacion:agregar_flujo_de_trabajo nombre:%1")
+                         .arg(mynewname);
+                     toInputConfigure(myconsult);
+                     return QString("Ok");
+             }
+             SYD << tr("...........MainWindow::cargar_flujo_de_trabajo...NO..copiado..(1)...");
+
+             return QString("");
+         }
+
+         SYD  << tr("..............MainWindow::cargar_flujo_de_trabajo.....data....DATA (2)....");
 
 
 
@@ -4224,7 +4452,7 @@ bool  MainWindow::toInputConsole(const QString& action,bool withpermises) {
                     .arg(data.map["Autofiltro"]);
 
 
-            SYD << tr("MainWindow::toInputConsole...***AUTOFILTER_TEXT:|%s|")
+            SYD << tr("MainWindow::toInputConsole...***AUTOFILTER_TEXT:|%1|")
                    .arg(texto);
 
             parseArgs( texto );
@@ -4288,7 +4516,6 @@ bool  MainWindow::toInputConsole(const QString& action,bool withpermises) {
             }
 
 
-
         }
 
         else if ( parser.operationName().compare(QString::fromLatin1("Generar_gráfico_básico"),Qt::CaseSensitive) == 0) {
@@ -4340,6 +4567,7 @@ bool  MainWindow::toInputConsole(const QString& action,bool withpermises) {
                     .arg(data.map["Cargar_archivo_flujo"])
                     .arg(data.map["Filtro_recursivo"]);
 
+
             parseArgs( texto );
 
             if (! executeParsed() ) {
@@ -4373,7 +4601,6 @@ bool  MainWindow::toInputConsole(const QString& action,bool withpermises) {
                 SYE << tr("No existe la variable flujo para graficar");
             }
 
-
             if (data.map.contains("Clave")) {
                 currid = data.map["Clave"];
             }
@@ -4384,7 +4611,6 @@ bool  MainWindow::toInputConsole(const QString& action,bool withpermises) {
             else {
                 SYE << tr("No existe la variable id para graficar el flujo");
             }
-
 
 
             QString texto = QString("-f %1 -p graphviz -g -k %2 ")
@@ -4452,7 +4678,6 @@ bool  MainWindow::toInputConsole(const QString& action,bool withpermises) {
             MainWindow::configurator->openXML(pathflow);
             MainWindow::configurator->convertXMLtoObjects();
             MainWindow::configurator->openDataSources();
-
 
             infos = MainWindow::configurator->getWorkflows().at(0)
                     ->listNextStates(mykeyvalue,SafetWorkflow::OnlyNext,true);
@@ -5385,13 +5610,14 @@ void MainWindow::toInputSign() {
 
 }
 
-void MainWindow::toInputConfigure() {
+void MainWindow::toInputConfigure(const QString& mytexto) {
 
      SafetTextParser parser;
-     QString texto;
+     QString texto = mytexto;
 //     texto  = completingTextEdit->toPlainText().toLatin1();
-     qDebug("**.. ...(1)..texto: \n|%s|\n", qPrintable(texto));
+     SYD << tr("....MainWindow::toInputConfigure....(1)....");
 
+     SYD << tr("....MainWindow::toInputConfigure....(1)....texto:|%1|").arg(texto);
      parser.setStr( texto.toLatin1() );
      QString str = "agregar,eliminar,actualizar,mostrar";
      QString commandstr = "INSERT INTO,DELETE,UPDATE,SELECT";
@@ -5404,12 +5630,13 @@ void MainWindow::toInputConfigure() {
 
 
 
+
      parser.processInput( xml.toLatin1() );
      QString filepath = SafetYAWL::getConfFile().getValue("Input", "input.path").toString();
      QString filename = "defconfigure.xml";
 
      parser.openXml(filepath + "/" + filename);
-     qDebug("...toInputConfigure....filepath: %s", qPrintable(filepath));
+     SYD << tr("....MainWindow::toInputConfigure....(1)....papth:|%1|").arg(filepath + "/" + filename);
 
      QStringList names = parser.loadNameConfs();
 
@@ -5427,8 +5654,9 @@ void MainWindow::toInputConfigure() {
 
 
       foreach(QString s, results) {
-         qDebug("toInputConfigure.......result: %s", qPrintable(s));
-         proccessConfFile(s);
+         SYD <<  tr("toInputConfigure.......result: |%1|").arg(s);
+
+         proccessConfFile(s,"safet.conf",true);
      }
 
       if ( MainWindow::configurator  /* && user say yes */ ) {
@@ -5439,14 +5667,9 @@ void MainWindow::toInputConfigure() {
           configurator->openDataSources();
       }
 
-//     QString message = QString("<table><tr><td><font color=green>%1</font>"
-//                               "</td></tr></table>").arg(tr("La operación de <b>configuración</b> fue exitosa"
-//                               "....<b>ok!</b>"));;
 
 
 }
-
-
 
 
 void MainWindow::proccessConfFile(const QString& sql, const QString& filename, bool multiplefields) {
@@ -5728,13 +5951,14 @@ QString MainWindow::searchFieldsInAuthConf(const QString& key) {
 
 }
 
+
 void MainWindow::doInsertInAuthConfFile(QRegExp& rx) {
 
 
-    SYD << tr("..........MainWindow::processConfFile....doInsertInAuthConfFile....rx.pattern:|%1|...")
+    SYD << tr("..........MainWindow::processConfFile....WITHOUTREPLACECONF....doInsertInAuthConfFile....rx.pattern:|%1|...")
            .arg(rx.pattern());
 
-    SYD << tr("..........MainWindow::processConfFile....doInsertInAuthConfFile....rx.cap(1):|%1|...")
+    SYD << tr("..........MainWindow::processConfFile....WITHOUTREPLACECONFdoInsertInAuthConfFile....rx.cap(1):|%1|...")
            .arg(rx.cap(1));
     SYD << tr("..........MainWindow::processConfFile....doInsertInAuthConfFile....rx.cap(2):|%1|...")
            .arg(rx.cap(2));
@@ -5773,7 +5997,7 @@ void MainWindow::doInsertInAuthConfFile(QRegExp& rx) {
 
                 SYD << tr(".........MainWindow::doInsertAuthConfFile.......(countuser)....newfield: |%1|").arg(newfield);
                 QString firstfield = newfield.split(".").at(0);
-                QString key = firstfield +"/"+newfield.mid(firstfield.length()+1);               
+                QString key = firstfield +"/"+newfield.mid(firstfield.length()+1);
 
                 SYD << tr(".........MainWindow::doInsertAuthConfFile.....firstfield: |%1|").arg(firstfield);
                 SYD << tr(".........MainWindow::doInsertAuthConfFile.....key: |%1|").arg(key);
@@ -5817,6 +6041,8 @@ void MainWindow::doInsertInAuthConfFile(QRegExp& rx) {
         SafetYAWL::replaceSectionInFile(fileconf,sectiontext,replacetext);
 
 }
+
+
 
 void MainWindow::restoreWindowState()
 {
@@ -7325,6 +7551,9 @@ bool MainWindow::executeParsed() {
            }
 
            configurator->setAutofilters( commands['a']);
+           if (commands.contains('r')) {
+               SYD << tr("COMMANDS....r:|%1|").arg(commands['r']);
+           }
            configurator->setRecursivefilters( commands['r']);
            SafetYAWL::streamlog.initAllStack();
            configurator->openXML(commands['f']);
@@ -7534,11 +7763,13 @@ bool MainWindow::parse(int &argc, char **argv) {
          }
 
        //	qDebug("!commands.contains('f'): %d", !commands.contains('f'));
-        if ( commands.contains('h') || commands.contains('V') || commands.contains('T')) return true;
+        if ( commands.contains('h') || commands.contains('V') || commands.contains('T'))  {
+            return true;
+        }
         if ( !commands.contains('f')  ) {
                 streamText << tr("*** No se especifico la ruta del archivo de flujo de trabajo (.xml) *** \n");
                 streamText  <<  tr("Opcion: -f <archivo> o --file <archivo> \n");
-//		streamText.flush();
+
                 sendStreamToOutput();
                 parsed = false;
                 processCommand('f');
@@ -7811,10 +8042,52 @@ bool MainWindow::genGraph() {
             SYD << tr("MainWindow.:genGraph...*MYID (2):|%1|")
                    .arg(myid);
 
-            _currentjson = QString("{ \"filename\": \"%1\", \"id\": \"%3\",\"data\": %2 }")
+            QString mydata = QString("{ \"filename\": \"%1\", \"id\": \"%3\",\"data\": %2 }")
+                                .arg(_currentjson)
+                                .arg(configurator->getWorkflows().at(0)->currentGraphJSON(""))
+                                .arg(myid);
+            QString searchid = MainWindow::normalize(myid);
+            SYD << tr("MainWindow.:genGraph...GENGRAPH...SCRIPTENGINE...*MYID (2):|%1|")
+                   .arg(searchid);
+
+            QString myscript = searchScript(searchid);
+
+            QString alltips = "";
+            if (  !myscript.isEmpty() ) {
+                    SYD << tr("...EVALTIPS....GENGRAPH...SCRIPTENGINE...mydir....(1) exist");
+                    SYD << tr("...EVALTIPS....GENGRAPH...SCRIPTENGINE...mydir....(1) myscript:\n|%1|")
+                           .arg(myscript);
+
+                    QStringList mytips = generateTips(mydata,myscript);
+                    SYD << tr("...EVALTIPS.....GENGRAPH...SCRIPTENGINE..mydir....(1) mytips.count():\n|%1|")
+                           .arg(mytips.count());
+                    if (mytips.count() > 0) {
+                        QString tipsresult;
+                        tipsresult += "  \"safettips\": [";
+                        foreach(QString t, mytips) {
+                            tipsresult += "{ \"tip\": \"" + t +"\"},";
+                        }
+                        tipsresult.chop(1);
+                        tipsresult += "],\n";
+
+                        alltips += " ";
+                        alltips += tipsresult;
+                        alltips += "";
+
+
+                    }
+
+            }
+
+            SYD << tr("MainWindow.:genGraph...GENGRAPH...SCRIPTENGINE...*alltips (2):|%1|")
+                   .arg(alltips);
+
+
+            _currentjson = QString("{ \"filename\": \"%1\", \"id\": \"%3\", %4 \"data\": %2 }")
                     .arg(_currentjson)
                     .arg(configurator->getWorkflows().at(0)->currentGraphJSON(""))
-                    .arg(myid);
+                    .arg(myid)
+                    .arg(alltips);
 
         }
 
@@ -7822,6 +8095,22 @@ bool MainWindow::genGraph() {
 
 
         return true;
+}
+
+QString MainWindow::normalize(const QString& text) {
+    QString normtl  = text;
+
+    normtl.replace(QRegExp("\\s+")," ");
+    normtl.replace("á","a");
+    normtl.replace("é","e");
+    normtl.replace("í","i");
+    normtl.replace("ó","o");
+    normtl.replace("ú","u");
+    normtl.replace("ñ","n");
+    normtl.replace("Ñ","N");
+    normtl.replace(" ","_");
+
+    return normtl;
 }
 
 
@@ -9019,7 +9308,7 @@ bool MainWindow::login(const QString& name, const QString& pass) {
             SYD << tr("\n....MainWindow::login...mykey:|%1|").arg(mykey);
             if (mylist.count() > 3 ) {
                 QStringList curtickets = mylist.at(3).split(";",QString::SkipEmptyParts);
-                SYD << tr("....MainWindow::login...CURTICKETS...curtickets...mylist:|%1|")
+                SYD << tr("....MainWindow::login...PROBE_WITHOUT__CURTICKETS...curtickets...mylist:|%1|")
                        .arg(mylist.at(3));
                 SYD << tr("....MainWindow::login...CURTICKETS...curtickets.count()..:|%1|")
                        .arg(curtickets.count());
