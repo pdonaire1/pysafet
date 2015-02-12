@@ -107,7 +107,7 @@ void SafetTask::addChild(SafetXmlObject* o) {
 
                 myrf = qobject_cast<SafetRecursivefilter*>(o);
                 mywf = qobject_cast<SafetWorkflow*>(parent());
-
+                recursivefilterlist.append(myrf);
                 SYD << tr("....Filtro:|%1|").arg(myrf->id());
                 Q_CHECK_PTR( mywf );
                 myyawl = qobject_cast<SafetYAWL*>(mywf->parent());

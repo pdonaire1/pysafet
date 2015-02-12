@@ -111,9 +111,6 @@ void SafetRecursivefilter::linkTasks(SafetTask* tasksource, SafetTask* tasktarge
      }
 
 
-     if ( myport->getConnectionlist().count() > 0 ) {
-         myport->setPattern("or");
-     }
 
      bool adding = true;
      foreach(SafetConnection *currconn, myport->getConnectionlist()) {
@@ -128,6 +125,11 @@ void SafetRecursivefilter::linkTasks(SafetTask* tasksource, SafetTask* tasktarge
         myport->addConnection( myconnection);
 
     }
+
+    if ( myport->getConnectionlist().count() > 1 ) {
+        myport->setPattern("or");
+    }
+
         SYD
             << tr("FiltroRecursivo(Recursivefilter): Agregando conexion a la tarea\"%1\"" )
             .arg(parentTask->id());

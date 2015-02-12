@@ -172,6 +172,29 @@ void SafetWorkflow::evalAutofilters() {
 
 }
 
+void SafetWorkflow::evalRecursivefilters() {
+    SafetYAWL   *myyawl = qobject_cast<SafetYAWL*>(parent());
+
+    SYD << tr(".....SafetWorkflow::evalAutofilters()...(1)..");
+    Q_CHECK_PTR(myyawl);
+
+    SYD << tr(".....SafetWorkflow::evalAutofilters()...(2)..");
+    foreach(SafetTask* task, getTasklist()) {
+        QList<SafetRecursivefilter*> mylistrf = task->getRecursivefilters();
+        foreach(SafetRecursivefilter* myfilter, mylistrf) {
+          if ( myyawl->isActiveRecursiveFilter( myfilter->id() ) ) {
+                myfilter->setFiltertask( task );
+                QList<SafetTask*> aflist = myfilter->createTasks(task->id().left(2).toLower());
+
+            }
+        }
+
+
+    }
+    SYD << tr(".....SafetWorkflow::evalAutofilters()...(3)..");
+
+}
+
 bool SafetWorkflow::putParameters(const QMap<QString,QString>& p) {
     bool result = false;
 
@@ -185,8 +208,6 @@ bool SafetWorkflow::putParameters(const QMap<QString,QString>& p) {
                .arg(strin);
         bool dodefaultvalue = false;
         strout = replaceArg(strin,p, dodefaultvalue);
-
-
         SYD << tr("....SafetWorkflow::putParameters...strout:|%1|")
                .arg(strout);
 
@@ -202,27 +223,6 @@ bool SafetWorkflow::putParameters(const QMap<QString,QString>& p) {
             task->setTitle("::safethide::");
         }
         else if (strin != strout ) {
-             if (strout.startsWith("select ",Qt::CaseInsensitive)) {
-                SYD  << tr("TITLE STARTSWITH SELECT..1");
-                QSqlQuery query( SafetYAWL::currentDb );
-                QString command = strout;
-
-                query.prepare(  command );
-               bool executed = query.exec();
-               if (!executed ) {
-                    SYW << tr("Titulo No correcta SQL: \"%1\"").arg(command);
-
-                }
-               SYD  << tr("TITLE STARTSWITH SELECT..2");
-
-                bool isnext = query.next();
-
-                if (isnext) {
-                    strout = query.value(0).toString();
-                    SYD  << tr("TITLE STARTSWITH SELECT..3..strout:|%1|").arg(strout);
-                }
-            }
-
             SYD << tr("....SafetWorkflow::putParameters..(1)...");
             if ( strout.indexOf(QRegExp("\\s+NULL\\s*"),Qt::CaseInsensitive) == -1 ) {
                 QString normtl = strout;
@@ -281,31 +281,31 @@ bool SafetWorkflow::putParameters(const QMap<QString,QString>& p) {
 
 
         }
-        SYD << tr(".........SafetWorkflow::putParameters VARIABLECOUNT:|%1|")
-               .arg(task->getVariables().count());
-        foreach(SafetVariable *var, task->getVariables()) {
-            strin = var->rolfield();
+
+        SYD << tr(".........SafetWorkflow::putParameters RECURSIVEFILTERCOUNT:|%1|")
+               .arg(task->getRecursivefilters().count());
+        foreach(SafetRecursivefilter *filter, task->getRecursivefilters()) {
+            strin = filter->filter();
             bool doit = false;
             strout = replaceArg(strin,list,doit);
             strout.replace("_USERNAME", SafetYAWL::currentAuthUser());
-            SYD << tr("......SafetWorkflow::putParameters...AUTO_REPLACE....ROLFIELD...strout:|%1|")
-                   .arg(strout);
+
             if (strin != strout ) {
-                var->setRolfield(strout);
+                filter->setFilter(strout);
             }
-            strin = var->timestampfield();
+
             doit = false;
+            strin = filter->initial();
+            SYD << tr(".........SafetWorkflow::putParameters...RECURSIVE....initial...(1)..:|%1|").arg(strin);
             strout = replaceArg(strin,list,doit);
             strout.replace("_USERNAME", SafetYAWL::currentAuthUser());
-            SYD << tr("......SafetWorkflow::putParameters...AUTO_REPLACE....TSFIELD...strout:|%1|")
-                   .arg(strout);
+            SYD << tr(".........SafetWorkflow::putParameters...RECURSIVE....initial...(2)..strout:|%1|").arg(strout);
             if (strin != strout ) {
-                var->setTimestampfield(strout);
+                filter->setInitial(strout);
+                SYD << tr(".........SafetWorkflow::putParameters...RECURSIVE....initial...(2)..setting:|%1|").arg(strout);
             }
 
-
         }
-
 
         foreach(SafetPort *port, task->getPorts()) {
             if (port->type() == "split" ) {

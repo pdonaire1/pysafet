@@ -8174,6 +8174,7 @@ void MainWindow::evalParsValues(SafetWorkflow *wf) {
     wf->putParameters(_currparsvalues);
     SYD << tr("....evalParsValues...AUTO_REPLACE*");
     wf->evalAutofilters();
+    wf->evalRecursivefilters();
 }
 
 void MainWindow::setConffileValues(const QMap<QString,QString>& values) {
