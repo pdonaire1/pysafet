@@ -104,7 +104,7 @@ y en el prompt de python (>>>) importa la librería de Safet ejecutando el sigui
 Si el interprete no muestra ningún mensajes, el módulo se instalo correctamente. 
 Para salir del interprete Ctrl D 
 
-Continuando con la configuraciones
+Continuando con las configuraciones
 ======================
 dirigirse a https://seguridad.cenditel.gob.ve/safet/media/curso/ y descargar el archivo libpnp_graphviz.so y
 copiarlo a /urs/lib/libsafet
