@@ -101,9 +101,39 @@ y en el prompt de python (>>>) importa la librería de Safet ejecutando el sigui
 >>> import Safet
 >>>
 ```
-
 Si el interprete no muestra ningún mensajes, el módulo se instalo correctamente. 
 Para salir del interprete Ctrl D 
+
+Continuando con la configuraciones
+======================
+dirigirse a https://seguridad.cenditel.gob.ve/safet/media/curso/ y descargar el archivo libpnp_graphviz.so y
+copiarlo a /urs/lib/libsafet
+
+```
+$ su
+# cp ~/Descargas/libpnp_graphviz.so /usr/lib/libsafet/
+```
+
+Para correr La interfaz gráfica ejecutar el ejecutable del directorio ~/.safet/inflow
+
+```
+$ ./inflow
+```
+Usuario: admin Contraseña: admin.
+
+Para hacer el CRUD, en el ~/.safet/input/ se encuentra el fichero deftrac.xml en donde se altera la linea 19 y 
+se coloca en el atributo literal="" la opción que fué configurada en el ~/.safet/flowfiles/mensajes.xml en
+la linea 20 en el atributo options="" Ej: options="iniciado" quedando así en el fichero deftrac.xml en la
+linea 19 la opción literal="iniciado" para que pueda relacionarlo.
+
+Y en la linea 84 del deftrac.xml se coloca en el atributo path="" la ruta del mismo xml quedando así:
+```
+		<field type="comboflow" mandatory="yes" options="next" 
+                                  path="/home/c30/.safet/flowfiles/mensajes.xml" title="Siguiente_Estado">
+```
+
+NOTA: Si al momento de ejecutar un proceso ocurre un error, éste se puede apreciar en el archivo 
+~/.safet/log/safet.log
 
 Ejecución de un ejemplo precargado
 ==================================
