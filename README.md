@@ -106,7 +106,13 @@ Para salir del interprete Ctrl D
 
 Continuando con las configuraciones
 ======================
-dirigirse a https://seguridad.cenditel.gob.ve/safet/media/curso/ y descargar el archivo libpnp_graphviz.so y
+Dirigirse a 
+```
+https://seguridad.cenditel.gob.ve/safet/media/curso/ 
+ó a
+https://github.com/pdonaire1/pysafet_curso
+```
+Y descargar el archivo libpnp_graphviz.so y
 copiarlo a /urs/lib/libsafet
 
 ```
@@ -134,6 +140,10 @@ Y en la linea 84 del deftrac.xml se coloca en el atributo path="" la ruta del mi
 
 NOTA: Si al momento de ejecutar un proceso ocurre un error, éste se puede apreciar en el archivo 
 ~/.safet/log/safet.log
+
+Si ocurre un error y no se escribe en safet.log, o si cambias de usuario al ~/.safet entonces tendrás que 
+ejecutar un comando para reemplazar el '/home/usuario_viejo' por '/home/usuario_nuevo', y con esto debería 
+funcionar el log de safet.
 
 Ejecución de un ejemplo precargado
 ==================================
