@@ -107,11 +107,11 @@ Para salir del interprete Ctrl D
 Continuando con las configuraciones
 ======================
 Dirigirse a 
-```
+
 https://seguridad.cenditel.gob.ve/safet/media/curso/ 
 ó a
 https://github.com/pdonaire1/pysafet_curso
-```
+
 Y descargar el archivo libpnp_graphviz.so y
 copiarlo a /urs/lib/libsafet
 
