@@ -108,9 +108,9 @@ Continuando con las configuraciones
 ======================
 Dirigirse a 
 
-https://seguridad.cenditel.gob.ve/safet/media/curso/ 
-ó a
 https://github.com/pdonaire1/pysafet_curso
+ó a
+https://seguridad.cenditel.gob.ve/safet/media/curso/ 
 
 Y descargar el archivo libpnp_graphviz.so y
 copiarlo a /urs/lib/libsafet
@@ -120,7 +120,8 @@ $ su
 # cp ~/Descargas/libpnp_graphviz.so /usr/lib/libsafet/
 ```
 
-Para correr La interfaz gráfica ejecutar el ejecutable del directorio ~/.safet/inflow
+Para correr La interfaz gráfica: descargar los archivos de https://github.com/pdonaire1/pysafet_curso en la carpeta 
+curso y descomprimir el inflow, luego ejecutar el ejecutable del dentro de inflow del directorio curso
 
 ```
 $ ./inflow
